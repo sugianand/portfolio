@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { projects, type Category, type Project } from '../data'
 import { scrollToId } from '../lib/store'
@@ -46,6 +46,13 @@ function ProjectCard({ project, index, onOpen }: { project: Project; index: numb
 
 function ProjectDetail({ project, onClose, onNav }: { project: Project; onClose: () => void; onNav: (dir: 1 | -1) => void }) {
   const index = projects.indexOf(project)
+  const sheetRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    sheetRef.current?.focus({ preventScroll: true })
+    return () => previous?.focus({ preventScroll: true })
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -63,7 +70,7 @@ function ProjectDetail({ project, onClose, onNav }: { project: Project; onClose:
 
   return (
     <div className="detail" role="dialog" aria-modal="true" aria-label={`${project.title} case study`} onClick={onClose}>
-      <article className="detail-sheet" onClick={(e) => e.stopPropagation()} key={project.id}>
+      <article className="detail-sheet" ref={sheetRef} tabIndex={-1} onClick={(e) => e.stopPropagation()} key={project.id}>
         <header className={`detail-hero tone-${project.tone}`}>
           <div className="detail-bar mono">
             <span>Case study {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>

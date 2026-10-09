@@ -273,6 +273,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
 
 /* ---------- case study ---------- */
 .detail { position: fixed; inset: 0; z-index: 130; background: rgba(0, 0, 0, .7); backdrop-filter: blur(6px); overflow-y: auto; padding: clamp(12px, 4vh, 48px) var(--gutter); animation: fade .25s ease both; }
+.detail-sheet:focus { outline: none; }
 .detail-sheet { max-width: 1080px; margin: 0 auto; background: var(--ink-2); border: 1px solid var(--line); animation: sheet-in .45s var(--ease) both; }
 @keyframes sheet-in { from { transform: translateY(40px); opacity: 0; } }
 .detail-hero { padding: clamp(20px, 3vw, 36px); display: grid; gap: 14px; }

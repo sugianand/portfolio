@@ -3,7 +3,6 @@ import { unlock } from '../lib/store'
 import { SubHead } from './Sections'
 
 const HIGH_KEY = 'sa26:frantic-high'
-const W = 960
 const H = 320
 const GROUND = 270
 
@@ -29,6 +28,9 @@ export function Arcade() {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
     if (!canvas || !ctx) return
+    // Narrow screens get a shorter field so the game stays tall enough to play.
+    const W = canvas.clientWidth < 600 ? 560 : 960
+    canvas.style.aspectRatio = `${W} / ${H}`
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     canvas.width = W * dpr
     canvas.height = H * dpr
