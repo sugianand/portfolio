@@ -155,7 +155,7 @@ export const markBooted = () => {
   emit('boot-done')
 }
 
-type BusEvent = 'confetti' | 'palette' | 'scatter' | 'boot-done'
+type BusEvent = 'confetti' | 'palette' | 'shortcuts' | 'scatter' | 'boot-done'
 const bus = new EventTarget()
 export const emit = (event: BusEvent) => bus.dispatchEvent(new Event(event))
 export const on = (event: BusEvent, handler: () => void) => {

@@ -22,14 +22,14 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'contact', label: 'Go to Contact', hint: 'section', run: () => scrollToId('contact') },
     { id: 'email', label: 'Copy email address', hint: profile.email, run: () => copyEmail(profile.email) },
     { id: 'resume', label: 'Open resume (PDF)', hint: 'new tab', run: () => open(profile.resume) },
-    { id: 'github', label: 'Open GitHub', hint: 'github.com/sugianand', run: () => open(profile.github) },
+    { id: 'open-github', label: 'Open GitHub', hint: 'github.com/sugianand', run: () => open(profile.github) },
     { id: 'linkedin', label: 'Open LinkedIn', hint: 'linkedin', run: () => open(profile.linkedin) },
     ...projects.map((p) => ({ id: `p-${p.id}`, label: `Project: ${p.title}`, hint: p.kind, run: () => { window.location.hash = `project/${p.id}` } })),
     { id: 'accent', label: 'Cycle accent color', hint: 'theme', run: cycleAccent },
     { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetAccent },
-    { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetAccent },
     { id: 'confetti', label: 'Celebrate', hint: 'why not', run: () => emit('confetti') },
     { id: 'secrets', label: 'Show achievements', hint: 'secrets', run: onAchievements },
+    { id: 'shortcuts', label: 'Show keyboard shortcuts', hint: '?', run: () => emit('shortcuts') },
     { id: 'source', label: 'View site source', hint: 'github', run: () => open(profile.source) },
   ], [onAchievements])
 
@@ -106,7 +106,71 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
           ))}
           {!filtered.length && <li className="palette-empty mono">No matches. Try “resume”.</li>}
         </ul>
-        <div className="palette-foot mono"><span>↑↓ navigate</span><span>↵ select</span><span>esc close</span></div>
+        <div className="palette-foot mono"><span>↑↓ navigate</span><span>↵ select</span><span>esc close</span><span>? shortcuts</span></div>
+      </div>
+    </div>
+  )
+}
+
+const SHORTCUTS: [keys: string[], action: string][] = [
+  [['⌘', 'K'], 'Open the command palette'],
+  [['/'], 'Open the command palette'],
+  [['?'], 'Show these shortcuts'],
+  [['Esc'], 'Close a dialog or panel'],
+  [['←', '→'], 'Previous or next case study'],
+  [['Space'], 'Jump in Frantic Run (also ↑ or W)'],
+  [['↑'], 'Recall terminal history'],
+  [['Tab'], 'Complete a terminal command'],
+]
+
+export function Shortcuts() {
+  const [isOpen, setOpen] = useState(false)
+  const boxRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const typing = (e.target as HTMLElement).closest('input, textarea, [contenteditable]')
+      if (e.key === '?' && !typing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        setOpen((o) => !o)
+      } else if (e.key === 'Escape') {
+        setOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    const off = on('shortcuts', () => setOpen(true))
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      off()
+    }
+  }, [])
+
+  // Move focus into the dialog and hand it back to wherever it came from on close.
+  useEffect(() => {
+    if (!isOpen) return
+    const previous = document.activeElement as HTMLElement | null
+    boxRef.current?.focus()
+    return () => previous?.focus()
+  }, [isOpen])
+
+  if (!isOpen) return null
+
+  return (
+    <div className="palette" onClick={() => setOpen(false)}>
+      <div ref={boxRef} className="palette-box shortcuts" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title" tabIndex={-1} onClick={(e) => e.stopPropagation()}>
+        <div className="palette-input">
+          <span className="mono">?</span>
+          <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+        </div>
+        <dl className="shortcut-list">
+          {SHORTCUTS.map(([keys, action]) => (
+            <div key={action}>
+              <dt>{keys.map((k) => <kbd key={k}>{k}</kbd>)}</dt>
+              <dd>{action}</dd>
+            </div>
+          ))}
+        </dl>
+        <div className="palette-foot mono"><span>esc close</span><button type="button" className="mono" onClick={() => setOpen(false)}>close ✕</button></div>
       </div>
     </div>
   )

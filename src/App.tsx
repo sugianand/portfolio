@@ -5,7 +5,7 @@ import { AchievementButton, AchievementDrawer, ThemeReset, Toasts } from './comp
 import { Boot } from './components/Boot'
 import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
-import { CommandPalette, Confetti, Konami } from './components/Overlays'
+import { CommandPalette, Confetti, Konami, Shortcuts } from './components/Overlays'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
 import { About } from './components/About'
 import { GitHubActivity } from './components/GitHubActivity'
@@ -74,6 +74,7 @@ function App() {
       <AchievementDrawer open={drawerOpen} onClose={closeDrawer} />
       <Toasts />
       <CommandPalette onAchievements={() => setDrawerOpen(true)} />
+      <Shortcuts />
       <Confetti />
       <Konami />
     </>
