@@ -47,7 +47,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .wordmark span { color: var(--accent); margin-inline: 2px; }
 .nav-links { display: flex; gap: 4px; padding: 5px; border: 1px solid var(--line); background: rgba(19, 19, 17, .7); backdrop-filter: blur(12px); border-radius: 999px; }
 .nav-links a { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 8px 14px; border-radius: 999px; transition: color .2s, background .2s; }
-.nav-links a span { color: var(--dim); margin-right: 6px; }
+.nav-links a span { color: var(--muted); margin-right: 6px; }
 .nav-links b { font-weight: inherit; }
 .nav-short { display: none; }
 .nav-links a:hover { color: var(--cream); }

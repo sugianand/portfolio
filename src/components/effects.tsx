@@ -50,7 +50,8 @@ export function Scramble({ text, className = '', trigger = 'view' }: { text: str
   }, [inView, onView, text])
 
   return (
-    <span ref={ref} className={`scramble ${className}`} aria-label={text} onPointerEnter={trigger !== 'view' ? run : undefined}>
+    <span ref={ref} className={`scramble ${className}`} onPointerEnter={trigger !== 'view' ? run : undefined}>
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">{output}</span>
     </span>
   )

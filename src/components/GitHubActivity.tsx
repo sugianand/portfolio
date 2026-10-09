@@ -108,7 +108,7 @@ export function GitHubActivity() {
               <div><strong>{summary.longest}</strong><span className="mono">longest streak (days)</span></div>
               <div><strong>{data.repos ?? '—'}</strong><span className="mono">public repos</span></div>
             </div>
-            <div className="gh-scroll" ref={scrollRef}>
+            <div className="gh-scroll" ref={scrollRef} tabIndex={0} role="region" aria-label="Contribution calendar, scrollable">
               <div className="gh-graph" style={{ gridTemplateColumns: `24px repeat(${weeks.length}, 1fr)` }}>
                 <span />
                 {monthLabels.map((m, i) => <span key={i} className="gh-month mono">{m}</span>)}

@@ -24,12 +24,12 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
   const pct = Math.round((unlocked.length / achievementList.length) * 100)
 
   return (
-    <div className={`drawer ${open ? 'drawer-open' : ''}`} aria-hidden={!open}>
-      <button type="button" className="drawer-scrim" onClick={onClose} aria-label="Close achievements" tabIndex={open ? 0 : -1} />
+    <div className={`drawer ${open ? 'drawer-open' : ''}`} inert={!open}>
+      <button type="button" className="drawer-scrim" onClick={onClose} aria-label="Close achievements" />
       <aside className="drawer-panel" role="dialog" aria-label="Achievements">
         <div className="drawer-head">
           <p className="kicker mono"><span>◆</span> Secrets</p>
-          <button type="button" className="mono drawer-close" onClick={onClose} tabIndex={open ? 0 : -1}>esc ✕</button>
+          <button type="button" className="mono drawer-close" onClick={onClose}>esc ✕</button>
         </div>
         <h3>{pct}% <em>found.</em></h3>
         <div className="drawer-bar"><span style={{ transform: `scaleX(${pct / 100})` }} /></div>
@@ -47,7 +47,7 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
             )
           })}
         </ul>
-        <button type="button" className="mono drawer-reset" onClick={resetAchievements} tabIndex={open ? 0 : -1}>reset progress</button>
+        <button type="button" className="mono drawer-reset" onClick={resetAchievements}>reset progress</button>
       </aside>
     </div>
   )
