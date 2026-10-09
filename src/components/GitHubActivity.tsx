@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { profile } from '../data'
+import { useInView } from '../lib/useInView'
 import { Reveal } from './effects'
 import { SectionHead } from './Sections'
 
@@ -53,11 +54,14 @@ export function GitHubActivity() {
     if (el) el.scrollLeft = el.scrollWidth
   }, [data])
 
+  const [sectionRef, near] = useInView<HTMLElement>(0)
+
   useEffect(() => {
+    if (!near) return
     let alive = true
     load().then((d) => alive && setData(d)).catch(() => alive && setFailed(true))
     return () => { alive = false }
-  }, [])
+  }, [near])
 
   const weeks = useMemo(() => {
     if (!data) return []
@@ -86,7 +90,7 @@ export function GitHubActivity() {
   })
 
   return (
-    <section className="section activity" id="github">
+    <section className="section activity" id="github" ref={sectionRef}>
       <SectionHead index="04" kicker="GitHub" title="Commit" accent="history." note="Live from GitHub: every square is a day of work over the past year." />
       <Reveal className="gh-frame">
         <div className="frame-bar mono">
