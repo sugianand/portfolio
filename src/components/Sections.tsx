@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { profile, roles, skills, stats } from '../data'
-import { copyEmail } from '../lib/store'
+import { copyEmail, unlock } from '../lib/store'
+import { useInView } from '../lib/useInView'
 import { Clock, CountUp, Reveal, Scramble } from './effects'
 
 export function Marquee({ words, reverse = false }: { words: string[]; reverse?: boolean }) {
@@ -120,8 +121,12 @@ export function Contact() {
 
 export function Footer() {
   const built = new Date(__BUILD__.date)
+  const [ref, seen] = useInView<HTMLElement>(0.9)
+  useEffect(() => {
+    if (seen) unlock('explorer')
+  }, [seen])
   return (
-    <footer className="footer mono">
+    <footer className="footer mono" ref={ref}>
       <span>© 2026 {profile.name}</span>
       <span>Detroit <Clock timeZone={profile.timezone} /></span>
       <a href={`${profile.source}/commit/${__BUILD__.hash}`} target="_blank" rel="noreferrer" title={__BUILD__.message}>
