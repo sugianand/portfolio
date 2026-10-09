@@ -110,7 +110,7 @@ export function Contact() {
           <a href={`mailto:${profile.email}`}>Email ↗</a>
           <a href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a>
           <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-          <a href={profile.resume} download="Suganeshwara-Anand-Resume.pdf">Resume ↓</a>
+          <a href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
         </div>
       </div>
     </section>
