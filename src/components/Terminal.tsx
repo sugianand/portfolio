@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
-import { profile, projects, roles, skills } from '../data'
+import { profile, projects, roles, skills, type Project } from '../data'
 import { accents, achievementList, copyEmail, emit, getState, scrollToId, setAccent, unlock, type AccentName } from '../lib/store'
 import { SubHead } from './Sections'
 
@@ -14,6 +14,25 @@ const COMMANDS = [
 ]
 
 const FILES = ['about.txt', 'experience.log', 'projects/', 'resume.pdf', 'secrets/']
+
+// Each project directory mirrors the sections of its case study.
+const projectFiles = (p: Project): Record<string, string[]> => ({
+  'overview.md': [p.overview],
+  'why.md': [p.why],
+  'features.md': p.features.map((f) => `- ${f}`),
+  'challenges.md': p.challenges.map((c) => `- ${c}`),
+  'stack.txt': [p.stack.join(', '), `role: ${p.role}`, `status: ${p.status}`],
+})
+
+// Resolves "projects/<id>[/<file>]" (with optional ./ or ~/ prefix) against the project list.
+const resolveProjectPath = (path: string) => {
+  const parts = path.replace(/^(\.\/|~\/)/, '').split('/').filter(Boolean)
+  if (parts[0] !== 'projects' || parts.length < 2 || parts.length > 3) return null
+  const project = projects.find((p) => p.id === parts[1].toLowerCase())
+  return { project, file: parts[2] }
+}
+
+const projectPaths = projects.flatMap((p) => [`projects/${p.id}/`, ...Object.keys(projectFiles(p)).map((f) => `projects/${p.id}/${f}`)])
 
 const neofetchArt = String.raw`
    _____  ___
@@ -47,6 +66,7 @@ function respond(cmd: string, ctx: Context) {
           {[
             ['whoami', 'the short bio'],
             ['ls / cat <file>', 'poke around the filesystem'],
+            ['ls projects/<name>', 'read a case study, file by file'],
             ['projects', 'things I have shipped'],
             ['experience', 'the career git log'],
             ['skills', 'languages, frameworks, tools'],
@@ -63,17 +83,28 @@ function respond(cmd: string, ctx: Context) {
       )))
     case 'whoami':
       return ctx.print(line('out', `${profile.name}. Computer scientist (Wayne State, minor in Math) now doing an M.S. in Artificial Intelligence. I like the hard middle of a problem: the edge cases, the architecture, and the moment a rough idea becomes something real.`))
-    case 'ls':
+    case 'ls': {
+      const target = resolveProjectPath(arg)
+      if (target) {
+        const isFile = target.project && target.file && target.file in projectFiles(target.project)
+        if (!target.project || target.file) return ctx.print(line(isFile ? 'out' : 'err', isFile ? arg : `ls: cannot access '${arg}': No such file or directory`))
+        return ctx.print(line('out', <div className="ls">{Object.keys(projectFiles(target.project)).map((f) => <span key={f}>{f}</span>)}</div>), line('dim', `tip: cat projects/${target.project.id}/why.md`))
+      }
       if (arg.startsWith('projects')) return ctx.print(...projects.map((p) => line('out', <><b>{p.id}/</b> <i>{p.tagline}</i></>)))
       if (arg.startsWith('secrets')) return ctx.print(line('err', 'ls: cannot open directory \'secrets/\': Permission denied (try sudo?)'))
       return ctx.print(line('out', <div className="ls">{FILES.map((f) => <span key={f} className={f.endsWith('/') ? 'dir' : ''}>{f}</span>)}</div>))
+    }
     case 'cat': {
       if (!arg) return ctx.print(line('err', 'cat: missing file operand'))
       if (arg === 'about.txt') return ctx.run('whoami')
       if (arg === 'experience.log') return ctx.run('experience')
       if (arg === 'resume.pdf') return ctx.print(line('err', 'cat: resume.pdf: binary file. Try `resume` or `open resume`.'))
       if (arg.startsWith('secrets')) return ctx.print(line('err', `cat: ${arg}: Permission denied`))
-      if (arg.startsWith('projects')) return ctx.print(line('err', `cat: ${arg}: Is a directory`))
+      const target = resolveProjectPath(arg)
+      const body = target?.project && target.file ? projectFiles(target.project)[target.file] : undefined
+      if (body) return ctx.print(...body.map((b) => line('out', b)))
+      if (target?.project && !target.file) return ctx.print(line('err', `cat: ${arg}: Is a directory`))
+      if (/^(\.\/|~\/)?projects\/?$/.test(arg)) return ctx.print(line('err', `cat: ${arg}: Is a directory`))
       return ctx.print(line('err', `cat: ${arg}: No such file or directory`))
     }
     case 'projects':
@@ -246,10 +277,17 @@ export function Terminal() {
       return
     }
     const last = parts[parts.length - 1]
-    const pool = parts[0] === 'theme' ? Object.keys(accents) : parts[0] === 'open' ? ['github', 'linkedin', 'resume', ...projects.map((p) => p.id)] : FILES
-    const matches = pool.filter((c) => c.startsWith(last))
+    const pool = parts[0] === 'theme' ? Object.keys(accents) : parts[0] === 'open' ? ['github', 'linkedin', 'resume', ...projects.map((p) => p.id)] : [...FILES, ...projectPaths]
+    // Only offer the next path segment, so `cat projects/` lists directories rather than every file.
+    const depth = last.split('/').length
+    const matches = pool.filter((c) => c.startsWith(last) && c.replace(/\/$/, '').split('/').length === depth)
     if (matches.length === 1) setInput([...parts.slice(0, -1), matches[0]].join(' '))
-    else if (matches.length > 1) print(line('in', input), line('dim', matches.join('  ')))
+    else if (matches.length > 1) {
+      // Extend to the longest shared prefix first, so projects/ → projects/<id>/ works like a real shell.
+      const shared = matches.reduce((a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return a.slice(0, i) })
+      if (shared.length > last.length) setInput([...parts.slice(0, -1), shared].join(' '))
+      else print(line('in', input), line('dim', matches.map((m) => m.slice(m.lastIndexOf('/', m.length - 2) + 1)).join('  ')))
+    }
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
