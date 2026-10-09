@@ -76,9 +76,9 @@ export function CountUp({ value, decimals = 0, suffix = '' }: { value: number; d
   }, [inView, value])
 
   return (
-    <span ref={ref}>
-      {current.toFixed(decimals)}
-      {suffix}
+    <span ref={ref} className="count">
+      <span className="sr-only">{value.toFixed(decimals)}{suffix}</span>
+      <span aria-hidden="true">{current.toFixed(decimals)}{suffix}</span>
     </span>
   )
 }
