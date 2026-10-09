@@ -529,9 +529,14 @@ body {
 }
 
 .topbar {
-  height: 98px;
-  flex-basis: 98px;
+  height: 104px;
+  flex-basis: 104px;
   border-color: var(--line);
+}
+
+.topbar .wordmark {
+  font-size: 22px;
+  letter-spacing: -.09em;
 }
 
 .wordmark {
@@ -549,16 +554,27 @@ body {
 }
 
 .tab-nav {
-  border-color: var(--line);
-  background: rgba(17, 24, 48, .75);
+  gap: 4px;
+  padding: 5px;
+  border: 0;
+  background: transparent;
 }
 
 .tab-nav button {
-  font-family: 'DM Mono', monospace;
+  padding: 12px 18px;
+  color: #c7cede;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  text-transform: none;
 }
 
 .tab-nav button span {
   color: var(--mint);
+  font: 10px 'DM Mono', monospace;
+  letter-spacing: .04em;
+  opacity: .8;
 }
 
 .tab-nav button:hover,
@@ -567,10 +583,21 @@ body {
   background: var(--mint);
 }
 
+.tab-nav button.active {
+  box-shadow: 0 8px 24px rgba(119, 230, 209, .18);
+}
+
 .availability i,
 .status-dot {
   background: var(--mint);
   box-shadow: 0 0 15px var(--mint);
+}
+
+.availability {
+  color: #c7cede;
+  font-size: 11px;
+  letter-spacing: .02em;
+  text-transform: none;
 }
 
 .panel {
@@ -715,6 +742,10 @@ h3 em {
   .topbar {
     height: 78px;
     flex-basis: 78px;
+  }
+
+  .topbar .wordmark {
+    font-size: 19px;
   }
 
   .panel {
