@@ -7,8 +7,8 @@ export const profile = {
   email: 'sugianand89@gmail.com',
   github: 'https://github.com/sugianand',
   linkedin: 'https://www.linkedin.com/in/suganeshwara-anand-b86367219/',
-  resume: '/resume.pdf',
-  source: 'https://github.com/sugianand/sugianand.github.io',
+  resume: `${import.meta.env.BASE_URL}resume.pdf`,
+  source: 'https://github.com/sugianand/portfolio',
 }
 
 export type Project = {

@@ -19,6 +19,8 @@ const build = {
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Relative base so the build works on a custom domain and on a /repo/ subpath.
+  base: './',
   plugins: [react()],
   define: {
     __BUILD__: JSON.stringify(build),

@@ -6,7 +6,7 @@ The site is intentionally presented as a horizontal, single-viewport experience.
 
 ## Live site
 
-- Portfolio: [sugianand.github.io](https://sugianand.github.io/)
+- Portfolio: [sugianand.github.io/portfolio](https://sugianand.github.io/portfolio/) (moving to suganeshwara.is-a.dev)
 - GitHub repositories: [github.com/sugianand](https://github.com/sugianand?tab=repositories)
 - LinkedIn: [linkedin.com/in/suganeshwara-anand-b86367219](https://www.linkedin.com/in/suganeshwara-anand-b86367219/)
 - Resume: [Download the PDF](./public/resume.pdf)
