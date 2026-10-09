@@ -1,81 +1,50 @@
 # Suganeshwara Anand — Portfolio
 
-Personal portfolio for Suganeshwara Anand, a computer scientist and AI master's student focused on dependable software, intelligent tools, and systems that people can trust.
+Personal site for Suganeshwara "Sugi" Anand, a computer scientist and AI master's student at Wayne State.
 
-The site is intentionally presented as a horizontal, single-viewport experience. Visitors can use the centered tabs or the left/right arrow keys to move between Home, Work, About, and Contact.
+**Live:** [sugianand.github.io/portfolio](https://sugianand.github.io/portfolio/) (moving to `sugi.is-a.dev`)
 
-## Live site
+## What's on the site
 
-- Portfolio: [sugianand.github.io/portfolio](https://sugianand.github.io/portfolio/) (moving to sugi.is-a.dev)
-- GitHub repositories: [github.com/sugianand](https://github.com/sugianand?tab=repositories)
-- LinkedIn: [linkedin.com/in/suganeshwara-anand-b86367219](https://www.linkedin.com/in/suganeshwara-anand-b86367219/)
-- Resume: [Download the PDF](./public/resume.pdf)
+| Section | What it shows |
+| --- | --- |
+| Hero | Particle-text name with a rotating "a.k.a." line, over a live WebGL topographic shader |
+| About | Bio, quick facts, stats, and skills |
+| Projects | Filterable project grid. Each card opens a case study (overview, motivation, features, challenges), linkable at `#project/<id>` |
+| Experience | Roles shown as an expandable `git log` |
+| GitHub | Live contribution heatmap and stats |
+| Playground | A working terminal (`help`, `neofetch`, `sudo hire-me`, …) and a playable remake of The Frantic Run |
+| Contact | Click-to-copy email, links, and resume |
 
-## Highlights
+There are also a <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd> command palette, twelve hidden achievements, and a Konami code. The footer shows the deployed commit hash.
 
-- Horizontal tab-based navigation with animated panel transitions
-- Responsive layout with a mobile-friendly stacked fallback
-- Pointer-reactive ambient lighting and animated visual signal
-- Work panel featuring QA, embedded systems, backend, full-stack, and game-development experience
-- Direct GitHub, LinkedIn, email, and downloadable resume links
-- GitHub Pages deployment through GitHub Actions
+## Editing content
 
-## Tech stack
+Almost everything lives in [`src/data.ts`](./src/data.ts):
 
-- React 19
-- TypeScript
-- Vite
-- CSS
-- GitHub Pages
-- GitHub Actions
+- `profile`: name, links, resume path
+- `projects`: cards and case-study copy (`overview`, `why`, `features`, `challenges`)
+- `roles`: experience entries for the git log
+- `skills`, `stats`
+
+## Tech
+
+React 19 · TypeScript · Vite · hand-written WebGL and Canvas 2D (no animation libraries) · GitHub Pages via GitHub Actions
 
 ## Local development
 
-Requirements:
-
-- Node.js 22 or newer
-- npm
-
-Install dependencies:
+Requires Node.js 22+.
 
 ```bash
 npm ci
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-The local site is available at `http://127.0.0.1:5173`.
-
-## Validation and production build
-
-Run the linter:
-
-```bash
+npm run dev      # http://localhost:5173
 npm run lint
-```
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-Preview the production build:
-
-```bash
+npm run build    # outputs to dist/
 npm run preview
 ```
 
 ## Deployment
 
-The workflow in [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) builds and deploys the `dist` directory to GitHub Pages:
+[`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) builds the site and publishes `dist/` to GitHub Pages on every push to `main`. The build uses a relative base path, so the same output works on the `/portfolio/` subpath and on a custom domain.
 
-- On every push to `main`
-- On manual dispatch
-- On a six-hour schedule to re-publish the current committed site
-
-Scheduled runs deploy the committed repository state; they do not generate or modify content automatically.
+The contribution heatmap reads from the public [github-contributions-api](https://github.com/grubersjoe/github-contributions-api) at runtime, and the build injects the commit hash and count from git.
