@@ -52,7 +52,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .nav-short { display: none; }
 .nav-links a:hover { color: var(--cream); }
 .nav-links a.active { background: var(--cream); color: var(--ink); }
-.nav-links a.active span { color: var(--accent); }
+.nav-links a.active span { color: color-mix(in srgb, var(--accent) 55%, #000); }
 .nav-extra { justify-self: end; display: flex; gap: 8px; align-items: center; }
 
 /* ---------- hero ---------- */
