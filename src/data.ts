@@ -101,12 +101,11 @@ export const projects: Project[] = [
     body: 'You enter your courses and tasks, and it decides when you should work on each one, splits the work into chunks, and builds a schedule around the rest of your life.',
     stack: ['Next.js', 'React', 'FastAPI', 'Python', 'Supabase', 'TypeScript'],
     links: [
-      { label: 'Live demo', href: 'https://11planner.vercel.app' },
       { label: 'Source', href: 'https://github.com/sugianand/11planner' },
     ],
     tone: 'green',
     role: 'Team project',
-    status: 'Live',
+    status: 'Complete; the hosted demo is currently offline',
     overview: '11Planner is a study planner that builds the schedule for you. You add your courses (or drop in a syllabus PDF and it extracts the details), add tasks with deadlines and time estimates, and the backend generates a week of focused study blocks. Those blocks work around your classes, respect a daily cap, and leave room for breaks.',
     why: 'We were tired of the same cycle: knowing a project was due, not knowing when to work on it, and doing it the night before. Most students aren\'t bad at school, they\'re bad at planning, so we built something that does the planning for them.',
     features: [
