@@ -26,7 +26,7 @@ export function SubHead({ label, title, note }: { label: string; title: string; 
     <div className="subhead">
       <span className="subhead-label mono">{label}</span>
       <h3>{title}</h3>
-      <p className="mono">{note}</p>
+      <p>{note}</p>
     </div>
   )
 }

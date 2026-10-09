@@ -4,18 +4,21 @@
   --ink-3: #1c1c19;
   --line: #2b2b27;
   --cream: #f4f0e9;
-  --muted: #9a958a;
+  --muted: #aaa498;
   --dim: #837e74;
   --accent: #fa6945;
   --accent-rgb: 250, 105, 69;
   --green: #8ee19c;
   --blue: #7aa7ff;
   --display: 'Syne', 'Arial Black', system-ui, sans-serif;
-  --mono: 'DM Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --sans: 'Geist', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --gutter: clamp(18px, 4vw, 56px);
   --ease: cubic-bezier(.2, .8, .2, 1);
 
-  font-family: var(--display);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
   color: var(--cream);
   background: var(--ink);
   color-scheme: dark;
@@ -41,6 +44,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .mono { font-family: var(--mono); }
+
+/* Syne is reserved for big display type; everything else uses the readable sans. */
+h1, h2, h3, .wordmark, .marquee b, .stat strong, .gh-stats strong, .contact-email, .arcade-overlay strong, .art-glyph, .drawer-panel h3, .work-outro strong { font-family: var(--display); }
 
 @media (pointer: fine) {
   html.has-cursor, html.has-cursor * { cursor: none !important; }
