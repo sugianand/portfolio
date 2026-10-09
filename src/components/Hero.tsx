@@ -1,7 +1,25 @@
+import { useEffect, useState } from 'react'
 import { profile } from '../data'
 import { scrollToId } from '../lib/store'
-import { Clock } from './effects'
+import { Clock, Scramble } from './effects'
 import { ParticleName } from './ParticleName'
+
+const ALIASES = ['Sugi', 'SA', 'sugianand', 'the one who reads the logs', 'root-cause enthusiast', 'edge-case collector', 'professional debugger']
+
+function Aliases() {
+  const [index, setIndex] = useState(0)
+  useEffect(() => {
+    const id = window.setInterval(() => setIndex((i) => (i + 1) % ALIASES.length), 2600)
+    return () => window.clearInterval(id)
+  }, [])
+  return (
+    <p className="aka mono" aria-label={`Also known as ${ALIASES.join(', ')}`}>
+      <span>a.k.a.</span>
+      <b aria-hidden="true"><Scramble key={index} text={ALIASES[index]} /></b>
+      <span className="aka-count" aria-hidden="true">{String(index + 1).padStart(2, '0')}/{String(ALIASES.length).padStart(2, '0')}</span>
+    </p>
+  )
+}
 
 export function Hero() {
   return (
@@ -13,6 +31,7 @@ export function Hero() {
       </div>
 
       <ParticleName />
+      <Aliases />
 
       <div className="hero-foot">
         <p className="hero-intro">

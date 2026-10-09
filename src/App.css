@@ -63,6 +63,10 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .particle-name .hero-name { margin: 0; }
 .particle-name canvas { position: absolute; inset: 0; display: block; touch-action: pan-y; }
 .particle-name.ready .hero-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+.aka { display: flex; align-items: baseline; gap: 14px; margin: -2vh 0 4vh; font-size: clamp(14px, 1.6vw, 22px); color: var(--muted); }
+.aka b { color: var(--accent); font-weight: 500; min-width: 0; }
+.aka b::after { content: '_'; animation: blink .9s steps(1) infinite; margin-left: 2px; }
+.aka-count { margin-left: auto; font-size: 11px; color: var(--dim); letter-spacing: .1em; }
 .chip-ghost { border-style: dashed; color: var(--muted); background: transparent; backdrop-filter: none; }
 .chip-ghost:hover { transform: none; border-color: var(--line); }
 .hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
