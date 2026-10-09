@@ -2,6 +2,7 @@
   "name": "suganeshwara-portfolio",
   "private": true,
   "version": "0.0.0",
+  "description": "Horizontal personal portfolio for Suganeshwara Anand.",
   "type": "module",
   "scripts": {
     "dev": "vite",

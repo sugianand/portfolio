@@ -1,32 +1,81 @@
-# React + TypeScript + Vite
+# Suganeshwara Anand — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Personal portfolio for Suganeshwara Anand, a computer scientist and AI master's student focused on dependable software, intelligent tools, and systems that people can trust.
 
-Currently, two official plugins are available:
+The site is intentionally presented as a horizontal, single-viewport experience. Visitors can use the centered tabs or the left/right arrow keys to move between Home, Work, About, and Contact.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live site
 
-## React Compiler
+- Portfolio: [sugianand.github.io](https://sugianand.github.io/)
+- GitHub repositories: [github.com/sugianand](https://github.com/sugianand?tab=repositories)
+- LinkedIn: [linkedin.com/in/suganeshwara-anand-b86367219](https://www.linkedin.com/in/suganeshwara-anand-b86367219/)
+- Resume: [Download the PDF](./public/resume.pdf)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Highlights
 
-## Expanding the Oxlint configuration
+- Horizontal tab-based navigation with animated panel transitions
+- Responsive layout with a mobile-friendly stacked fallback
+- Pointer-reactive ambient lighting and animated visual signal
+- Work panel featuring QA, embedded systems, backend, full-stack, and game-development experience
+- Direct GitHub, LinkedIn, email, and downloadable resume links
+- GitHub Pages deployment through GitHub Actions
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Tech stack
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- React 19
+- TypeScript
+- Vite
+- CSS
+- GitHub Pages
+- GitHub Actions
+
+## Local development
+
+Requirements:
+
+- Node.js 22 or newer
+- npm
+
+Install dependencies:
+
+```bash
+npm ci
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The local site is available at `http://127.0.0.1:5173`.
+
+## Validation and production build
+
+Run the linter:
+
+```bash
+npm run lint
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Deployment
+
+The workflow in [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) builds and deploys the `dist` directory to GitHub Pages:
+
+- On every push to `main`
+- On manual dispatch
+- On a six-hour schedule to re-publish the current committed site
+
+Scheduled runs deploy the committed repository state; they do not generate or modify content automatically.
