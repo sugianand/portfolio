@@ -97,7 +97,7 @@ function App() {
 
         <section className={`panel contact-panel ${activePanel === 'contact' ? 'panel-active' : ''}`} aria-hidden={activePanel !== 'contact'}>
           <div><p className="eyebrow">Have a problem worth solving?</p><h2>Let’s make<br /><em>something real.</em></h2><a className="contact-email" href="mailto:sugianand89@gmail.com">sugianand89@gmail.com <span>-&gt;</span></a></div>
-          <div className="contact-links"><a href="https://github.com/sugianand" target="_blank" rel="noreferrer">GitHub <span>↗</span></a><a href="https://www.linkedin.com/in/suganeshwara-anand-b86367219/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a><p>Open to software engineering, AI, and systems opportunities.</p></div>
+          <div className="contact-links"><a href="https://github.com/sugianand?tab=repositories" target="_blank" rel="noreferrer">GitHub repositories <span>↗</span></a><a href="https://www.linkedin.com/in/suganeshwara-anand-b86367219/" target="_blank" rel="noreferrer">LinkedIn profile <span>↗</span></a><a href="/resume.pdf" download="Suganeshwara-Anand-Resume.pdf">Resume PDF <span>↓</span></a><p>Open to software engineering, AI, and systems opportunities.</p></div>
         </section>
       </div>
 
