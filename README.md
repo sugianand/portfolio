@@ -2,7 +2,7 @@
 
 Personal site for Suganeshwara "Sugi" Anand, a computer scientist and AI master's student at Wayne State.
 
-**Live:** [sugianand.github.io/portfolio](https://sugianand.github.io/portfolio/) (moving to `sugi.is-a.dev`)
+**Live:** [sugianand.github.io](https://sugianand.github.io) (forwards to [sugianand.github.io/portfolio](https://sugianand.github.io/portfolio/) via [sugianand/sugianand.github.io](https://github.com/sugianand/sugianand.github.io))
 
 ## What's on the site
 
