@@ -6,7 +6,7 @@ const KEY = 'sa26:booted'
 const shouldBoot = () => {
   try {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-    return sessionStorage.getItem(KEY) !== '1'
+    return localStorage.getItem(KEY) !== '1'
   } catch {
     return true
   }
@@ -53,7 +53,7 @@ export function Boot() {
       cancelled = true
       timers.forEach(clearTimeout)
       try {
-        sessionStorage.setItem(KEY, '1')
+        localStorage.setItem(KEY, '1')
       } catch {
         /* ignore */
       }
@@ -64,10 +64,10 @@ export function Boot() {
       window.setTimeout(() => setGone(true), 900)
     }
 
-    script.forEach((_, i) => timers.push(window.setTimeout(() => setLines(i + 1), 120 + i * 140)))
-    const barStart = 120 + script.length * 140
-    for (let i = 1; i <= 20; i++) timers.push(window.setTimeout(() => setProgress(i * 5), barStart + i * 28))
-    timers.push(window.setTimeout(finish, barStart + 20 * 28 + 250))
+    script.forEach((_, i) => timers.push(window.setTimeout(() => setLines(i + 1), 80 + i * 90)))
+    const barStart = 80 + script.length * 90
+    for (let i = 1; i <= 20; i++) timers.push(window.setTimeout(() => setProgress(i * 5), barStart + i * 18))
+    timers.push(window.setTimeout(finish, barStart + 20 * 18 + 150))
 
     window.addEventListener('keydown', finish, { once: true })
     window.addEventListener('pointerdown', finish, { once: true })

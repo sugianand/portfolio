@@ -112,8 +112,16 @@ export function ParticleName() {
       for (const p of particles) if (p.accent) ctx.fillRect(p.x, p.y, size, size)
     }
 
+    // Physics runs in fixed 60 Hz steps so the name forms in the same wall-clock
+    // time on slow devices; once the fly-in has had a second, stragglers are
+    // eased straight onto their letters so the name is always readable.
+    const STEP = 1000 / 60
+    let last = 0
+    let pending = 0
+
     const step = (now: number) => {
       const springy = assembled && now > released
+      const settle = springy && now > released + 1000
       const radius = Math.max(70, width * 0.07)
       for (const p of particles) {
         const dx = p.x - pointer.x
@@ -135,12 +143,23 @@ export function ParticleName() {
         p.vy *= 0.8
         p.x += p.vx
         p.y += p.vy
+        if (settle && dist2 > radius * radius) {
+          p.x += (p.tx - p.x) * 0.12
+          p.y += (p.ty - p.y) * 0.12
+        }
       }
-      draw()
     }
 
     const loop = (now: number) => {
-      if (visible) step(now)
+      if (visible) {
+        pending = Math.min(pending + (last ? now - last : STEP), STEP * 8)
+        while (pending >= STEP) {
+          step(now)
+          pending -= STEP
+        }
+        draw()
+      }
+      last = now
       raf = requestAnimationFrame(loop)
     }
 
