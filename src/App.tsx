@@ -1,7 +1,7 @@
 import { lazy, Suspense, useCallback, useState } from 'react'
 import './App.css'
 import { emit } from './lib/store'
-import { AchievementButton, AchievementDrawer, Toasts } from './components/Achievements'
+import { AchievementButton, AchievementDrawer, ThemeReset, Toasts } from './components/Achievements'
 import { Boot } from './components/Boot'
 import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
@@ -33,7 +33,7 @@ function App() {
     <>
       <Boot />
       <ShaderBackdrop />
-      <Nav items={navItems} extra={<><button type="button" className="hud mono hide-sm" onClick={() => emit('palette')} aria-label="Open command palette"><kbd>⌘K</kbd></button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
+      <Nav items={navItems} extra={<><ThemeReset /><button type="button" className="hud mono hide-sm" onClick={() => emit('palette')} aria-label="Open command palette"><kbd>⌘K</kbd></button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
       <main>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />

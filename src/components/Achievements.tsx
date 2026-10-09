@@ -1,5 +1,15 @@
 import { useEffect } from 'react'
-import { achievementList, resetAchievements, useStore } from '../lib/store'
+import { achievementList, DEFAULT_ACCENT, resetAccent, resetAchievements, useStore } from '../lib/store'
+
+export function ThemeReset() {
+  const accent = useStore((s) => s.accent)
+  if (accent === DEFAULT_ACCENT) return null
+  return (
+    <button type="button" className="hud theme-reset" onClick={resetAccent} title="Restore the original orange theme">
+      ↺ Original colors
+    </button>
+  )
+}
 
 export function AchievementButton({ onOpen }: { onOpen: () => void }) {
   const count = useStore((s) => s.unlocked.length)

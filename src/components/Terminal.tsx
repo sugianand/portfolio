@@ -53,7 +53,7 @@ function respond(cmd: string, ctx: Context) {
             ['open <name>', 'github, linkedin, resume, or a project'],
             ['contact', 'copy my email'],
             ['neofetch', 'system specs'],
-            ['theme <color>', Object.keys(accents).join(' | ')],
+            ['theme <color>', `${Object.keys(accents).join(' | ')} | reset`],
             ['play', 'go to the arcade'],
             ['achievements', 'secrets found so far'],
             ['clear', 'wipe the screen'],
@@ -126,7 +126,11 @@ function respond(cmd: string, ctx: Context) {
     }
     case 'theme': {
       const name = arg.toLowerCase() as AccentName
-      if (!arg) return ctx.print(line('out', `current: ${getState().accent}. available: ${Object.keys(accents).join(', ')}`))
+      if (!arg) return ctx.print(line('out', `current: ${getState().accent}. available: ${Object.keys(accents).join(', ')}. 'theme reset' restores the original.`))
+      if (['reset', 'default', 'original'].includes(name)) {
+        setAccent('orange')
+        return ctx.print(line('ok', 'original colors restored'))
+      }
       if (!(name in accents)) return ctx.print(line('err', `theme: unknown color '${arg}'`))
       setAccent(name)
       return ctx.print(line('ok', `accent set to ${name}`))

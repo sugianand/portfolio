@@ -47,7 +47,27 @@ const read = (): AchievementId[] => {
   }
 }
 
-let state: State = { unlocked: read(), accent: 'orange', toasts: [] }
+export const DEFAULT_ACCENT: AccentName = 'orange'
+const ACCENT_KEY = 'sa26:accent'
+
+const readAccent = (): AccentName => {
+  try {
+    const saved = localStorage.getItem(ACCENT_KEY)
+    return saved && saved in accents ? (saved as AccentName) : DEFAULT_ACCENT
+  } catch {
+    return DEFAULT_ACCENT
+  }
+}
+
+const applyAccent = (accent: AccentName) => {
+  const hex = accents[accent]
+  const root = document.documentElement
+  root.style.setProperty('--accent', hex)
+  root.style.setProperty('--accent-rgb', hexToRgb(hex).map((v) => Math.round(v * 255)).join(', '))
+}
+
+let state: State = { unlocked: read(), accent: readAccent(), toasts: [] }
+if (state.accent !== DEFAULT_ACCENT) applyAccent(state.accent)
 const listeners = new Set<() => void>()
 
 const set = (patch: Partial<State>) => {
@@ -100,20 +120,29 @@ export const resetAchievements = () => {
 }
 
 export const setAccent = (accent: AccentName) => {
-  const hex = accents[accent]
-  const root = document.documentElement
-  root.style.setProperty('--accent', hex)
-  root.style.setProperty('--accent-rgb', hexToRgb(hex).map((v) => Math.round(v * 255)).join(', '))
+  applyAccent(accent)
+  const changed = accent !== state.accent
   set({ accent })
-  if (accent !== 'orange') unlock('theme')
+  try {
+    if (accent === DEFAULT_ACCENT) localStorage.removeItem(ACCENT_KEY)
+    else localStorage.setItem(ACCENT_KEY, accent)
+  } catch {
+    /* storage unavailable: the color lasts for this visit only */
+  }
+  if (accent !== DEFAULT_ACCENT) {
+    unlock('theme')
+    if (changed) toast(`Theme: ${accent}`, 'Click "↺ Original colors" up top to go back')
+  }
 }
+
+export const resetAccent = () => setAccent(DEFAULT_ACCENT)
 
 export const cycleAccent = () => {
   const names = Object.keys(accents) as AccentName[]
   setAccent(names[(names.indexOf(state.accent) + 1) % names.length])
 }
 
-export const hexToRgb = (hex: string): [number, number, number] => {
+export function hexToRgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16)
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { profile, projects } from '../data'
-import { copyEmail, cycleAccent, emit, on, scrollToId, unlock } from '../lib/store'
+import { copyEmail, cycleAccent, emit, on, resetAccent, scrollToId, unlock } from '../lib/store'
 
 type Action = { id: string; label: string; hint: string; run: () => void }
 
@@ -26,6 +26,8 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'linkedin', label: 'Open LinkedIn', hint: 'linkedin', run: () => open(profile.linkedin) },
     ...projects.map((p) => ({ id: `p-${p.id}`, label: `Project: ${p.title}`, hint: p.kind, run: () => { window.location.hash = `project/${p.id}` } })),
     { id: 'accent', label: 'Cycle accent color', hint: 'theme', run: cycleAccent },
+    { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetAccent },
+    { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetAccent },
     { id: 'confetti', label: 'Celebrate', hint: 'why not', run: () => emit('confetti') },
     { id: 'secrets', label: 'Show achievements', hint: 'secrets', run: onAchievements },
     { id: 'source', label: 'View site source', hint: 'github', run: () => open(profile.source) },
