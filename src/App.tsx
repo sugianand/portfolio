@@ -8,15 +8,18 @@ import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
 import { CommandPalette, Confetti, Konami } from './components/Overlays'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
-import { Contact, Footer, GitLog, Marquee, Stats } from './components/Sections'
+import { About } from './components/About'
+import { GitHubActivity } from './components/GitHubActivity'
+import { Projects } from './components/Projects'
+import { Contact, Footer, GitLog, Marquee, Playground } from './components/Sections'
 import { Terminal } from './components/Terminal'
-import { Work } from './components/Work'
 
 const navItems: NavItem[] = [
-  { id: 'work', label: 'Work' },
-  { id: 'log', label: 'Log' },
-  { id: 'shell', label: 'Shell' },
-  { id: 'arcade', label: 'Arcade' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects', short: 'Work' },
+  { id: 'log', label: 'Experience', short: 'Exp' },
+  { id: 'github', label: 'GitHub', short: 'Git' },
+  { id: 'playground', label: 'Playground', short: 'Play' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -32,11 +35,14 @@ function App() {
       <main>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />
-        <Stats />
-        <Work />
+        <About />
+        <Projects />
         <GitLog />
-        <Terminal />
-        <Arcade />
+        <GitHubActivity />
+        <Playground>
+          <Terminal />
+          <Arcade />
+        </Playground>
         <Marquee words={['Curious enough to ask why', 'Practical enough to ship']} reverse />
         <Contact />
       </main>

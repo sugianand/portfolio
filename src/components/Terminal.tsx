@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { profile, projects, roles, skills } from '../data'
 import { accents, achievementList, copyEmail, emit, getState, scrollToId, setAccent, unlock, type AccentName } from '../lib/store'
-import { SectionHead } from './Sections'
+import { SubHead } from './Sections'
 
 type Line = { id: number; kind: 'in' | 'out' | 'err' | 'dim' | 'ok'; body: ReactNode }
 
@@ -284,8 +284,8 @@ export function Terminal() {
   }
 
   return (
-    <section className="section shell" id="shell">
-      <SectionHead index="03" kicker="Interactive" title="Talk to" accent="the machine." note="A working shell. Tab completes, arrow keys walk history, and yes, sudo exists." />
+    <div className="play-block" id="shell">
+      <SubHead label="A" title="Terminal" note="A working shell. Type help to start. Tab completes, ↑ ↓ walk history, and yes, sudo exists." />
       <div className={`terminal-frame term ${shaking ? 'term-shake' : ''}`} onClick={() => inputRef.current?.focus({ preventScroll: true })}>
         <div className="frame-bar mono">
           <span className="lights"><i /><i /><i /></span>
@@ -319,6 +319,6 @@ export function Terminal() {
           <button key={c} type="button" onClick={() => suggest(c)} className="chip">{c}</button>
         ))}
       </div>
-    </section>
+    </div>
   )
 }

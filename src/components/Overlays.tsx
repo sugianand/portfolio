@@ -13,8 +13,10 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const actions = useMemo<Action[]>(() => [
-    { id: 'work', label: 'Go to Work', hint: 'section', run: () => scrollToId('work') },
+    { id: 'about', label: 'Go to About', hint: 'section', run: () => scrollToId('about') },
+    { id: 'projects', label: 'Go to Projects', hint: 'section', run: () => scrollToId('projects') },
     { id: 'log', label: 'Go to Experience', hint: 'section', run: () => scrollToId('log') },
+    { id: 'github', label: 'Go to GitHub activity', hint: 'section', run: () => scrollToId('github') },
     { id: 'shell', label: 'Open the terminal', hint: 'section', run: () => scrollToId('shell') },
     { id: 'arcade', label: 'Play Frantic Run', hint: 'section', run: () => scrollToId('arcade') },
     { id: 'contact', label: 'Go to Contact', hint: 'section', run: () => scrollToId('contact') },
@@ -22,7 +24,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'resume', label: 'Open resume (PDF)', hint: 'new tab', run: () => open(profile.resume) },
     { id: 'github', label: 'Open GitHub', hint: 'github.com/sugianand', run: () => open(profile.github) },
     { id: 'linkedin', label: 'Open LinkedIn', hint: 'linkedin', run: () => open(profile.linkedin) },
-    ...projects.map((p) => ({ id: `p-${p.id}`, label: `Project: ${p.title}`, hint: p.kind, run: () => open(p.links.find((l) => !l.href.startsWith('#'))?.href ?? profile.github) })),
+    ...projects.map((p) => ({ id: `p-${p.id}`, label: `Project: ${p.title}`, hint: p.kind, run: () => { window.location.hash = `project/${p.id}` } })),
     { id: 'accent', label: 'Cycle accent color', hint: 'theme', run: cycleAccent },
     { id: 'confetti', label: 'Celebrate', hint: 'why not', run: () => emit('confetti') },
     { id: 'secrets', label: 'Show achievements', hint: 'secrets', run: onAchievements },

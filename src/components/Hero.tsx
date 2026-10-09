@@ -16,7 +16,7 @@ function Aliases() {
     <p className="aka mono" aria-label={`Also known as ${ALIASES.join(', ')}`}>
       <span>a.k.a.</span>
       <b aria-hidden="true"><Scramble key={index} text={ALIASES[index]} /></b>
-      <span className="aka-count" aria-hidden="true">{String(index + 1).padStart(2, '0')}/{String(ALIASES.length).padStart(2, '0')}</span>
+      <span className="aka-count hide-sm" aria-hidden="true">psst: click the name</span>
     </p>
   )
 }
@@ -38,8 +38,9 @@ export function Hero() {
           Computer scientist and AI master&apos;s student. I build <em>dependable systems</em>, intelligent tools, and software that survives contact with real users.
         </p>
         <div className="hero-actions mono">
-          <span className="chip chip-ghost hide-sm">Click the name. Seriously.</span>
-          <button type="button" className="chip chip-solid" onClick={() => scrollToId('work')} data-cursor="go">See the work ↓</button>
+          <button type="button" className="chip chip-solid" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
+          <a className="chip" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
+          <button type="button" className="chip" onClick={() => scrollToId('contact')}>Contact</button>
         </div>
       </div>
     </section>

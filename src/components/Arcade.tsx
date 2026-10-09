@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { unlock } from '../lib/store'
-import { SectionHead } from './Sections'
+import { SubHead } from './Sections'
 
 const HIGH_KEY = 'sa26:frantic-high'
 const W = 960
@@ -194,8 +194,8 @@ export function Arcade() {
   }, [])
 
   return (
-    <section className="section arcade" id="arcade">
-      <SectionHead index="04" kicker="Arcade" title="The Frantic" accent="Run." note="A tiny remake of my 2024 endless runner. Space, ↑, or tap to jump. Double jump is allowed." />
+    <div className="play-block" id="arcade">
+      <SubHead label="B" title="The Frantic Run" note="A tiny remake of my 2024 endless runner. Space, ↑, or tap to jump. Double jump is allowed; flying blocks are best ducked under." />
       <div className="arcade-frame">
         <div className="arcade-hud mono">
           <span>score <b>{String(score).padStart(4, '0')}</b></span>
@@ -209,6 +209,6 @@ export function Arcade() {
           </button>
         )}
       </div>
-    </section>
+    </div>
   )
 }

@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { profile } from '../data'
 import { scrollToId } from '../lib/store'
 
-export type NavItem = { id: string; label: string }
+export type NavItem = { id: string; label: string; short?: string }
 
 export function Nav({ items, extra }: { items: NavItem[]; extra?: ReactNode }) {
   const [active, setActive] = useState('')
@@ -42,7 +42,7 @@ export function Nav({ items, extra }: { items: NavItem[]; extra?: ReactNode }) {
             className={active === item.id ? 'active' : ''}
             onClick={(e) => { e.preventDefault(); scrollToId(item.id) }}
           >
-            <span>0{i + 1}</span>{item.label}
+            <span>0{i + 1}</span><b className="nav-full">{item.label}</b><b className="nav-short">{item.short ?? item.label}</b>
           </a>
         ))}
       </nav>

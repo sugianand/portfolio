@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
-import { profile, roles, skills, stats } from '../data'
+import { useEffect, useState, type ReactNode } from 'react'
+import { profile, roles } from '../data'
 import { copyEmail, unlock } from '../lib/store'
 import { useInView } from '../lib/useInView'
-import { Clock, CountUp, Reveal, Scramble } from './effects'
+import { Clock, Reveal, Scramble } from './effects'
 
 export function Marquee({ words, reverse = false }: { words: string[]; reverse?: boolean }) {
   const row = [...words, ...words]
@@ -21,15 +21,21 @@ export function Marquee({ words, reverse = false }: { words: string[]; reverse?:
   )
 }
 
-export function Stats() {
+export function SubHead({ label, title, note }: { label: string; title: string; note: string }) {
   return (
-    <section className="stats" aria-label="Quick numbers">
-      {stats.map((s) => (
-        <div key={s.label} className="stat">
-          <strong><CountUp value={s.value} decimals={s.decimals} suffix={s.suffix} /></strong>
-          <span className="mono">{s.label}</span>
-        </div>
-      ))}
+    <div className="subhead">
+      <span className="subhead-label mono">{label}</span>
+      <h3>{title}</h3>
+      <p className="mono">{note}</p>
+    </div>
+  )
+}
+
+export function Playground({ children }: { children: ReactNode }) {
+  return (
+    <section className="section playground" id="playground">
+      <SectionHead index="05" kicker="Playground · optional" title="For the" accent="curious." note="Not required reading. A real terminal and a small game, for anyone who wants to poke around." />
+      {children}
     </section>
   )
 }
@@ -51,7 +57,7 @@ export function GitLog() {
 
   return (
     <section className="section gitlog" id="log">
-      <SectionHead index="02" kicker="Experience" title="git log" accent="--author=me" note="Every role is a commit. Click one to see the diff." />
+      <SectionHead index="03" kicker="Experience" title="Where I've" accent="worked." note="Styled as a git log: every role is a commit. Click one to expand the details." />
       <Reveal className="terminal-frame">
         <div className="frame-bar mono">
           <span className="lights"><i /><i /><i /></span>
@@ -85,14 +91,6 @@ export function GitLog() {
         </ol>
       </Reveal>
 
-      <Reveal className="skills">
-        {Object.entries(skills).map(([group, list]) => (
-          <div key={group} className="skill-group">
-            <p className="mono">{group}</p>
-            <div>{list.map((s) => <span key={s}>{s}</span>)}</div>
-          </div>
-        ))}
-      </Reveal>
     </section>
   )
 }
@@ -100,7 +98,7 @@ export function GitLog() {
 export function Contact() {
   return (
     <section className="section contact" id="contact">
-      <p className="kicker mono"><span>05</span> Contact</p>
+      <p className="kicker mono"><span>06</span> Contact</p>
       <h2 className="contact-title">
         <Scramble text="Let's build" /><br /><em><Scramble text="something real." /></em>
       </h2>
