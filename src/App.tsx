@@ -1,6 +1,8 @@
 import './App.css'
+import { Boot } from './components/Boot'
 import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
+import { ShaderBackdrop } from './components/ShaderBackdrop'
 import { Contact, Footer, GitLog, Marquee, Stats } from './components/Sections'
 import { Work } from './components/Work'
 
@@ -13,6 +15,8 @@ const navItems: NavItem[] = [
 function App() {
   return (
     <>
+      <Boot />
+      <ShaderBackdrop />
       <Nav items={navItems} />
       <main>
         <Hero />
