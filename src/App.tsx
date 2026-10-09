@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import './App.css'
 import { emit } from './lib/store'
 import { AchievementButton, AchievementDrawer, ThemeReset, Toasts } from './components/Achievements'
@@ -25,9 +25,29 @@ const navItems: NavItem[] = [
   { id: 'contact', label: 'Contact' },
 ]
 
+// The browser tries to jump to #section before React has rendered it, so deep links
+// (shared URLs, the 404 page) need a hand. Lazy chunks and web fonts shift the layout
+// for a moment after mount, so re-pin until then unless the visitor starts scrolling.
+const useInitialSectionHash = () => {
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (!navItems.some((item) => item.id === id)) return
+    const jump = () => document.getElementById(id)?.scrollIntoView({ block: 'start' })
+    const timers = [0, 300, 900, 1800].map((ms) => window.setTimeout(jump, ms))
+    const stop = () => timers.forEach(clearTimeout)
+    const events = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
+    events.forEach((e) => window.addEventListener(e, stop, { once: true, passive: true }))
+    return () => {
+      stop()
+      events.forEach((e) => window.removeEventListener(e, stop))
+    }
+  }, [])
+}
+
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = useCallback(() => setDrawerOpen(false), [])
+  useInitialSectionHash()
 
   return (
     <>
