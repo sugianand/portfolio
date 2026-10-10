@@ -488,3 +488,13 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .contact-links a { color: #111; }
   .contact-links a[href^="http"]::after, .contact-links a[href^="mailto"]::after { content: ' ' attr(href); text-transform: none; letter-spacing: 0; color: var(--muted); }
 }
+
+/* Mid-width screens (small laptops, phones held sideways): the six tabs don't
+   fit beside the logo, so the tab bar floats at the bottom like on phones. */
+@media (min-width: 821px) and (max-width: 960px) {
+  .nav { grid-template-columns: auto auto; }
+  .nav-links { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); }
+  .nav-links a { padding: 8px 12px; font-size: 14px; }
+  .footer { padding-bottom: 90px; }
+  .toasts { bottom: 80px; }
+}
