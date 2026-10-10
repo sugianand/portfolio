@@ -19,11 +19,11 @@ Personal site for Suganeshwara "Sugi" Anand: Software Engineer + AI Builder, M.S
 | Skill evidence | Every skill links to the projects or roles where it's used; skills without public evidence say so. |
 | Currently building | Repos pushed in the last 45 days, live from the GitHub API. |
 | WebGL + Canvas | A GLSL topographic shader and a fixed-timestep particle name, both paused when hidden and lighter on touch devices. |
-| Playground | A working terminal (`help`, `ls projects/cinedna`, `sudo hire-me`), a Frantic Run remake, ⌘K palette, achievements, and a Konami code. |
+| Extras | ⌘K command palette, `?` shortcuts overlay, achievements, and a Konami code. |
 
 ## Editing content
 
-Everything lives in [`src/data.ts`](./src/data.ts): `profile`, `projects` (cards, case studies, metrics, architecture), `roles`, `skillGroups`, and `stats`. The UI, terminal, recruiter view, and assistant all read from it, so a fact changes in one place.
+Everything lives in [`src/data.ts`](./src/data.ts): `profile`, `projects` (cards, case studies, metrics, architecture), `roles`, `skillGroups`, and `stats`. The UI, recruiter view, and assistant all read from it, so a fact changes in one place.
 
 ## Tech
 
