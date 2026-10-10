@@ -106,7 +106,11 @@ export function ShaderBackdrop() {
     const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uAccent = u('uAccent'), uPulse = u('uPulse')
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const scale = Math.min(window.devicePixelRatio || 1, 1) * 0.5
+    // Touch devices have no hover to react to, so render smaller and at 30 fps there.
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    const scale = Math.min(window.devicePixelRatio || 1, 1) * (coarse ? 0.35 : 0.5)
+    const frameMs = coarse ? 1000 / 30 : 0
+    let lastFrame = 0
     const mouse = { x: window.innerWidth * 0.7, y: window.innerHeight * 0.4 }
     const eased = { ...mouse }
     const color = [...accentRef.current]
@@ -136,7 +140,10 @@ export function ShaderBackdrop() {
     }
 
     const loop = (time: number) => {
-      draw(time)
+      if (time - lastFrame >= frameMs - 1) {
+        lastFrame = time
+        draw(time)
+      }
       if (running) raf = requestAnimationFrame(loop)
     }
 

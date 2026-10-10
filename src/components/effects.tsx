@@ -83,12 +83,24 @@ export function CountUp({ value, decimals = 0, suffix = '' }: { value: number; d
   )
 }
 
-/** Live wall clock for a time zone. */
+// Building an Intl formatter is far more expensive than using one, and the
+// clocks tick every second, so keep one per time zone.
+const formatters = new Map<string, Intl.DateTimeFormat>()
+const formatterFor = (timeZone: string) => {
+  let f = formatters.get(timeZone)
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+    formatters.set(timeZone, f)
+  }
+  return f
+}
+
+/** Live wall clock for a time zone. Pauses while the tab is hidden. */
 export function Clock({ timeZone }: { timeZone: string }) {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 1000)
+    const id = window.setInterval(() => { if (!document.hidden) setNow(new Date()) }, 1000)
     return () => window.clearInterval(id)
   }, [])
-  return <>{now.toLocaleTimeString('en-US', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</>
+  return <>{formatterFor(timeZone).format(now)}</>
 }
