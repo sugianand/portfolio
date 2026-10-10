@@ -51,7 +51,7 @@ function App() {
     <>
       <Boot />
       <ShaderBackdrop />
-      <Nav items={navItems} extra={<><ThemeReset /><button type="button" className="hud rv-trigger hide-sm" onClick={() => emit('recruiter')}>60s overview</button><button type="button" className="hud mono hide-sm" onClick={() => emit('palette')} aria-label="Open command palette"><kbd>⌘K</kbd></button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
+      <Nav items={navItems} extra={<><ThemeReset /><button type="button" className="hud rv-trigger hide-sm" onClick={() => emit('recruiter')}>60s overview</button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
       <main>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />

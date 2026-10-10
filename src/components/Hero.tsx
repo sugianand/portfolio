@@ -27,7 +27,6 @@ export function Hero() {
       <div className="hero-meta mono">
         <span><i className="dot" /> Open to AI, backend &amp; full-stack roles</span>
         <span>{profile.location} · <Clock timeZone={profile.timezone} /></span>
-        <span className="hide-sm">42.33°N 83.05°W</span>
       </div>
 
       <ParticleName />
@@ -37,15 +36,13 @@ export function Hero() {
         <div className="hero-copy">
           <p className="hero-role">{profile.headline}</p>
           <p className="hero-intro">
-            M.S. in AI at Wayne State, B.S. in CS. I build <em>ranking and retrieval systems</em>, <em>real-time multiplayer backends</em>, and full-stack products, and I ship them with tests.
+            M.S. in AI at Wayne State. I build <em>ranking and retrieval systems</em>, <em>real-time backends</em>, and full-stack products.
           </p>
-          <p className="hero-targets mono">{profile.targets.join(' · ')}<br />{profile.availability}</p>
         </div>
         <div className="hero-actions mono">
           <button type="button" className="chip chip-solid" onClick={() => emit('recruiter')}>60-second overview</button>
           <button type="button" className="chip" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
           <a className="chip" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
-          <button type="button" className="chip" onClick={() => scrollToId('contact')}>Contact</button>
         </div>
       </div>
     </section>
