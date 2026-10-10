@@ -1,4 +1,5 @@
-import { profile, skills, stats } from '../data'
+import { useState } from 'react'
+import { evidenceLabels, profile, projects, skillGroups, stats } from '../data'
 import { CountUp, Reveal } from './effects'
 import { SectionHead } from './Sections'
 
@@ -8,7 +9,7 @@ const facts = [
   ['Based in', profile.location],
   ['Currently', 'Student Assistant at WSU C&IT · Peer Technical Mentor'],
   ['Previously', 'QA at Accurate Technologies · Backend at NeverEnding'],
-  ['Looking for', 'Software engineering and AI roles'],
+  ['Looking for', 'AI, ML, backend, and full-stack roles; internships and co-ops'],
 ]
 
 export function About() {
@@ -24,7 +25,7 @@ export function About() {
             I like the hard middle of a problem: the edge cases, the architecture, and the moment a rough idea becomes something real. I&apos;ve tested embedded automotive software, built Django and Java backends for financial products, imaged hundreds of machines with a portal I wrote, and taught students to build games.
           </p>
           <p>
-            Right now I&apos;m building AI-flavored products like CineDNA, real-time multiplayer games, and tools that make students&apos; lives easier.
+            Right now I&apos;m building CineDNA, a natural-language movie recommender, and Movie in Three Clues, a real-time multiplayer game on Cloudflare Workers, alongside graduate AI coursework.
           </p>
           <div className="about-actions mono">
             <a className="chip chip-solid" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
@@ -53,14 +54,49 @@ export function About() {
         ))}
       </div>
 
-      <Reveal className="skills">
-        {Object.entries(skills).map(([group, list]) => (
-          <div key={group} className="skill-group">
-            <p className="mono">{group === 'ai' ? 'AI / ML' : group}</p>
-            <div>{list.map((s) => <span key={s}>{s}</span>)}</div>
+      <SkillMap />
+    </section>
+  )
+}
+
+const evidenceName = (key: string) => projects.find((p) => p.id === key)?.title ?? evidenceLabels[key] ?? key
+
+/** Skills grouped by area; selecting one shows where it is actually used. */
+function SkillMap() {
+  const [active, setActive] = useState<string | null>(null)
+  const item = skillGroups.flatMap((g) => g.items).find((i) => i.name === active)
+
+  return (
+    <Reveal className="skillmap">
+      <div className="skills">
+        {skillGroups.map((g) => (
+          <div key={g.key} className="skill-group">
+            <p className="mono">{g.label}</p>
+            <div>
+              {g.items.map((i) => (
+                <button
+                  key={i.name}
+                  type="button"
+                  className={`${i.evidence ? 'has-ev' : ''} ${active === i.name ? 'active' : ''}`}
+                  onPointerEnter={() => setActive(i.name)}
+                  onFocus={() => setActive(i.name)}
+                  onClick={() => setActive(i.name)}
+                  aria-pressed={active === i.name}
+                >
+                  {i.name}
+                </button>
+              ))}
+            </div>
           </div>
         ))}
-      </Reveal>
-    </section>
+      </div>
+      <p className="skill-evidence" aria-live="polite">
+        {item
+          ? item.evidence
+            ? <><b>{item.name}</b> <span className="mono">used in</span> {item.evidence.map(evidenceName).join(' · ')}</>
+            : <><b>{item.name}</b> <span className="mono">no public project yet</span></>
+          : <span className="mono">Select a skill to see where it&apos;s used. Underlined skills link to real projects or roles.</span>}
+      </p>
+    </Reveal>
   )
 }

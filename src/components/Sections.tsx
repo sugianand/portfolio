@@ -71,10 +71,14 @@ export function GitLog() {
               <li key={role.hash} className={`commit ${isOpen ? 'open' : ''}`}>
                 <button type="button" className="commit-head" onClick={() => setOpen(isOpen ? null : role.hash)} aria-expanded={isOpen} data-cursor={isOpen ? 'close' : 'diff'}>
                   <span className="graph">{isOpen ? '◉' : '●'}</span>
-                  <span className="hash">{role.hash}</span>
-                  {role.refs && <span className="refs">({role.refs})</span>}
-                  <span className="type">{role.type}:</span>
-                  <span className="msg">{role.title} <span className="at">@ {role.org}</span></span>
+                  <span className="commit-main">
+                    <span className="msg">{role.title} <span className="at">@ {role.org}</span></span>
+                    <span className="commit-meta">
+                      <span className="hash">{role.hash}</span>
+                      {role.refs && <span className="refs">({role.refs})</span>}
+                      <span className="type">{role.type}</span>
+                    </span>
+                  </span>
                   <span className="date">{role.date}</span>
                 </button>
                 <div className="commit-body">

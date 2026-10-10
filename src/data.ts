@@ -394,12 +394,75 @@ export const roles: Role[] = [
   },
 ]
 
-export const skills = {
-  languages: ['Python', 'Java', 'C++', 'C#', 'TypeScript', 'JavaScript', 'SQL'],
-  frameworks: ['React', 'Next.js', 'Django', 'FastAPI', 'Express', 'Blazor'],
-  ai: ['PyTorch', 'TensorFlow', 'NumPy', 'MATLAB'],
-  tools: ['Docker', 'Linux', 'Git', 'Supabase', 'MySQL', 'Jira'],
+/** Where a skill shows up. Keys are project ids or the role keys below. */
+export const evidenceLabels: Record<string, string> = {
+  neverending: 'NeverEnding (internship)',
+  ati: 'Accurate Technologies (internship)',
+  cit: 'WSU C&IT portal',
+  rocket: 'Rocket Companies (teaching)',
+  chatui: 'Simple Chat UI (resume project)',
 }
+
+export type SkillGroup = { key: string; label: string; items: { name: string; evidence?: string[] }[] }
+
+// Evidence lists only places the skill is verifiably used: project repos on
+// this site or roles on the resume. Skills without public evidence carry none.
+export const skillGroups: SkillGroup[] = [
+  { key: 'languages', label: 'Languages', items: [
+    { name: 'Python', evidence: ['cinedna', '11planner', 'neverending'] },
+    { name: 'TypeScript', evidence: ['three-clues', 'portfolio'] },
+    { name: 'JavaScript', evidence: ['home-cleaning', 'frantic-run', 'rocket'] },
+    { name: 'Java', evidence: ['neverending'] },
+    { name: 'C#', evidence: ['cit'] },
+    { name: 'C++', evidence: ['chatui'] },
+    { name: 'SQL', evidence: ['home-cleaning', 'three-clues', '11planner'] },
+  ] },
+  { key: 'ai_ml', label: 'AI / ML', items: [
+    { name: 'Recommendation & ranking', evidence: ['cinedna'] },
+    { name: 'Rule-based NLU', evidence: ['cinedna'] },
+    { name: 'LLM APIs', evidence: ['11planner'] },
+    { name: 'PyTorch' },
+    { name: 'TensorFlow' },
+    { name: 'NumPy' },
+    { name: 'MATLAB', evidence: ['chatui'] },
+  ] },
+  { key: 'backend', label: 'Backend', items: [
+    { name: 'FastAPI', evidence: ['cinedna', '11planner'] },
+    { name: 'Django / DRF', evidence: ['neverending'] },
+    { name: 'Express', evidence: ['home-cleaning'] },
+    { name: 'Cloudflare Workers', evidence: ['three-clues'] },
+    { name: 'REST API design', evidence: ['cinedna', 'home-cleaning', 'neverending'] },
+  ] },
+  { key: 'frontend', label: 'Frontend', items: [
+    { name: 'React', evidence: ['cinedna', 'three-clues', 'portfolio', 'neverending'] },
+    { name: 'Next.js', evidence: ['11planner'] },
+    { name: 'Blazor', evidence: ['cit'] },
+    { name: 'WebGL / GLSL', evidence: ['portfolio'] },
+    { name: 'Canvas', evidence: ['portfolio', 'frantic-run'] },
+  ] },
+  { key: 'data', label: 'Databases', items: [
+    { name: 'PostgreSQL (Supabase)', evidence: ['11planner'] },
+    { name: 'MySQL', evidence: ['home-cleaning'] },
+    { name: 'SQLite (D1)', evidence: ['three-clues'] },
+  ] },
+  { key: 'infra', label: 'Infra & tools', items: [
+    { name: 'Docker', evidence: ['cinedna'] },
+    { name: 'GitHub Actions', evidence: ['cinedna', 'portfolio'] },
+    { name: 'Vercel', evidence: ['home-cleaning'] },
+    { name: 'Render', evidence: ['cinedna'] },
+    { name: 'Git' },
+    { name: 'Linux' },
+    { name: 'Jira', evidence: ['neverending'] },
+  ] },
+  { key: 'testing', label: 'Testing & QA', items: [
+    { name: 'Regression & root-cause analysis', evidence: ['ati'] },
+    { name: 'Unit & integration tests', evidence: ['three-clues', 'cinedna', 'portfolio'] },
+    { name: 'Miniflare', evidence: ['three-clues'] },
+  ] },
+]
+
+/** Flat view used by the terminal. */
+export const skills: Record<string, string[]> = Object.fromEntries(skillGroups.map((g) => [g.key, g.items.map((i) => i.name)]))
 
 export const stats = [
   { value: 30, suffix: '+', label: 'Defects resolved at ATI' },
