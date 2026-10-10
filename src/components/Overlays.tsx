@@ -14,6 +14,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
 
   const actions = useMemo<Action[]>(() => [
     { id: 'recruiter', label: '60-second overview (recruiter view)', hint: 'R', run: () => emit('recruiter') },
+    { id: 'assistant', label: 'Ask the portfolio assistant', hint: 'retrieval', run: () => emit('assistant') },
     { id: 'about', label: 'Go to About', hint: 'section', run: () => scrollToId('about') },
     { id: 'projects', label: 'Go to Projects', hint: 'section', run: () => scrollToId('projects') },
     { id: 'log', label: 'Go to Experience', hint: 'section', run: () => scrollToId('log') },

@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom'
 import { projects, type Category, type Project } from '../data'
 import { scrollToId } from '../lib/store'
 import { Reveal } from './effects'
-import { ProductPreview } from './ProductPreview'
 import { SectionHead } from './Sections'
 
 const FILTERS: ('All' | Category)[] = ['All', 'AI', 'Backend', 'Full Stack', 'Realtime', 'Games']
@@ -12,6 +11,8 @@ const HASH = '#project/'
 // The case-study dialog is split into its own chunk and prefetched on hover or focus.
 const loadDetail = () => import('./ProjectDetail')
 const ProjectDetail = lazy(() => loadDetail().then((m) => ({ default: m.ProjectDetail })))
+// Previews (and the CineDNA engine they run) sit below the fold, so they load as their own chunk.
+const ProductPreview = lazy(() => import('./ProductPreview').then((m) => ({ default: m.ProductPreview })))
 
 export function ProjectLink({ link, onInternal }: { link: Project['links'][number]; onInternal?: () => void }) {
   if (link.href.startsWith('#')) {
@@ -28,7 +29,7 @@ function FeaturedCard({ project, onOpen }: { project: Project; onOpen: () => voi
   return (
     <article className={`fcard tone-${project.tone}`}>
       <button type="button" className="pcard-hit" onClick={onOpen} onPointerEnter={loadDetail} onFocus={loadDetail} aria-label={`Read the ${project.title} case study`} data-cursor="read" />
-      <div className="fcard-preview"><ProductPreview id={project.id} /></div>
+      <div className="fcard-preview"><Suspense fallback={<div className="pv pv-placeholder" aria-hidden="true" />}><ProductPreview id={project.id} /></Suspense></div>
       <div className="fcard-copy">
         <p className="pcard-top mono"><span>{project.kind}</span><span>{project.year}</span></p>
         <h3>{project.title}</h3>

@@ -735,3 +735,44 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .hero-meta { top: 74px; align-items: center; }
   .aka { font-size: 15px; }
 }
+
+/* ---------- assistant ---------- */
+.ask-launch { position: fixed; right: var(--gutter); bottom: 22px; z-index: 60; display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 999px; border: 1px solid rgba(var(--accent-rgb), .7); background: rgba(19, 19, 17, .92); backdrop-filter: blur(12px); color: var(--cream); font: 500 14px var(--sans); box-shadow: 0 14px 36px rgba(0, 0, 0, .45); transition: transform .25s var(--ease), border-color .2s; }
+.ask-launch span { color: var(--accent); }
+.ask-launch:hover { transform: translateY(-2px); border-color: var(--accent); }
+.ask-launch.hidden-launch { opacity: 0; pointer-events: none; }
+.ask { position: fixed; right: var(--gutter); bottom: 22px; z-index: 125; width: min(460px, calc(100vw - 2 * var(--gutter))); height: min(640px, calc(100svh - 110px)); display: grid; grid-template-rows: auto 1fr auto; background: var(--ink-2); border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0, 0, 0, .6); animation: pop .25s var(--ease) both; }
+.ask-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+.ask-head strong { display: block; font-size: 17px; }
+.ask-head span { display: block; font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+.ask-close { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+.ask-close:hover { color: var(--accent); }
+.ask-log { overflow-y: auto; padding: 16px 18px; display: grid; gap: 18px; align-content: start; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.ask-empty p { font-size: 15px; color: #d8d3c8; line-height: 1.55; }
+.ask-suggest { display: grid; gap: 6px; margin-top: 14px; }
+.ask-suggest button { text-align: left; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line); color: #e4dfd5; transition: border-color .2s, background .2s; }
+.ask-suggest button:hover, .ask-suggest button:focus-visible { border-color: var(--accent); background: rgba(var(--accent-rgb), .08); }
+.ask-turn { display: grid; gap: 10px; }
+.ask-q { justify-self: end; max-width: 86%; padding: 9px 12px; background: rgba(var(--accent-rgb), .16); border: 1px solid rgba(var(--accent-rgb), .4); font-size: 14.5px; }
+.ask-a { display: grid; gap: 8px; padding: 12px 14px; background: var(--ink); border: 1px solid var(--line); }
+.ask-a > p { font-size: 14.5px; line-height: 1.55; color: #e4dfd5; }
+.ask-a sup { color: var(--accent); font-size: 11px; }
+.ask-a a { color: var(--accent); text-decoration: underline; }
+.ask-sources { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px; }
+.ask-sources button { font-size: 13px; padding: 5px 9px; border: 1px solid var(--line); color: #d8d3c8; }
+.ask-sources button span { color: var(--accent); }
+.ask-sources button:hover { border-color: var(--accent); color: var(--cream); }
+.ask-trace summary { font-size: 12px; color: var(--muted); cursor: pointer; }
+.ask-trace p, .ask-trace ol { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.6; word-break: break-word; }
+.ask-trace ol { padding-left: 18px; list-style: decimal; }
+.ask-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+.ask-form input { flex: 1; min-width: 0; font: 15px var(--sans); color: var(--cream); background: var(--ink); border: 1px solid #3a3a35; padding: 10px 12px; outline: none; }
+.ask-form input:focus { border-color: var(--accent); }
+.ask-form button { font: 600 14px var(--sans); padding: 0 16px; background: var(--accent); color: var(--ink); }
+.ask-form button:disabled { opacity: .5; cursor: default; }
+@media (max-width: 960px) {
+  .ask-launch { bottom: 84px; padding: 11px 14px; }
+  .ask { bottom: 12px; height: min(620px, calc(100svh - 24px)); }
+}
+@media print { .ask-launch, .ask { display: none !important; } }
+.pv-placeholder { height: 256px; }

@@ -6,6 +6,7 @@ import { Boot } from './components/Boot'
 import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
 import { CommandPalette, Confetti, Konami, Shortcuts } from './components/Overlays'
+import { Assistant } from './components/Assistant'
 import { RecruiterView } from './components/RecruiterView'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
 import { About } from './components/About'
@@ -77,6 +78,7 @@ function App() {
       <CommandPalette onAchievements={() => setDrawerOpen(true)} />
       <Shortcuts />
       <RecruiterView />
+      <Assistant />
       <Confetti />
       <Konami />
     </>
