@@ -19,8 +19,6 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'projects', label: 'Go to Projects', hint: 'section', run: () => scrollToId('projects') },
     { id: 'log', label: 'Go to Experience', hint: 'section', run: () => scrollToId('log') },
     { id: 'github', label: 'Go to GitHub activity', hint: 'section', run: () => scrollToId('github') },
-    { id: 'shell', label: 'Open the terminal', hint: 'section', run: () => scrollToId('shell') },
-    { id: 'arcade', label: 'Play Frantic Run', hint: 'section', run: () => scrollToId('arcade') },
     { id: 'contact', label: 'Go to Contact', hint: 'section', run: () => scrollToId('contact') },
     { id: 'email', label: 'Copy email address', hint: profile.email, run: () => copyEmail(profile.email) },
     { id: 'resume', label: 'Open resume (PDF)', hint: 'new tab', run: () => open(profile.resume) },
@@ -121,9 +119,6 @@ const SHORTCUTS: [keys: string[], action: string][] = [
   [['?'], 'Show these shortcuts'],
   [['Esc'], 'Close a dialog or panel'],
   [['←', '→'], 'Previous or next case study'],
-  [['Space'], 'Jump in Frantic Run (also ↑ or W)'],
-  [['↑'], 'Recall terminal history'],
-  [['Tab'], 'Complete a terminal command'],
 ]
 
 export function Shortcuts() {

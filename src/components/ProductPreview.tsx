@@ -77,9 +77,8 @@ function CluesPreview() {
 }
 
 const TERM = [
-  ['$ neofetch', 'SA-OS 26.10 · React 19 · WebGL'],
-  ['$ ls projects/', 'cinedna/  three-clues/  portfolio/'],
-  ['$ sudo hire-me', 'Access granted. Excellent decision.'],
+  ['> What AI projects has Sugi built?', 'CineDNA ranks films across 14 weighted DNA dimensions… [1]'],
+  ['> Which project shows realtime work?', 'Movie in Three Clues: a server-owned clock and versioned writes… [2]'],
 ]
 
 // Character offset at which each command starts typing (each output line pauses 4 ticks).

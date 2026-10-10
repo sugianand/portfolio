@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { profile, projects, roles, stats } from '../data'
-import { copyEmail, on, scrollToId } from '../lib/store'
+import { copyEmail, on, scrollToId, unlock } from '../lib/store'
 
 const HASH = '#recruiter'
 
@@ -47,6 +47,7 @@ export function RecruiterView() {
 
   useEffect(() => {
     if (!open) return
+    unlock('recruiter')
     const previous = document.activeElement as HTMLElement | null
     boxRef.current?.focus({ preventScroll: true })
     const onKey = (e: KeyboardEvent) => {

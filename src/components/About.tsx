@@ -61,33 +61,53 @@ export function About() {
 
 const evidenceName = (key: string) => projects.find((p) => p.id === key)?.title ?? evidenceLabels[key] ?? key
 
-/** Skills grouped by area; selecting one shows where it is actually used. */
+// Two-letter symbols for the periodic-table view of the stack.
+const SYMBOLS: Record<string, string> = {
+  Python: 'Py', TypeScript: 'Ts', JavaScript: 'Js', Java: 'Ja', 'C#': 'C#', 'C++': 'C+', SQL: 'Sq',
+  'Recommendation & ranking': 'Rk', 'Rule-based NLU': 'Nl', 'Information retrieval (BM25)': 'Ir', 'LLM APIs': 'Ll',
+  PyTorch: 'Pt', TensorFlow: 'Tf', NumPy: 'Np', MATLAB: 'Ml',
+  FastAPI: 'Fa', 'Django / DRF': 'Dj', Express: 'Ex', 'Cloudflare Workers': 'Cf', 'REST API design': 'Ra',
+  React: 'Re', 'Next.js': 'Nx', Blazor: 'Bz', 'WebGL / GLSL': 'Gl', Canvas: 'Cv',
+  'PostgreSQL (Supabase)': 'Pg', MySQL: 'My', 'SQLite (D1)': 'Sl',
+  Docker: 'Dk', 'GitHub Actions': 'Ga', Vercel: 'Vc', Render: 'Rn', Git: 'Gt', Linux: 'Lx', Jira: 'Ji',
+  'Regression & root-cause analysis': 'Rc', 'Unit & integration tests': 'Ut', Miniflare: 'Mf',
+}
+
+const SHORT: Record<string, string> = {
+  'Recommendation & ranking': 'Ranking', 'Information retrieval (BM25)': 'Retrieval', 'Rule-based NLU': 'NLU',
+  'REST API design': 'REST APIs', 'PostgreSQL (Supabase)': 'Postgres', 'SQLite (D1)': 'SQLite',
+  'Regression & root-cause analysis': 'Root cause', 'Unit & integration tests': 'Testing', 'Cloudflare Workers': 'Workers',
+  'GitHub Actions': 'Actions', 'WebGL / GLSL': 'WebGL', 'Django / DRF': 'Django',
+}
+
+/** The stack as a periodic table: one tile per skill, colored by family; dots count where it is used. */
 function SkillMap() {
   const [active, setActive] = useState<string | null>(null)
-  const item = skillGroups.flatMap((g) => g.items).find((i) => i.name === active)
+  const all = skillGroups.flatMap((g) => g.items.map((i) => ({ ...i, group: g.key })))
+  const item = all.find((i) => i.name === active)
 
   return (
     <Reveal className="skillmap">
-      <div className="skills">
-        {skillGroups.map((g) => (
-          <div key={g.key} className="skill-group">
-            <p className="mono">{g.label}</p>
-            <div>
-              {g.items.map((i) => (
-                <button
-                  key={i.name}
-                  type="button"
-                  className={`${i.evidence ? 'has-ev' : ''} ${active === i.name ? 'active' : ''}`}
-                  onPointerEnter={() => setActive(i.name)}
-                  onFocus={() => setActive(i.name)}
-                  onClick={() => setActive(i.name)}
-                  aria-pressed={active === i.name}
-                >
-                  {i.name}
-                </button>
-              ))}
-            </div>
-          </div>
+      <ul className="ptable-legend mono" aria-label="Skill families">
+        {skillGroups.map((g) => <li key={g.key} className={`fam-${g.key}`}><i />{g.label}</li>)}
+      </ul>
+      <div className="ptable">
+        {all.map((i, n) => (
+          <button
+            key={i.name}
+            type="button"
+            className={`el fam-${i.group} ${i.evidence ? '' : 'el-noev'} ${active === i.name ? 'active' : ''}`}
+            onPointerEnter={() => setActive(i.name)}
+            onFocus={() => setActive(i.name)}
+            onClick={() => setActive(i.name)}
+            aria-pressed={active === i.name}
+            aria-label={`${i.name}${i.evidence ? `, used in ${i.evidence.length}` : ''}`}
+          >
+            <span className="el-n mono">{n + 1}</span>
+            <b>{SYMBOLS[i.name] ?? i.name.slice(0, 2)}</b>
+            <span className="el-name">{SHORT[i.name] ?? i.name}</span>
+            <span className="el-dots" aria-hidden="true">{(i.evidence ?? []).map((e) => <i key={e} />)}</span>
+          </button>
         ))}
       </div>
       <p className="skill-evidence" aria-live="polite">
@@ -95,7 +115,7 @@ function SkillMap() {
           ? item.evidence
             ? <><b>{item.name}</b> <span className="mono">used in</span> {item.evidence.map(evidenceName).join(' · ')}</>
             : <><b>{item.name}</b> <span className="mono">no public project yet</span></>
-          : <span className="mono">Select a skill to see where it&apos;s used. Underlined skills link to real projects or roles.</span>}
+          : <span className="mono">Hover or tap an element. Each dot is a project or role that uses it.</span>}
       </p>
     </Reveal>
   )

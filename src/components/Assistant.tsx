@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import type { Answer } from '../lib/assistant'
 import type { Source } from '../lib/retrieval'
-import { on, scrollToId } from '../lib/store'
+import { on, scrollToId, unlock } from '../lib/store'
 
 const SUGGESTIONS = [
   'What AI projects has Sugi built?',
@@ -54,6 +54,7 @@ export function Assistant() {
     setInput('')
     const { answer } = await loadEngine()
     setTurns((t) => [...t, { q: question, a: answer(question) }].slice(-12))
+    unlock('assistant')
     setBusy(false)
   }
 

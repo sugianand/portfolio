@@ -50,7 +50,7 @@ const EXPAND: Record<string, string[]> = {
   fit: ['looking', 'roles', 'ai', 'built'],
   contact: ['email', 'linkedin', 'github', 'resume'],
   teach: ['mentor', 'tutor', 'coach', 'taught'],
-  game: ['games', 'arcade', 'runner', 'multiplayer'],
+  game: ['games', 'runner', 'multiplayer'],
   language: ['languages', 'python', 'typescript', 'java'],
   tech: ['stack', 'skills', 'languages'],
   technology: ['stack', 'skills'],

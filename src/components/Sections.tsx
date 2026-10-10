@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { profile, roles } from '../data'
 import { copyEmail, unlock } from '../lib/store'
 import { useInView } from '../lib/useInView'
@@ -18,25 +18,6 @@ export function Marquee({ words, reverse = false }: { words: string[]; reverse?:
         ))}
       </div>
     </div>
-  )
-}
-
-export function SubHead({ label, title, note }: { label: string; title: string; note: string }) {
-  return (
-    <div className="subhead">
-      <span className="subhead-label mono">{label}</span>
-      <h3>{title}</h3>
-      <p>{note}</p>
-    </div>
-  )
-}
-
-export function Playground({ children }: { children: ReactNode }) {
-  return (
-    <section className="section playground" id="playground">
-      <SectionHead index="05" kicker="Playground · optional" title="For the" accent="curious." note="Not required reading. A real terminal and a small game, for anyone who wants to poke around." />
-      {children}
-    </section>
   )
 }
 
@@ -102,7 +83,7 @@ export function GitLog() {
 export function Contact() {
   return (
     <section className="section contact" id="contact">
-      <p className="kicker mono"><span>06</span> Contact</p>
+      <p className="kicker mono"><span>05</span> Contact</p>
       <h2 className="contact-title">
         <Scramble text="Let's build" /><br /><em><Scramble text="something real." /></em>
       </h2>

@@ -1,15 +1,14 @@
 import { useSyncExternalStore } from 'react'
 
 export const achievementList = [
-  { id: 'hello', name: 'Hello, World', hint: 'Run any command in the terminal' },
+  { id: 'recruiter', name: 'Speed Reader', hint: 'Open the 60-second overview' },
+  { id: 'casestudy', name: 'Deep Diver', hint: 'Open a project case study' },
+  { id: 'demo', name: 'Taste Test', hint: 'Run your own search in the CineDNA demo' },
+  { id: 'arch', name: 'Systems Thinker', hint: 'Explore an architecture diagram' },
+  { id: 'assistant', name: 'Curious Mind', hint: 'Ask the assistant a question' },
   { id: 'palette', name: 'Power User', hint: 'Open the command palette' },
   { id: 'scatter', name: 'Big Bang', hint: 'Click the name in the hero' },
-  { id: 'neofetch', name: 'Ricer', hint: 'Check the system specs' },
-  { id: 'sudo', name: 'Root Access', hint: 'Use sudo to make a hiring decision' },
-  { id: 'rmrf', name: 'Chaos Agent', hint: 'Try to delete everything' },
   { id: 'theme', name: 'Chameleon', hint: 'Change the accent color' },
-  { id: 'runner', name: 'Warmed Up', hint: 'Score 10 in Frantic Run' },
-  { id: 'marathon', name: 'Marathoner', hint: 'Score 40 in Frantic Run' },
   { id: 'copy', name: 'Copycat', hint: 'Copy the email address' },
   { id: 'konami', name: 'Old School', hint: '↑ ↑ ↓ ↓ ← → ← → B A' },
   { id: 'explorer', name: 'Explorer', hint: 'Reach the very bottom' },

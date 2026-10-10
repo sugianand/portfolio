@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import { emit } from './lib/store'
 import { AchievementButton, AchievementDrawer, ThemeReset, Toasts } from './components/Achievements'
@@ -12,18 +12,14 @@ import { ShaderBackdrop } from './components/ShaderBackdrop'
 import { About } from './components/About'
 import { GitHubActivity } from './components/GitHubActivity'
 import { Projects } from './components/Projects'
-import { Contact, Footer, GitLog, Marquee, Playground } from './components/Sections'
+import { Contact, Footer, GitLog, Marquee } from './components/Sections'
 
-// The Playground sits far below the fold, so its terminal and game load as separate chunks.
-const Terminal = lazy(() => import('./components/Terminal').then((m) => ({ default: m.Terminal })))
-const Arcade = lazy(() => import('./components/Arcade').then((m) => ({ default: m.Arcade })))
 
 const navItems: NavItem[] = [
   { id: 'about', label: 'About' },
   { id: 'projects', label: 'Projects', short: 'Work' },
   { id: 'log', label: 'Experience', short: 'Exp' },
   { id: 'github', label: 'GitHub', short: 'Git' },
-  { id: 'playground', label: 'Playground', short: 'Play' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -63,12 +59,6 @@ function App() {
         <Projects />
         <GitLog />
         <GitHubActivity />
-        <Playground>
-          <Suspense fallback={null}>
-            <Terminal />
-            <Arcade />
-          </Suspense>
-        </Playground>
         <Marquee words={['Curious enough to ask why', 'Practical enough to ship']} reverse />
         <Contact />
       </main>

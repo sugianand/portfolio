@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import { projects, type Project } from '../data'
 import { ArchDiagram } from './ArchDiagram'
 import { CineDNADemo } from './CineDNADemo'
+import { unlock } from '../lib/store'
 import { ProjectLink } from './Projects'
 
 type Block = { title: string; body: ReactNode }
@@ -28,6 +29,7 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
   const sheetRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
+    unlock('casestudy')
     const previous = document.activeElement as HTMLElement | null
     sheetRef.current?.focus({ preventScroll: true })
     return () => previous?.focus({ preventScroll: true })

@@ -46,7 +46,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .mono { font-family: var(--mono); }
 
 /* Syne is reserved for big display type; everything else uses the readable sans. */
-h1, h2, h3, .wordmark, .marquee b, .stat strong, .gh-stats strong, .contact-email, .arcade-overlay strong, .art-glyph, .drawer-panel h3, .work-outro strong { font-family: var(--display); }
+h1, h2, h3, .wordmark, .marquee b, .stat strong, .gh-stats strong, .contact-email, .art-glyph, .drawer-panel h3, .work-outro strong { font-family: var(--display); }
 
 @media (pointer: fine) {
   html.has-cursor, html.has-cursor * { cursor: none !important; }

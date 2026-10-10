@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { search, type Dimension } from '../lib/cinedna'
+import { unlock } from '../lib/store'
 
 const EXAMPLES = [
   'slow burn dark mystery without romance',
@@ -22,7 +23,7 @@ export function CineDNADemo() {
         <p className="mono">Live demo · CineDNA&apos;s ranking engine running in your browser</p>
         <label className="demo-input">
           <span className="sr-only">Describe a movie vibe</span>
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Describe a vibe…" maxLength={200} spellCheck={false} />
+          <input value={query} onChange={(e) => { setQuery(e.target.value); unlock('demo') }} placeholder="Describe a vibe…" maxLength={200} spellCheck={false} />
         </label>
         <div className="demo-examples">
           {EXAMPLES.map((ex) => (

@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
+import { unlock } from '../lib/store'
 
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
@@ -84,7 +85,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
                 className={`arch-node ${n.id === active ? 'active' : ''} ${linked.has(n.id) && n.id !== active ? 'linked' : ''}`}
                 onPointerEnter={() => setActive(n.id)}
                 onFocus={() => setActive(n.id)}
-                onClick={() => setActive(n.id)}
+                onClick={() => { setActive(n.id); unlock('arch') }}
                 aria-pressed={n.id === active}
               >
                 <b>{n.label}</b>

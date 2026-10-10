@@ -179,7 +179,7 @@ export const projects: Project[] = [
     categories: ['AI', 'Full Stack'],
     featured: true,
     tagline: 'The site you are on is a project too.',
-    body: 'Hand-written WebGL and Canvas, an in-browser retrieval assistant, a working terminal, and a game, on React with no other runtime dependencies.',
+    body: 'Hand-written WebGL and Canvas, and an in-browser retrieval assistant, on React with no other runtime dependencies.',
     stack: ['React 19', 'TypeScript', 'WebGL (GLSL)', 'Canvas 2D', 'Vite', 'GitHub Actions'],
     links: [{ label: 'Source', href: 'https://github.com/sugianand/portfolio' }],
     tone: 'ink',
@@ -192,7 +192,6 @@ export const projects: Project[] = [
       'A fragment shader with domain-warped noise and pointer interaction, paused when hidden',
       'A fixed-timestep particle system so the name forms equally fast on slow devices',
       'A client-side retrieval assistant: BM25 with query expansion, an intent-aware rerank, extractive answers with citations, and tests for real recruiter questions',
-      'A terminal with tab completion and history, a canvas game, and an achievements system',
       'Lazy-loaded chunks, reduced-motion support, and zero axe accessibility violations',
     ],
     metrics: [
@@ -202,8 +201,8 @@ export const projects: Project[] = [
     ],
     architecture: {
       nodes: [
-        { id: 'data', label: 'data.ts', tech: 'single source of truth', tier: 0, detail: 'Projects, roles, skills, and facts. The UI, the terminal, the recruiter view, and the assistant all read from it.' },
-        { id: 'react', label: 'React UI', tech: 'React 19 + TS', tier: 1, detail: 'Sections, case studies, and overlays. Heavy parts (terminal, game, case studies) load as separate chunks on demand.' },
+        { id: 'data', label: 'data.ts', tech: 'single source of truth', tier: 0, detail: 'Projects, roles, skills, and facts. The UI, the recruiter view, and the assistant all read from it.' },
+        { id: 'react', label: 'React UI', tech: 'React 19 + TS', tier: 1, detail: 'Sections, case studies, and overlays. Heavy parts (case studies, previews, the assistant) load as separate chunks on demand.' },
         { id: 'gl', label: 'Render layer', tech: 'WebGL + Canvas 2D', tier: 1, detail: 'A GLSL terrain shader and a particle system, both driven by requestAnimationFrame and paused when not visible.' },
         { id: 'rag', label: 'Assistant', tech: 'BM25 in the browser', tier: 2, detail: 'Chunks the site data into passages, builds an inverted index, ranks passages with BM25 plus an intent-aware rerank, and quotes the best sentences with citations. No server, no API key, and it refuses questions the data cannot answer.' },
         { id: 'ci', label: 'CI/CD', tech: 'GitHub Actions → Pages', tier: 2, detail: 'Every push to main is linted, built, and deployed. The build injects the commit hash and count shown in the footer.' },
@@ -214,7 +213,7 @@ export const projects: Project[] = [
     features: [
       'WebGL terrain that bends around the pointer and follows the theme color',
       'Particle-text name that scatters and reforms',
-      'Retrieval assistant, recruiter view, terminal, arcade, ⌘K palette, and achievements',
+      'Retrieval assistant, recruiter view, ⌘K palette, and achievements',
       'Case studies with interactive architecture diagrams',
     ],
     challenges: [
@@ -302,12 +301,11 @@ export const projects: Project[] = [
     body: 'A browser endless runner on a hand-written game loop: movement physics, collision detection, scoring, and steady frame rates.',
     stack: ['JavaScript', 'HTML Canvas', 'SCSS'],
     links: [
-      { label: 'Play the remake', href: '#arcade' },
       { label: 'Source', href: 'https://github.com/sugianand/Frantic_Run' },
     ],
     tone: 'blue',
     role: 'Solo',
-    status: 'Complete; a remake is playable on this site',
+    status: 'Complete',
     problem: 'Game feel lives in milliseconds: a stuttering loop or a hitbox off by a few pixels ruins it.',
     overview: 'Dodge obstacles, survive as the speed climbs, and chase a high score. Everything runs on a hand-written loop with no engine: physics, collisions, scoring, and rendering.',
     why: 'Games are the fastest way to feel whether your code is good. If the loop stutters or a collision is off by a few pixels, you notice right away. I wanted to understand what an engine does by writing one myself.',
@@ -464,7 +462,7 @@ export const skillGroups: SkillGroup[] = [
   ] },
 ]
 
-/** Flat view used by the terminal. */
+/** Flat view of skill names by group. */
 export const skills: Record<string, string[]> = Object.fromEntries(skillGroups.map((g) => [g.key, g.items.map((i) => i.name)]))
 
 export const stats = [
