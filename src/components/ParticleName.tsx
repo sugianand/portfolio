@@ -47,7 +47,7 @@ export function ParticleName() {
       probe.font = '800 100px Syne, Arial Black, sans-serif'
       probe.letterSpacing = '-4px'
       const widest = Math.max(...LINES.map((l) => probe.measureText(l).width))
-      const fontSize = Math.min(240, (width * 0.99 * 100) / widest)
+      const fontSize = Math.min(220, (width * 0.88 * 100) / widest)
       const lineHeight = fontSize * 0.86
       height = Math.ceil(lineHeight * LINES.length + fontSize * 0.12)
       wrap.style.height = `${height}px`
@@ -66,9 +66,9 @@ export function ParticleName() {
       octx.letterSpacing = `${-fontSize * 0.04}px`
       octx.textBaseline = 'alphabetic'
       octx.fillStyle = '#fff'
-      octx.fillText(LINES[0], 0, lineHeight * 0.92)
+      octx.fillText(LINES[0], (width - octx.measureText(LINES[0]).width) / 2, lineHeight * 0.92)
       const word = LINES[1].slice(0, -1)
-      const x0 = width - octx.measureText(LINES[1]).width
+      const x0 = (width - octx.measureText(LINES[1]).width) / 2
       octx.fillText(word, x0, lineHeight * 1.92)
       octx.fillStyle = '#f00'
       octx.fillText('.', x0 + octx.measureText(word).width, lineHeight * 1.92)

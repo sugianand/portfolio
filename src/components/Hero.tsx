@@ -39,7 +39,7 @@ export function Hero() {
           <p className="hero-intro">
             M.S. in AI at Wayne State, B.S. in CS. I build <em>ranking and retrieval systems</em>, <em>real-time multiplayer backends</em>, and full-stack products, and I ship them with tests.
           </p>
-          <p className="hero-targets mono">{profile.targets.join(' · ')} — {profile.availability.toLowerCase()}</p>
+          <p className="hero-targets mono">{profile.targets.join(' · ')}<br />{profile.availability}</p>
         </div>
         <div className="hero-actions mono">
           <button type="button" className="chip chip-solid" onClick={() => emit('recruiter')}>60-second overview</button>
