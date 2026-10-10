@@ -5,10 +5,13 @@ import { Reveal } from './effects'
 import { SectionHead } from './Sections'
 
 type Day = { date: string; count: number; level: 0 | 1 | 2 | 3 | 4 }
-type Data = { total: number; days: Day[]; repos: number | null }
+type Repo = { name: string; url: string; description: string | null; language: string | null; pushed: string }
+type Data = { total: number; days: Day[]; repos: number | null; active: Repo[] }
 
 const USER = 'sugianand'
-const CACHE = 'sa26:gh'
+const CACHE = 'sa26:gh2'
+// Profile plumbing, not projects.
+const HIDDEN = new Set(['sugianand', 'sugianand.github.io'])
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 async function load(): Promise<Data> {
@@ -18,17 +21,55 @@ async function load(): Promise<Data> {
   } catch {
     /* ignore */
   }
-  const [contrib, user] = await Promise.all([
+  const [contrib, user, repos] = await Promise.all([
     fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`).then((r) => (r.ok ? r.json() : Promise.reject(r.status))),
     fetch(`https://api.github.com/users/${USER}`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    fetch(`https://api.github.com/users/${USER}/repos?sort=pushed&per_page=12`).then((r) => (r.ok ? r.json() : [])).catch(() => []),
   ])
-  const data: Data = { total: contrib.total.lastYear, days: contrib.contributions, repos: user?.public_repos ?? null }
+  const cutoff = Date.now() - 45 * 864e5
+  const active: Repo[] = (repos as { name: string; html_url: string; description: string | null; language: string | null; pushed_at: string; fork: boolean }[])
+    .filter((r) => !r.fork && !HIDDEN.has(r.name) && Date.parse(r.pushed_at) > cutoff)
+    .slice(0, 4)
+    .map((r) => ({ name: r.name, url: r.html_url, description: r.description, language: r.language, pushed: r.pushed_at }))
+  const data: Data = { total: contrib.total.lastYear, days: contrib.contributions, repos: user?.public_repos ?? null, active }
   try {
     sessionStorage.setItem(CACHE, JSON.stringify(data))
   } catch {
     /* ignore */
   }
   return data
+}
+
+const ago = (iso: string) => {
+  const h = (Date.now() - Date.parse(iso)) / 36e5
+  if (h < 1) return 'just now'
+  if (h < 24) return `${Math.floor(h)}h ago`
+  const d = Math.floor(h / 24)
+  return d === 1 ? 'yesterday' : `${d} days ago`
+}
+
+function CurrentlyBuilding({ repos }: { repos: Repo[] }) {
+  return (
+    <div className="now">
+      <p className="now-title mono"><i className="dot" /> Currently building <span>· live from GitHub</span></p>
+      <ul>
+        {repos.map((r) => (
+          <li key={r.name}>
+            <a href={r.url} target="_blank" rel="noreferrer">
+              <b>{r.name}{r.name === 'portfolio' ? ' (this site)' : ''}</b>
+              {r.description && <span>{r.description}</span>}
+              <em className="mono">{[r.language, `pushed ${ago(r.pushed)}`].filter(Boolean).join(' · ')}</em>
+            </a>
+          </li>
+        ))}
+        <li className="now-static">
+          <b>Graduate AI coursework</b>
+          <span>M.S. in Artificial Intelligence at Wayne State University</span>
+          <em className="mono">in progress</em>
+        </li>
+      </ul>
+    </div>
+  )
 }
 
 function summarize(days: Day[]) {
@@ -91,7 +132,7 @@ export function GitHubActivity() {
 
   return (
     <section className="section activity" id="github" ref={sectionRef}>
-      <SectionHead index="04" kicker="GitHub" title="Commit" accent="history." note="Live from GitHub: every square is a day of work over the past year." />
+      <SectionHead index="04" kicker="GitHub" title="Commit" accent="history." note="Live from GitHub: what I'm building right now, and every day of work over the past year." />
       <Reveal className="gh-frame">
         <div className="frame-bar mono">
           <span className="lights"><i /><i /><i /></span>
@@ -106,6 +147,7 @@ export function GitHubActivity() {
 
         {data && summary && (
           <>
+            {data.active.length > 0 && <CurrentlyBuilding repos={data.active} />}
             <div className="gh-stats">
               <div><strong>{data.total}</strong><span className="mono">contributions, last 12 months</span></div>
               <div><strong>{summary.active}</strong><span className="mono">active days</span></div>
