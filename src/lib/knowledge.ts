@@ -30,7 +30,7 @@ export function buildKnowledge(): Doc[] {
   docs.push({
     id: 'contact',
     title: 'Contact, resume, GitHub, LinkedIn',
-    text: `Email: ${profile.email}. GitHub: github.com/sugianand. LinkedIn: linkedin.com/in/suganeshwara-anand-b86367219. The resume PDF is linked in the hero, the 60-second overview, and the contact section.`,
+    text: `Email: ${profile.email}. GitHub: github.com/sugianand. LinkedIn: linkedin.com/in/suganeshwara-anand-b86367219. The resume PDF is linked in the hero, the Quick summary, and the contact section.`,
     source: { kind: 'section', id: 'contact' },
   })
   docs.push({

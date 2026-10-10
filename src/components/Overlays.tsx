@@ -13,7 +13,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const actions = useMemo<Action[]>(() => [
-    { id: 'recruiter', label: '60-second overview (recruiter view)', hint: 'R', run: () => emit('recruiter') },
+    { id: 'recruiter', label: 'Quick summary (for recruiters)', hint: 'R', run: () => emit('recruiter') },
     { id: 'assistant', label: 'Ask the portfolio assistant', hint: 'retrieval', run: () => emit('assistant') },
     { id: 'about', label: 'Go to About', hint: 'section', run: () => scrollToId('about') },
     { id: 'projects', label: 'Go to Projects', hint: 'section', run: () => scrollToId('projects') },
@@ -116,7 +116,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
 const SHORTCUTS: [keys: string[], action: string][] = [
   [['⌘', 'K'], 'Open the command palette'],
   [['/'], 'Open the command palette'],
-  [['R'], 'Open the 60-second recruiter overview'],
+  [['R'], 'Open the quick summary for recruiters'],
   [['?'], 'Show these shortcuts'],
   [['Esc'], 'Close a dialog or panel'],
   [['←', '→'], 'Previous or next case study'],

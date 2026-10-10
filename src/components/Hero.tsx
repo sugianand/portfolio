@@ -39,7 +39,7 @@ export function Hero() {
           </p>
         </div>
         <div className="hero-actions mono">
-          <button type="button" className="chip chip-solid" onClick={() => emit('recruiter')}>60-second overview</button>
+          <button type="button" className="chip chip-solid" onClick={() => emit('recruiter')}>Quick summary</button>
           <button type="button" className="chip" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
           <a className="chip" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
         </div>

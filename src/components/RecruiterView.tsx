@@ -79,11 +79,11 @@ export function RecruiterView() {
       <div className="rv-box" ref={boxRef} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
         <div className="rv-head">
           <div>
-            <p className="mono rv-kicker">60-second overview</p>
+            <p className="mono rv-kicker">Quick summary</p>
             <h2 id="rv-title">{profile.name} <span>(Sugi)</span></h2>
             <p className="rv-headline">{profile.headline} · {profile.location}</p>
           </div>
-          <button type="button" className="mono rv-close" onClick={close} aria-label="Esc, close overview">esc ✕</button>
+          <button type="button" className="mono rv-close" onClick={close} aria-label="Esc, close summary">esc ✕</button>
         </div>
 
         <div className="rv-actions">

@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react'
 import { accentHex, accents, type AccentName, type Theme } from './palette.ts'
 
 export const achievementList = [
-  { id: 'recruiter', name: 'Speed Reader', hint: 'Open the 60-second overview' },
+  { id: 'recruiter', name: 'Speed Reader', hint: 'Open the quick summary' },
   { id: 'casestudy', name: 'Deep Diver', hint: 'Open a project case study' },
   { id: 'demo', name: 'Taste Test', hint: 'Run your own search in the CineDNA demo' },
   { id: 'arch', name: 'Systems Thinker', hint: 'Explore an architecture diagram' },
