@@ -9,9 +9,11 @@ type Repo = { name: string; url: string; description: string | null; language: s
 type Data = { total: number | null; days: Day[]; repos: number | null; active: Repo[] }
 
 const USER = 'sugianand'
-const CACHE = 'sa26:gh2'
-// Profile plumbing, not projects.
-const HIDDEN = new Set(['sugianand', 'sugianand.github.io'])
+const CACHE = 'sa26:gh3'
+// Profile plumbing and this site itself, not projects.
+const HIDDEN = new Set(['sugianand', 'sugianand.github.io', 'portfolio'])
+// Always shown in this slot of "Currently building", whatever the push order.
+const PINNED = { name: '11planner', slot: 2 }
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 async function load(): Promise<Data> {
@@ -28,10 +30,12 @@ async function load(): Promise<Data> {
     fetch(`https://api.github.com/users/${USER}/repos?sort=pushed&per_page=12`).then((r) => (r.ok ? r.json() : [])).catch(() => []),
   ])
   const cutoff = Date.now() - 45 * 864e5
-  const active: Repo[] = (repos as { name: string; html_url: string; description: string | null; language: string | null; pushed_at: string; fork: boolean }[])
-    .filter((r) => !r.fork && !HIDDEN.has(r.name) && Date.parse(r.pushed_at) > cutoff)
-    .slice(0, 4)
+  const all: Repo[] = (repos as { name: string; html_url: string; description: string | null; language: string | null; pushed_at: string; fork: boolean }[])
+    .filter((r) => !r.fork && !HIDDEN.has(r.name))
     .map((r) => ({ name: r.name, url: r.html_url, description: r.description, language: r.language, pushed: r.pushed_at }))
+  const pinned = all.find((r) => r.name === PINNED.name)
+  const active = all.filter((r) => r !== pinned && Date.parse(r.pushed) > cutoff).slice(0, pinned ? 3 : 4)
+  if (pinned) active.splice(Math.min(PINNED.slot, active.length), 0, pinned)
   const days: Day[] = contrib?.contributions ?? []
   const data: Data = { total: contrib?.total?.lastYear ?? null, days, repos: user?.public_repos ?? null, active }
   if (!days.length && !active.length && data.repos === null) throw new Error('GitHub unreachable')
@@ -62,7 +66,7 @@ function CurrentlyBuilding({ repos }: { repos: Repo[] }) {
         {repos.map((r) => (
           <li key={r.name}>
             <a href={r.url} target="_blank" rel="noreferrer">
-              <b>{r.name}{r.name === 'portfolio' ? ' (this site)' : ''}</b>
+              <b>{r.name}</b>
               {r.description && <span>{r.description}</span>}
               <em className="mono">{[r.language, `pushed ${ago(r.pushed)}`].filter(Boolean).join(' · ')}</em>
             </a>
