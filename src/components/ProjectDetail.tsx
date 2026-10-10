@@ -1,6 +1,27 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { projects, type Project } from '../data'
+import { ArchDiagram } from './ArchDiagram'
+import { CineDNADemo } from './CineDNADemo'
 import { ProjectLink } from './Projects'
+
+type Block = { title: string; body: ReactNode }
+
+function sections(p: Project): Block[] {
+  const list = (items: string[], alt = false) => <ul className={`detail-list ${alt ? 'detail-list-alt' : ''}`}>{items.map((x) => <li key={x}>{x}</li>)}</ul>
+  const blocks: (Block | null)[] = [
+    { title: 'The problem', body: <p>{p.problem}</p> },
+    { title: 'The solution', body: <p>{p.overview}</p> },
+    p.id === 'cinedna' ? { title: 'Try it', body: <CineDNADemo /> } : null,
+    p.architecture ? { title: 'Architecture', body: <><p className="detail-hint">Hover, tap, or tab through the components.</p><ArchDiagram arch={p.architecture} /></> } : null,
+    p.hardest ? { title: 'Hardest engineering problem', body: <p>{p.hardest}</p> } : null,
+    p.built ? { title: 'What I built', body: list(p.built) } : null,
+    { title: 'What it does', body: list(p.features) },
+    { title: 'Lessons', body: list(p.challenges, true) },
+    { title: 'Why I built it', body: <p>{p.why}</p> },
+    p.next ? { title: 'What I\'d build next', body: list(p.next) } : null,
+  ]
+  return blocks.filter((b): b is Block => b !== null)
+}
 
 export function ProjectDetail({ project, onClose, onNav }: { project: Project; onClose: () => void; onNav: (dir: 1 | -1) => void }) {
   const index = projects.indexOf(project)
@@ -14,6 +35,7 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement).closest('input, textarea')) return
       if (e.key === 'Escape') onClose()
       if (e.key === 'ArrowRight') onNav(1)
       if (e.key === 'ArrowLeft') onNav(-1)
@@ -41,6 +63,11 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
           <p className="detail-kind mono">{project.kind} · {project.year}</p>
           <h2>{project.title}</h2>
           <p className="detail-tagline">{project.tagline}</p>
+          {project.metrics && (
+            <dl className="detail-metrics">
+              {project.metrics.map((m) => <div key={m.label}><dt>{m.value}</dt><dd>{m.label}</dd></div>)}
+            </dl>
+          )}
           <div className="detail-links mono">{project.links.map((l) => <ProjectLink key={l.label} link={l} onInternal={onClose} />)}</div>
         </header>
 
@@ -54,22 +81,12 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
             </dl>
           </aside>
           <div className="detail-main">
-            <section>
-              <h4 className="mono"><span>01</span> Overview</h4>
-              <p>{project.overview}</p>
-            </section>
-            <section>
-              <h4 className="mono"><span>02</span> Why I built it</h4>
-              <p>{project.why}</p>
-            </section>
-            <section>
-              <h4 className="mono"><span>03</span> What it does</h4>
-              <ul className="detail-list">{project.features.map((f) => <li key={f}>{f}</li>)}</ul>
-            </section>
-            <section>
-              <h4 className="mono"><span>04</span> Challenges &amp; what I learned</h4>
-              <ul className="detail-list detail-list-alt">{project.challenges.map((c) => <li key={c}>{c}</li>)}</ul>
-            </section>
+            {sections(project).map((b, i) => (
+              <section key={b.title}>
+                <h3 className="mono detail-h"><span>{String(i + 1).padStart(2, '0')}</span> {b.title}</h3>
+                {b.body}
+              </section>
+            ))}
           </div>
         </div>
 

@@ -1,0 +1,777 @@
+[
+ {
+  "query": "slow burn dark mystery without romance",
+  "intent": {
+   "target": {
+    "pacing": 35,
+    "mystery": 75,
+    "romance": 10,
+    "darkness": 75
+   },
+   "include": [
+    "mystery"
+   ],
+   "exclude": [
+    "romance"
+   ],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Arrival",
+    "score": 87.0,
+    "why": "matches mystery; strong fit for darkness and mystery"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 84.5,
+    "why": "matches mystery; strong fit for romance and darkness"
+   },
+   {
+    "title": "Knives Out",
+    "score": 80.0,
+    "why": "matches mystery; strong fit for romance and mystery"
+   },
+   {
+    "title": "Drishyam",
+    "score": 63.6,
+    "why": "strong fit for romance and darkness"
+   },
+   {
+    "title": "Prisoners",
+    "score": 62.9,
+    "why": "strong fit for romance and mystery"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 62.6,
+    "why": "strong fit for romance and mystery"
+   }
+  ]
+ },
+ {
+  "query": "something like Interstellar but darker",
+  "intent": {
+   "target": {
+    "emotional_intensity": 94,
+    "narrative_complexity": 88,
+    "visual_spectacle": 97,
+    "pacing": 71,
+    "mystery": 84,
+    "romance": 45,
+    "darkness": 91,
+    "humor": 17,
+    "plot_twists": 80,
+    "action": 64,
+    "character_depth": 86,
+    "world_building": 95,
+    "dialogue_density": 62,
+    "rewatchability": 91
+   },
+   "include": [],
+   "exclude": [],
+   "countries": [],
+   "refs": [
+    "Interstellar"
+   ]
+  },
+  "results": [
+   {
+    "title": "Dune: Part Two",
+    "score": 76.5,
+    "why": "strong fit for romance and dialogue density"
+   },
+   {
+    "title": "Inception",
+    "score": 76.3,
+    "why": "strong fit for humor and world building"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 75.3,
+    "why": "strong fit for world building and mystery"
+   },
+   {
+    "title": "The Dark Knight",
+    "score": 74.6,
+    "why": "strong fit for darkness and plot twists"
+   },
+   {
+    "title": "Arrival",
+    "score": 73.6,
+    "why": "strong fit for narrative complexity and character depth"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 72.6,
+    "why": "strong fit for narrative complexity and rewatchability"
+   }
+  ]
+ },
+ {
+  "query": "funny indian movie with twists",
+  "intent": {
+   "target": {
+    "humor": 75
+   },
+   "include": [],
+   "exclude": [],
+   "countries": [
+    "India"
+   ],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Andhadhun",
+    "score": 91.8,
+    "why": "strong fit for humor; fits your India preference"
+   },
+   {
+    "title": "3 Idiots",
+    "score": 81.0,
+    "why": "strong fit for humor; fits your India preference"
+   },
+   {
+    "title": "Knives Out",
+    "score": 78.8,
+    "why": "strong fit for humor"
+   },
+   {
+    "title": "Drishyam",
+    "score": 50.1,
+    "why": "strong fit for humor; fits your India preference"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 40.7,
+    "why": "strong fit for humor; fits your India preference"
+   },
+   {
+    "title": "Interstellar",
+    "score": 39.2,
+    "why": "strong fit for humor"
+   }
+  ]
+ },
+ {
+  "query": "mind-bending sci-fi, not too much action",
+  "intent": {
+   "target": {
+    "narrative_complexity": 75,
+    "action": 10
+   },
+   "include": [],
+   "exclude": [
+    "action"
+   ],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Knives Out",
+    "score": 95.3,
+    "why": "strong fit for narrative complexity and action"
+   },
+   {
+    "title": "Drishyam",
+    "score": 92.0,
+    "why": "strong fit for action and narrative complexity"
+   },
+   {
+    "title": "Arrival",
+    "score": 91.7,
+    "why": "strong fit for narrative complexity and action"
+   },
+   {
+    "title": "3 Idiots",
+    "score": 89.4,
+    "why": "strong fit for action and narrative complexity"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 87.3,
+    "why": "strong fit for narrative complexity and action"
+   },
+   {
+    "title": "Prisoners",
+    "score": 86.3,
+    "why": "strong fit for narrative complexity and action"
+   }
+  ]
+ },
+ {
+  "query": "emotional family story, no horror",
+  "intent": {
+   "target": {
+    "emotional_intensity": 75
+   },
+   "include": [
+    "family"
+   ],
+   "exclude": [
+    "horror"
+   ],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "3 Idiots",
+    "score": 93.5,
+    "why": "matches family; strong fit for emotional intensity"
+   },
+   {
+    "title": "Drishyam",
+    "score": 92.1,
+    "why": "matches family; strong fit for emotional intensity"
+   },
+   {
+    "title": "Knives Out",
+    "score": 87.8,
+    "why": "matches family; strong fit for emotional intensity"
+   },
+   {
+    "title": "Prisoners",
+    "score": 87.0,
+    "why": "matches family; strong fit for emotional intensity"
+   },
+   {
+    "title": "Interstellar",
+    "score": 86.3,
+    "why": "matches family; strong fit for emotional intensity"
+   },
+   {
+    "title": "Inception",
+    "score": 74.7,
+    "why": "strong fit for emotional intensity"
+   }
+  ]
+ },
+ {
+  "query": "fast paced action with world building",
+  "intent": {
+   "target": {
+    "pacing": 85,
+    "action": 75,
+    "world_building": 75
+   },
+   "include": [
+    "action"
+   ],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "The Dark Knight",
+    "score": 91.8,
+    "why": "matches action; strong fit for world building and pacing"
+   },
+   {
+    "title": "Inception",
+    "score": 90.6,
+    "why": "matches action; strong fit for pacing and action"
+   },
+   {
+    "title": "Interstellar",
+    "score": 66.5,
+    "why": "strong fit for action and pacing"
+   },
+   {
+    "title": "Dune: Part Two",
+    "score": 65.5,
+    "why": "strong fit for pacing and action"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 59.4,
+    "why": "strong fit for pacing and world building"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 57.3,
+    "why": "strong fit for world building and pacing"
+   }
+  ]
+ },
+ {
+  "query": "like Dune but less confusing",
+  "intent": {
+   "target": {
+    "emotional_intensity": 82,
+    "narrative_complexity": 24,
+    "visual_spectacle": 100,
+    "pacing": 83,
+    "mystery": 61,
+    "romance": 47,
+    "darkness": 75,
+    "humor": 8,
+    "plot_twists": 63,
+    "action": 91,
+    "character_depth": 83,
+    "world_building": 100,
+    "dialogue_density": 64,
+    "rewatchability": 94
+   },
+   "include": [],
+   "exclude": [],
+   "countries": [],
+   "refs": [
+    "Dune: Part Two"
+   ]
+  },
+  "results": [
+   {
+    "title": "The Dark Knight",
+    "score": 72.2,
+    "why": "strong fit for emotional intensity and mystery"
+   },
+   {
+    "title": "Interstellar",
+    "score": 70.1,
+    "why": "strong fit for romance and dialogue density"
+   },
+   {
+    "title": "Inception",
+    "score": 68.4,
+    "why": "strong fit for rewatchability and emotional intensity"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 68.4,
+    "why": "strong fit for character depth and world building"
+   },
+   {
+    "title": "Arrival",
+    "score": 63.8,
+    "why": "strong fit for humor and emotional intensity"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 62.2,
+    "why": "strong fit for emotional intensity and rewatchability"
+   }
+  ]
+ },
+ {
+  "query": "detective whodunit with sharp dialogue",
+  "intent": {
+   "target": {
+    "mystery": 75,
+    "dialogue_density": 75
+   },
+   "include": [],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Drishyam",
+    "score": 78.7,
+    "why": "strong fit for dialogue density and mystery"
+   },
+   {
+    "title": "Inception",
+    "score": 78.6,
+    "why": "strong fit for dialogue density and mystery"
+   },
+   {
+    "title": "Interstellar",
+    "score": 78.3,
+    "why": "strong fit for mystery and dialogue density"
+   },
+   {
+    "title": "Arrival",
+    "score": 76.9,
+    "why": "strong fit for dialogue density and mystery"
+   },
+   {
+    "title": "Dune: Part Two",
+    "score": 76.7,
+    "why": "strong fit for dialogue density and mystery"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 76.6,
+    "why": "strong fit for mystery and dialogue density"
+   }
+  ]
+ },
+ {
+  "query": "not slow, very twisty thriller",
+  "intent": {
+   "target": {
+    "pacing": 85,
+    "plot_twists": 95
+   },
+   "include": [
+    "thriller"
+   ],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Inception",
+    "score": 97.3,
+    "why": "matches thriller; strong fit for pacing and plot twists"
+   },
+   {
+    "title": "Andhadhun",
+    "score": 97.0,
+    "why": "matches thriller; strong fit for pacing and plot twists"
+   },
+   {
+    "title": "Drishyam",
+    "score": 92.5,
+    "why": "matches thriller; strong fit for plot twists and pacing"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 89.9,
+    "why": "strong fit for plot twists and pacing"
+   },
+   {
+    "title": "Prisoners",
+    "score": 87.4,
+    "why": "matches thriller; strong fit for plot twists and pacing"
+   },
+   {
+    "title": "Knives Out",
+    "score": 72.9,
+    "why": "strong fit for plot twists and pacing"
+   }
+  ]
+ },
+ {
+  "query": "hollywood space survival epic",
+  "intent": {
+   "target": {
+    "visual_spectacle": 75
+   },
+   "include": [
+    "space",
+    "survival"
+   ],
+   "exclude": [],
+   "countries": [
+    "USA"
+   ],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Interstellar",
+    "score": 92.2,
+    "why": "matches space, survival; strong fit for visual spectacle; fits your USA preference"
+   },
+   {
+    "title": "Arrival",
+    "score": 83.4,
+    "why": "strong fit for visual spectacle; fits your USA preference"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 79.1,
+    "why": "strong fit for visual spectacle; fits your USA preference"
+   },
+   {
+    "title": "The Dark Knight",
+    "score": 75.5,
+    "why": "strong fit for visual spectacle; fits your USA preference"
+   },
+   {
+    "title": "Inception",
+    "score": 71.2,
+    "why": "strong fit for visual spectacle; fits your USA preference"
+   },
+   {
+    "title": "Prisoners",
+    "score": 69.0,
+    "why": "strong fit for visual spectacle; fits your USA preference"
+   }
+  ]
+ },
+ {
+  "query": "a rewatchable comedy about friendship",
+  "intent": {
+   "target": {
+    "humor": 75,
+    "rewatchability": 75
+   },
+   "include": [
+    "comedy",
+    "friendship"
+   ],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "3 Idiots",
+    "score": 85.7,
+    "why": "matches comedy, friendship; strong fit for humor and rewatchability"
+   },
+   {
+    "title": "Knives Out",
+    "score": 82.3,
+    "why": "matches comedy; strong fit for humor and rewatchability"
+   },
+   {
+    "title": "Andhadhun",
+    "score": 79.9,
+    "why": "matches comedy; strong fit for humor and rewatchability"
+   },
+   {
+    "title": "Interstellar",
+    "score": 45.7,
+    "why": "strong fit for rewatchability and humor"
+   },
+   {
+    "title": "Inception",
+    "score": 44.7,
+    "why": "strong fit for rewatchability and humor"
+   },
+   {
+    "title": "Drishyam",
+    "score": 44.4,
+    "why": "strong fit for rewatchability and humor"
+   }
+  ]
+ },
+ {
+  "query": "bleak crime drama about justice and morality",
+  "intent": {
+   "target": {
+    "darkness": 75
+   },
+   "include": [
+    "crime",
+    "justice",
+    "morality"
+   ],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Andhadhun",
+    "score": 91.8,
+    "why": "matches crime, morality; strong fit for darkness"
+   },
+   {
+    "title": "Drishyam",
+    "score": 90.4,
+    "why": "matches crime, justice; strong fit for darkness"
+   },
+   {
+    "title": "The Dark Knight",
+    "score": 89.9,
+    "why": "matches crime, justice, morality; strong fit for darkness"
+   },
+   {
+    "title": "Prisoners",
+    "score": 83.4,
+    "why": "matches crime, justice, morality; strong fit for darkness"
+   },
+   {
+    "title": "Dune: Part Two",
+    "score": 77.6,
+    "why": "strong fit for darkness"
+   },
+   {
+    "title": "Inception",
+    "score": 71.8,
+    "why": "strong fit for darkness"
+   }
+  ]
+ },
+ {
+  "query": "beautiful cinematic visual spectacle",
+  "intent": {
+   "target": {
+    "visual_spectacle": 75
+   },
+   "include": [],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Arrival",
+    "score": 83.8,
+    "why": "strong fit for visual spectacle"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 79.5,
+    "why": "strong fit for visual spectacle"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 78.1,
+    "why": "strong fit for visual spectacle"
+   },
+   {
+    "title": "The Dark Knight",
+    "score": 75.9,
+    "why": "strong fit for visual spectacle"
+   },
+   {
+    "title": "Inception",
+    "score": 71.6,
+    "why": "strong fit for visual spectacle"
+   },
+   {
+    "title": "Interstellar",
+    "score": 70.2,
+    "why": "strong fit for visual spectacle"
+   }
+  ]
+ },
+ {
+  "query": "without any mystery, heartfelt and funnier",
+  "intent": {
+   "target": {
+    "emotional_intensity": 75,
+    "mystery": 10,
+    "humor": 80
+   },
+   "include": [],
+   "exclude": [
+    "mystery"
+   ],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "3 Idiots",
+    "score": 90.0,
+    "why": "strong fit for emotional intensity and humor"
+   },
+   {
+    "title": "The Dark Knight",
+    "score": 66.9,
+    "why": "strong fit for emotional intensity and mystery"
+   },
+   {
+    "title": "Dune: Part Two",
+    "score": 65.0,
+    "why": "strong fit for emotional intensity and mystery"
+   },
+   {
+    "title": "Andhadhun",
+    "score": 63.8,
+    "why": "strong fit for emotional intensity and humor"
+   },
+   {
+    "title": "Interstellar",
+    "score": 59.5,
+    "why": "strong fit for emotional intensity and humor"
+   },
+   {
+    "title": "Inception",
+    "score": 58.7,
+    "why": "strong fit for emotional intensity and humor"
+   }
+  ]
+ },
+ {
+  "query": "avoid romance",
+  "intent": {
+   "target": {
+    "romance": 10
+   },
+   "include": [],
+   "exclude": [
+    "romance"
+   ],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Shutter Island",
+    "score": 98.6,
+    "why": "strong fit for romance"
+   },
+   {
+    "title": "Drishyam",
+    "score": 98.6,
+    "why": "strong fit for romance"
+   },
+   {
+    "title": "Tumbbad",
+    "score": 98.6,
+    "why": "strong fit for romance"
+   },
+   {
+    "title": "Knives Out",
+    "score": 96.4,
+    "why": "strong fit for romance"
+   },
+   {
+    "title": "Prisoners",
+    "score": 94.2,
+    "why": "strong fit for romance"
+   },
+   {
+    "title": "The Dark Knight",
+    "score": 93.5,
+    "why": "strong fit for romance"
+   }
+  ]
+ },
+ {
+  "query": "zzz",
+  "intent": {
+   "target": {},
+   "include": [],
+   "exclude": [],
+   "countries": [],
+   "refs": []
+  },
+  "results": [
+   {
+    "title": "Interstellar",
+    "score": 50.0,
+    "why": "overall Movie DNA similarity"
+   },
+   {
+    "title": "Arrival",
+    "score": 50.0,
+    "why": "overall Movie DNA similarity"
+   },
+   {
+    "title": "Inception",
+    "score": 50.0,
+    "why": "overall Movie DNA similarity"
+   },
+   {
+    "title": "Shutter Island",
+    "score": 50.0,
+    "why": "overall Movie DNA similarity"
+   },
+   {
+    "title": "Prisoners",
+    "score": 50.0,
+    "why": "overall Movie DNA similarity"
+   },
+   {
+    "title": "Knives Out",
+    "score": 50.0,
+    "why": "overall Movie DNA similarity"
+   }
+  ]
+ }
+]

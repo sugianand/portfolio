@@ -3,9 +3,10 @@ import { createPortal } from 'react-dom'
 import { projects, type Category, type Project } from '../data'
 import { scrollToId } from '../lib/store'
 import { Reveal } from './effects'
+import { ProductPreview } from './ProductPreview'
 import { SectionHead } from './Sections'
 
-const FILTERS: ('All' | Category)[] = ['All', 'AI', 'Full Stack', 'Realtime', 'Games']
+const FILTERS: ('All' | Category)[] = ['All', 'AI', 'Backend', 'Full Stack', 'Realtime', 'Games']
 const HASH = '#project/'
 
 // The case-study dialog is split into its own chunk and prefetched on hover or focus.
@@ -23,25 +24,42 @@ export function ProjectLink({ link, onInternal }: { link: Project['links'][numbe
   return <a href={link.href} target="_blank" rel="noreferrer">{link.label} ↗</a>
 }
 
-function ProjectCard({ project, index, onOpen }: { project: Project; index: number; onOpen: () => void }) {
+function FeaturedCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
   return (
-    <article className={`pcard tone-${project.tone}`}>
+    <article className={`fcard tone-${project.tone}`}>
       <button type="button" className="pcard-hit" onClick={onOpen} onPointerEnter={loadDetail} onFocus={loadDetail} aria-label={`Read the ${project.title} case study`} data-cursor="read" />
-      <div className="pcard-top mono">
-        <span>{String(index + 1).padStart(2, '0')} · {project.kind}</span>
-        <span>{project.year}</span>
+      <div className="fcard-preview"><ProductPreview id={project.id} /></div>
+      <div className="fcard-copy">
+        <p className="pcard-top mono"><span>{project.kind}</span><span>{project.year}</span></p>
+        <h3>{project.title}</h3>
+        <p className="pcard-tagline">{project.tagline}</p>
+        <p className="pcard-body">{project.body}</p>
+        {project.metrics && (
+          <dl className="fcard-metrics">
+            {project.metrics.slice(0, 3).map((m) => (
+              <div key={m.label}><dt>{m.value}</dt><dd>{m.label}</dd></div>
+            ))}
+          </dl>
+        )}
+        <div className="pcard-foot mono">
+          <span className="pcard-cta">Read case study →</span>
+          <span className="pcard-links">{project.links.map((l) => <ProjectLink key={l.label} link={l} />)}</span>
+        </div>
       </div>
-      <div className="pcard-art" aria-hidden="true">
-        <span className="art-glyph">{project.title[0]}</span>
-        <span className="art-ring" />
-        <span className="art-grid" />
-      </div>
+    </article>
+  )
+}
+
+function CompactCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
+  return (
+    <article className="ccard">
+      <button type="button" className="pcard-hit" onClick={onOpen} onPointerEnter={loadDetail} onFocus={loadDetail} aria-label={`Read the ${project.title} case study`} data-cursor="read" />
+      <p className="pcard-top mono"><span>{project.kind}</span><span>{project.year}</span></p>
       <h3>{project.title}</h3>
-      <p className="pcard-tagline">{project.tagline}</p>
       <p className="pcard-body">{project.body}</p>
       <div className="pcard-stack mono">{project.stack.slice(0, 4).map((s) => <span key={s}>{s}</span>)}</div>
       <div className="pcard-foot mono">
-        <span className="pcard-cta">Read case study →</span>
+        <span className="pcard-cta">Case study →</span>
         <span className="pcard-links">{project.links.map((l) => <ProjectLink key={l.label} link={l} />)}</span>
       </div>
     </article>
@@ -75,11 +93,13 @@ export function Projects() {
     show(projects[(i + dir + projects.length) % projects.length])
   }
 
-  const shown = filter === 'All' ? projects : projects.filter((p) => p.categories.includes(filter))
+  const match = (p: Project) => filter === 'All' || p.categories.includes(filter)
+  const featured = projects.filter((p) => p.featured && match(p))
+  const more = projects.filter((p) => !p.featured && match(p))
 
   return (
     <section className="section projects" id="projects">
-      <SectionHead index="02" kicker="Projects" title="Proof over" accent="promises." note="Things I've designed, built, and shipped. Click any project for the full story: what it is, why I built it, and what I learned." />
+      <SectionHead index="02" kicker="Projects" title="Proof over" accent="promises." note="Real systems with real constraints. Open any project for the architecture, the hardest problem, and what I built myself." />
       <Reveal className="filters mono">
         {FILTERS.map((f) => {
           const count = f === 'All' ? projects.length : projects.filter((p) => p.categories.includes(f)).length
@@ -90,9 +110,19 @@ export function Projects() {
           )
         })}
       </Reveal>
-      <div className="pgrid">
-        {shown.map((p) => <ProjectCard key={p.id} project={p} index={projects.indexOf(p)} onOpen={() => show(p)} />)}
-      </div>
+      {featured.length > 0 && (
+        <div className="fgrid">
+          {featured.map((p) => <FeaturedCard key={p.id} project={p} onOpen={() => show(p)} />)}
+        </div>
+      )}
+      {more.length > 0 && (
+        <>
+          <p className="more-label mono">More projects</p>
+          <div className="cgrid">
+            {more.map((p) => <CompactCard key={p.id} project={p} onOpen={() => show(p)} />)}
+          </div>
+        </>
+      )}
       {open && createPortal(<Suspense fallback={null}><ProjectDetail project={open} onClose={() => show(null)} onNav={nav} /></Suspense>, document.body)}
     </section>
   )
