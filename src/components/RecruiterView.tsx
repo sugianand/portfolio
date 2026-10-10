@@ -75,14 +75,14 @@ export function RecruiterView() {
   return createPortal(
     <div className="rv" role="dialog" aria-modal="true" aria-labelledby="rv-title" onClick={close}>
       <div className="rv-box" ref={boxRef} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
-        <header className="rv-head">
+        <div className="rv-head">
           <div>
             <p className="mono rv-kicker">60-second overview</p>
             <h2 id="rv-title">{profile.name} <span>(Sugi)</span></h2>
             <p className="rv-headline">{profile.headline} · {profile.location}</p>
           </div>
           <button type="button" className="mono rv-close" onClick={close} aria-label="Close overview">esc ✕</button>
-        </header>
+        </div>
 
         <div className="rv-actions">
           <a className="chip chip-solid" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
@@ -138,10 +138,10 @@ export function RecruiterView() {
           </section>
         </div>
 
-        <footer className="rv-foot mono">
+        <div className="rv-foot mono">
           <span>Want the full story? The site has case studies, architecture diagrams, and a live CineDNA demo.</span>
           <button type="button" onClick={() => { close(); scrollToId('projects') }}>Explore projects →</button>
-        </footer>
+        </div>
       </div>
     </div>,
     document.body,
