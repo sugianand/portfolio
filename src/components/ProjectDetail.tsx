@@ -10,16 +10,21 @@ type Block = { title: string; body: ReactNode }
 function sections(p: Project): Block[] {
   const list = (items: string[], alt = false) => <ul className={`detail-list ${alt ? 'detail-list-alt' : ''}`}>{items.map((x) => <li key={x}>{x}</li>)}</ul>
   const blocks: (Block | null)[] = [
-    { title: 'The problem', body: <p>{p.problem}</p> },
-    { title: 'The solution', body: <p>{p.overview}</p> },
+    {
+      title: 'Problem → solution',
+      body: (
+        <div className="ps">
+          <div><span className="mono">Problem</span><p>{p.problem}</p></div>
+          <div><span className="mono">Solution</span><p>{p.overview}</p></div>
+        </div>
+      ),
+    },
     p.id === 'cinedna' ? { title: 'Try it', body: <CineDNADemo /> } : null,
-    p.architecture ? { title: 'Architecture', body: <><p className="detail-hint">Hover, tap, or tab through the components.</p><ArchDiagram arch={p.architecture} /></> } : null,
-    p.hardest ? { title: 'Hardest engineering problem', body: <p>{p.hardest}</p> } : null,
-    p.built ? { title: 'What I built', body: list(p.built) } : null,
-    { title: 'What it does', body: list(p.features) },
-    { title: 'Lessons', body: list(p.challenges, true) },
+    p.architecture ? { title: 'Architecture', body: <><p className="detail-hint">Hover or tap a component.</p><ArchDiagram arch={p.architecture} /></> } : null,
+    p.hardest ? { title: 'Hardest problem', body: <p>{p.hardest}</p> } : null,
+    p.built ? { title: 'What I built', body: list(p.built) } : { title: 'What it does', body: list(p.features.slice(0, 4)) },
     { title: 'Why I built it', body: <p>{p.why}</p> },
-    p.next ? { title: 'What I\'d build next', body: list(p.next) } : null,
+    p.next ? { title: 'Next', body: list(p.next) } : null,
   ]
   return blocks.filter((b): b is Block => b !== null)
 }

@@ -100,7 +100,7 @@ export function Projects() {
 
   return (
     <section className="section projects" id="projects">
-      <SectionHead index="02" kicker="Projects" title="Proof over" accent="promises." note="Real systems with real constraints. Open any project for the architecture, the hardest problem, and what I built myself." />
+      <SectionHead index="02" kicker="Projects" title="Proof over" accent="promises." note="Real systems with real constraints. Open one for the architecture and the hard parts." />
       <Reveal className="filters mono">
         {FILTERS.map((f) => {
           const count = f === 'All' ? projects.length : projects.filter((p) => p.categories.includes(f)).length

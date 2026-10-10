@@ -19,13 +19,10 @@ export function About() {
       <div className="about-grid">
         <Reveal className="about-copy">
           <p className="about-lead">
-            I&apos;m Suganeshwara, or <em>Sugi</em>. I&apos;m a computer scientist from Wayne State, now working on a master&apos;s in Artificial Intelligence.
+            I&apos;m Suganeshwara, or <em>Sugi</em>: a Wayne State CS grad now doing an M.S. in AI.
           </p>
           <p>
-            I like the hard middle of a problem: the edge cases, the architecture, and the moment a rough idea becomes something real. I&apos;ve tested embedded automotive software, built Django and Java backends for financial products, imaged hundreds of machines with a portal I wrote, and taught students to build games.
-          </p>
-          <p>
-            Right now I&apos;m building CineDNA, a natural-language movie recommender, and Movie in Three Clues, a real-time multiplayer game on Cloudflare Workers, alongside graduate AI coursework.
+            I like the hard middle of a problem: edge cases, architecture, the moment an idea becomes real. I&apos;ve tested automotive software, built financial backends, and shipped a recommender and a multiplayer game.
           </p>
           <div className="about-actions mono">
             <a className="chip chip-solid" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>

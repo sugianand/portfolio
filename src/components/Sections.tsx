@@ -38,7 +38,7 @@ export function GitLog() {
 
   return (
     <section className="section gitlog" id="log">
-      <SectionHead index="03" kicker="Experience" title="Where I've" accent="worked." note="Styled as a git log: every role is a commit. Click one to expand the details." />
+      <SectionHead index="03" kicker="Experience" title="Where I've" accent="worked." note="Every role is a commit. Click one for details." />
       <Reveal className="terminal-frame">
         <div className="frame-bar mono">
           <span className="lights"><i /><i /><i /></span>

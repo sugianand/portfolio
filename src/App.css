@@ -758,3 +758,12 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .el-noev { background: var(--ink); border-style: dashed; }
 .el-noev b { opacity: .75; }
 @media (max-width: 480px) { .ptable { grid-template-columns: repeat(4, 1fr); gap: 5px; } .el b { font-size: 21px; } .el-name { font-size: 11px; } .el-n { display: none; } }
+
+/* ---------- problem → solution ---------- */
+.ps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ps > div { padding: 16px 18px; border: 1px solid var(--line); background: var(--ink); display: grid; gap: 8px; align-content: start; }
+.ps > div:last-child { border-color: rgba(var(--accent-rgb), .5); }
+.ps span { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.ps > div:last-child span { color: var(--accent); }
+.detail-main .ps p { font-size: 16px; }
+@media (max-width: 640px) { .ps { grid-template-columns: 1fr; } }
