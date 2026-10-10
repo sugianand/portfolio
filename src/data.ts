@@ -9,6 +9,13 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/suganeshwara-anand-b86367219/',
   resume: `${import.meta.env.BASE_URL}resume.pdf`,
   source: 'https://github.com/sugianand/portfolio',
+  headline: 'Software Engineer + AI Builder',
+  targets: ['AI Engineer', 'ML Engineer', 'Software Engineer', 'Backend', 'Full-Stack'],
+  availability: 'New grad roles, internships, and co-ops',
+  education: [
+    { degree: 'M.S. Artificial Intelligence', school: 'Wayne State University', when: 'In progress' },
+    { degree: 'B.S. Computer Science, minor in Mathematics', school: 'Wayne State University', when: 'Completed' },
+  ],
 }
 
 export type Category = 'AI' | 'Full Stack' | 'Realtime' | 'Backend' | 'Games'

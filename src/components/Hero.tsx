@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { profile } from '../data'
-import { scrollToId } from '../lib/store'
+import { emit, scrollToId } from '../lib/store'
 import { Clock, Scramble } from './effects'
 import { ParticleName } from './ParticleName'
 
@@ -25,7 +25,7 @@ export function Hero() {
   return (
     <section className="hero" id="top">
       <div className="hero-meta mono">
-        <span><i className="dot" /> Open to SWE + AI roles</span>
+        <span><i className="dot" /> Open to AI, backend &amp; full-stack roles</span>
         <span>{profile.location} · <Clock timeZone={profile.timezone} /></span>
         <span className="hide-sm">42.33°N 83.05°W</span>
       </div>
@@ -34,11 +34,16 @@ export function Hero() {
       <Aliases />
 
       <div className="hero-foot">
-        <p className="hero-intro">
-          Computer scientist and AI master&apos;s student. I build <em>dependable systems</em>, intelligent tools, and software that survives contact with real users.
-        </p>
+        <div className="hero-copy">
+          <p className="hero-role">{profile.headline}</p>
+          <p className="hero-intro">
+            M.S. in AI at Wayne State, B.S. in CS. I build <em>ranking and retrieval systems</em>, <em>real-time multiplayer backends</em>, and full-stack products, and I ship them with tests.
+          </p>
+          <p className="hero-targets mono">{profile.targets.join(' · ')} — {profile.availability.toLowerCase()}</p>
+        </div>
         <div className="hero-actions mono">
-          <button type="button" className="chip chip-solid" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
+          <button type="button" className="chip chip-solid" onClick={() => emit('recruiter')}>60-second overview</button>
+          <button type="button" className="chip" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
           <a className="chip" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
           <button type="button" className="chip" onClick={() => scrollToId('contact')}>Contact</button>
         </div>

@@ -6,6 +6,7 @@ import { Boot } from './components/Boot'
 import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
 import { CommandPalette, Confetti, Konami, Shortcuts } from './components/Overlays'
+import { RecruiterView } from './components/RecruiterView'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
 import { About } from './components/About'
 import { GitHubActivity } from './components/GitHubActivity'
@@ -53,7 +54,7 @@ function App() {
     <>
       <Boot />
       <ShaderBackdrop />
-      <Nav items={navItems} extra={<><ThemeReset /><button type="button" className="hud mono hide-sm" onClick={() => emit('palette')} aria-label="Open command palette"><kbd>⌘K</kbd></button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
+      <Nav items={navItems} extra={<><ThemeReset /><button type="button" className="hud rv-trigger hide-sm" onClick={() => emit('recruiter')}>60s overview</button><button type="button" className="hud mono hide-sm" onClick={() => emit('palette')} aria-label="Open command palette"><kbd>⌘K</kbd></button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
       <main>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />
@@ -75,6 +76,7 @@ function App() {
       <Toasts />
       <CommandPalette onAchievements={() => setDrawerOpen(true)} />
       <Shortcuts />
+      <RecruiterView />
       <Confetti />
       <Konami />
     </>
