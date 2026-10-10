@@ -6,7 +6,7 @@ import { SectionHead } from './Sections'
 
 type Day = { date: string; count: number; level: 0 | 1 | 2 | 3 | 4 }
 type Repo = { name: string; url: string; description: string | null; language: string | null; pushed: string }
-type Data = { total: number; days: Day[]; repos: number | null; active: Repo[] }
+type Data = { total: number | null; days: Day[]; repos: number | null; active: Repo[] }
 
 const USER = 'sugianand'
 const CACHE = 'sa26:gh2'
@@ -22,7 +22,8 @@ async function load(): Promise<Data> {
     /* ignore */
   }
   const [contrib, user, repos] = await Promise.all([
-    fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`).then((r) => (r.ok ? r.json() : Promise.reject(r.status))),
+    // Unofficial third-party API: its outage shouldn't hide what GitHub itself returned.
+    fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
     fetch(`https://api.github.com/users/${USER}`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
     fetch(`https://api.github.com/users/${USER}/repos?sort=pushed&per_page=12`).then((r) => (r.ok ? r.json() : [])).catch(() => []),
   ])
@@ -31,11 +32,16 @@ async function load(): Promise<Data> {
     .filter((r) => !r.fork && !HIDDEN.has(r.name) && Date.parse(r.pushed_at) > cutoff)
     .slice(0, 4)
     .map((r) => ({ name: r.name, url: r.html_url, description: r.description, language: r.language, pushed: r.pushed_at }))
-  const data: Data = { total: contrib.total.lastYear, days: contrib.contributions, repos: user?.public_repos ?? null, active }
-  try {
-    sessionStorage.setItem(CACHE, JSON.stringify(data))
-  } catch {
-    /* ignore */
+  const days: Day[] = contrib?.contributions ?? []
+  const data: Data = { total: contrib?.total?.lastYear ?? null, days, repos: user?.public_repos ?? null, active }
+  if (!days.length && !active.length && data.repos === null) throw new Error('GitHub unreachable')
+  // Cache only complete results so a flaky source is retried on the next visit.
+  if (days.length && user) {
+    try {
+      sessionStorage.setItem(CACHE, JSON.stringify(data))
+    } catch {
+      /* ignore */
+    }
   }
   return data
 }
@@ -105,7 +111,7 @@ export function GitHubActivity() {
   }, [near])
 
   const weeks = useMemo(() => {
-    if (!data) return []
+    if (!data?.days.length) return []
     const out: (Day | null)[][] = []
     const first = new Date(`${data.days[0].date}T00:00:00`).getDay()
     let week: (Day | null)[] = Array(first).fill(null)
@@ -120,7 +126,7 @@ export function GitHubActivity() {
     return out
   }, [data])
 
-  const summary = useMemo(() => (data ? summarize(data.days) : null), [data])
+  const summary = useMemo(() => (data?.days.length ? summarize(data.days) : null), [data])
 
   const monthLabels = weeks.map((w, i) => {
     const day = w.find(Boolean)
@@ -145,11 +151,15 @@ export function GitHubActivity() {
         )}
         {!data && !failed && <p className="gh-empty mono">fetching contributions…</p>}
 
+        {data && data.active.length > 0 && <CurrentlyBuilding repos={data.active} />}
+        {data && !summary && (
+          <p className="gh-empty mono">Contribution graph unavailable right now. <a href={profile.github} target="_blank" rel="noreferrer">See the full profile ↗</a></p>
+        )}
+
         {data && summary && (
           <>
-            {data.active.length > 0 && <CurrentlyBuilding repos={data.active} />}
             <div className="gh-stats">
-              <div><strong>{data.total}</strong><span className="mono">contributions, last 12 months</span></div>
+              <div><strong>{data.total ?? '—'}</strong><span className="mono">contributions, last 12 months</span></div>
               <div><strong>{summary.active}</strong><span className="mono">active days</span></div>
               <div><strong>{summary.longest}</strong><span className="mono">longest streak (days)</span></div>
               <div><strong>{data.repos ?? '—'}</strong><span className="mono">public repos</span></div>
