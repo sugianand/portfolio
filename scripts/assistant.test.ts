@@ -15,7 +15,19 @@ const cases: [string, RegExp][] = [
   ['How do I contact Sugi?', /^contact/],
   ['How does CineDNA rank movies?', /^cinedna/],
   ['Has Sugi taught or mentored anyone?', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)/],
+  ['Where is he located?', /^profile/],
+  ['When does he graduate?', /^education/],
+  ['Where did he do his undergrad?', /^education/],
+  ['Does he have leadership experience?', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)/],
+  ['Has he worked with LLMs?', /^(11planner|skills-ai_ml)/],
+  ['What databases has he used?', /^skills-data/],
+  ['Can I see his resume?', /^contact/],
+  ['What was the hardest problem he solved?', /-hardest$/],
 ]
+
+test('quotes abbreviations like M.S. whole', () => {
+  assert.match(answer('When does he graduate?').snippets[0].text, /^M\.S\. Artificial Intelligence/)
+})
 
 for (const [q, expected] of cases) {
   test(q, () => {
@@ -26,7 +38,7 @@ for (const [q, expected] of cases) {
 }
 
 test('refuses questions outside the data', () => {
-  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz']) {
+  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?']) {
     assert.equal(answer(q).snippets.length, 0, q)
   }
 })

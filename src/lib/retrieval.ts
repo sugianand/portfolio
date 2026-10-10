@@ -15,7 +15,7 @@ export type Doc = {
 
 export type Hit = { doc: Doc; score: number }
 
-const STOP = new Set('a an and are as at be but by can did do does for from has have he her his how i in is it its me of on or our she so than that the their them they this to was what when where which who why will with would you your about tell sugi suganeshwara anand any some has had into also just more most best'.split(' '))
+const STOP = new Set('a an and are as at be but by can did do does for from has have he her his how i in is it its me of on or our she so than that the their them they this to was what when where which who why will with would you your about tell sugi suganeshwara anand any some has had into also just more most best need see'.split(' '))
 
 // Query-side expansion: recruiter vocabulary mapped onto words that appear in the data.
 const EXPAND: Record<string, string[]> = {
@@ -23,6 +23,7 @@ const EXPAND: Record<string, string[]> = {
   ml: ['ai', 'learning', 'recommendation', 'ranking', 'pytorch', 'tensorflow'],
   machine: ['ml', 'learning'],
   llm: ['openai', 'ai', 'estimator'],
+  llms: ['llm', 'openai', 'estimator'],
   rag: ['retrieval', 'bm25', 'assistant'],
   backend: ['api', 'fastapi', 'django', 'drf', 'express', 'worker', 'server', 'rest'],
   api: ['rest', 'fastapi', 'endpoint', 'express'],
@@ -46,6 +47,15 @@ const EXPAND: Record<string, string[]> = {
   school: ['education', 'university', 'wayne'],
   education: ['degree', 'university', 'gpa'],
   gpa: ['education'],
+  graduate: ['education', 'degree', 'progress'],
+  graduation: ['education', 'degree', 'progress'],
+  undergrad: ['education', 'completed'],
+  undergraduate: ['education', 'completed'],
+  study: ['education', 'master', 'degree'],
+  location: ['detroit'],
+  currently: ['current', 'now', 'progress'],
+  leadership: ['mentor', 'coach', 'taught', 'lead'],
+  lead: ['mentor', 'coach', 'taught'],
   hire: ['looking', 'roles', 'availability', 'internships', 'co'],
   fit: ['looking', 'roles', 'ai', 'built'],
   contact: ['email', 'linkedin', 'github', 'resume'],
@@ -71,6 +81,7 @@ export function tokenize(text: string) {
     .toLowerCase()
     .replace(/full[\s-]?stack/g, 'fullstack')
     .replace(/real[\s-]?time/g, 'realtime')
+    .replace(/\blocated\b/g, 'location')
     .split(/[^a-z0-9+#]+/)
     .filter((w) => w && !STOP.has(w))
     .map(stem)
@@ -137,7 +148,8 @@ export class Index {
  */
 export function extract(text: string, terms: Map<string, number>, max = 2) {
   // Split only at a period followed by a capital, so "Next.js" or "data.ts" stay intact.
-  const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z0-9"(])/).map((s) => s.trim()).filter(Boolean)
+  // Abbreviations like "M.S." or "B.S." do not end a sentence either.
+  const sentences = text.split(/(?<=[.!?])(?<!\b[A-Z]\.[A-Z]\.)\s+(?=[A-Z0-9"(])/).map((s) => s.trim()).filter(Boolean)
   const scored = sentences.map((s, i) => {
     const toks = new Set(tokenize(s))
     let score = 0

@@ -50,9 +50,6 @@ export function answer(question: string): Answer {
   const cutoff = hits[0].score * 0.45
   const candidates = hits.filter((h) => h.score >= cutoff)
 
-  // Pass 1 quotes passages that match the question's topic. If none do, the
-  // question only names a kind of thing ("what technologies…"), so pass 2
-  // lets passages of that kind answer on their own.
   const collect = (pick: (hit: Hit) => string) => {
     const perSource = new Map<string, number>()
     const out: Snippet[] = []
@@ -69,10 +66,15 @@ export function answer(question: string): Answer {
     return out
   }
 
+  // Pass 1 quotes passages that match the question's topic. If none do, the
+  // question only names a kind of thing ("what technologies…"), so pass 2
+  // lets passages of that kind answer on their own, along with passages whose
+  // title names the topic ("hardest problem") even if their text never does.
   const kinds = wantedKinds(question)
+  const titled = (d: Doc) => tokenize(d.title).some((t) => topical.has(t))
   let snippets = collect((h) => extract(h.doc.text, topical, 2))
-  if (!snippets.length && kinds.length) {
-    snippets = collect((h) => (kinds.some((m) => m(h.doc)) ? extract(h.doc.text, terms, 2) || h.doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] : ''))
+  if (!snippets.length) {
+    snippets = collect((h) => (kinds.some((m) => m(h.doc)) || titled(h.doc) ? extract(h.doc.text, terms, 2) || h.doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] : ''))
   }
   return { snippets, hits, terms: trace }
 }

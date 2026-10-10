@@ -12,7 +12,7 @@ export function buildKnowledge(): Doc[] {
   docs.push({
     id: 'profile',
     title: `${profile.name} (Sugi), ${profile.headline}`,
-    text: `Sugi is a software engineer and AI builder based in ${profile.location}, working on an M.S. in Artificial Intelligence at Wayne State University after a B.S. in Computer Science with a minor in Mathematics. Sugi builds ranking and retrieval systems, real-time multiplayer backends, and full-stack products.`,
+    text: `Location: ${profile.location}. Sugi is a software engineer and AI builder working on an M.S. in Artificial Intelligence at Wayne State University after a B.S. in Computer Science with a minor in Mathematics. Sugi builds ranking and retrieval systems, real-time multiplayer backends, and full-stack products.`,
     source: about,
   })
   docs.push({
