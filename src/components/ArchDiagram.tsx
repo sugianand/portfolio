@@ -5,6 +5,10 @@ import { unlock } from '../lib/store'
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
 
+/** Lets narrow nodes wrap paths like services/scoring.py at the slash. */
+const breakAfterSlash = (text: string) =>
+  text.split('/').flatMap((part, i) => (i === 0 ? [part] : ['/', <wbr key={i} />, part]))
+
 /**
  * A data-driven system diagram. Nodes sit in tiers (columns on wide screens,
  * rows on narrow ones); edges are measured from the rendered node boxes so the
@@ -89,7 +93,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
                 aria-pressed={n.id === active}
               >
                 <b>{n.label}</b>
-                <span className="mono">{n.tech}</span>
+                <span className="mono">{breakAfterSlash(n.tech)}</span>
               </button>
             ))}
           </div>

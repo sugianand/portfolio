@@ -567,8 +567,10 @@ main, .nav, .footer { position: relative; z-index: 1; }
 }
 @media (max-width: 640px) {
   .arch-canvas { grid-template-columns: 1fr; gap: 26px; padding: 16px; }
-  .arch-tier { flex-direction: row; flex-wrap: wrap; }
-  .arch-node { flex: 1 1 140px; }
+  /* Same-tier nodes share a row so siblings never read as a chain. */
+  .arch-tier { flex-direction: row; gap: 10px; }
+  .arch-node { flex: 1 1 0; min-width: 0; padding: 10px 11px; align-content: start; }
+  .arch-node b, .arch-node span { overflow-wrap: break-word; }
   .pv-results li { grid-template-columns: 96px 1fr 28px; font-size: 13px; }
   .demo-dims li { grid-template-columns: 110px 1fr 28px; }
   .fcard-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
