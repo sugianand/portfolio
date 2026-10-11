@@ -8,8 +8,21 @@
   --dim: #837e74;
   --accent: #fa6945;
   --accent-rgb: 250, 105, 69;
+  --accent-night: #fa6945;
   --green: #8ee19c;
   --blue: #7aa7ff;
+  --yellow: #f5d547;
+  --bad: #ff9b9b;
+  --text-hi: #e4dfd5;
+  --text: #d8d3c8;
+  --text-lo: #cfc9bd;
+  --soft: #bdb7ab;
+  --diff: #a8e6b2;
+  --edge-hi: #45443e;
+  --edge: #3a3a35;
+  --wire: #4a4943;
+  --track: #262622;
+  --empty: #1f1f1c;
   --display: 'Syne', 'Arial Black', system-ui, sans-serif;
   --sans: 'Geist', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --mono: 'Geist Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
@@ -25,6 +38,35 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Light theme: set on <html> before first paint (index.html) from the saved choice or
+   prefers-color-scheme. Every value keeps WCAG AA against --ink and --ink-2. */
+:root[data-theme='light'] {
+  --ink: #f6f3ec;
+  --ink-2: #ffffff;
+  --ink-3: #ebe6dc;
+  --line: #d9d3c7;
+  --cream: #191814;
+  --muted: #514d45;
+  --dim: #625d54;
+  --accent: #b23c1c;
+  --accent-rgb: 178, 60, 28;
+  --green: #1d6b2c;
+  --blue: #2a56b0;
+  --yellow: #7a5a00;
+  --bad: #a3212b;
+  --text-hi: #26241f;
+  --text: #2f2c27;
+  --text-lo: #3a3731;
+  --soft: #46423b;
+  --diff: #1d6b2c;
+  --edge-hi: #c9c3b7;
+  --edge: #cfc9bd;
+  --wire: #b3ada1;
+  --track: #e4dfd5;
+  --empty: #e6e1d7;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }

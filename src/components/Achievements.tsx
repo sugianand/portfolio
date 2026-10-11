@@ -1,12 +1,22 @@
 import { useEffect } from 'react'
-import { achievementList, DEFAULT_ACCENT, resetAccent, resetAchievements, useStore } from '../lib/store'
+import { achievementList, DEFAULT_ACCENT, resetAchievements, resetColors, toggleTheme, useStore } from '../lib/store'
 
 export function ThemeReset() {
   const accent = useStore((s) => s.accent)
   if (accent === DEFAULT_ACCENT) return null
   return (
-    <button type="button" className="hud theme-reset" onClick={resetAccent} title="Restore the original orange theme">
+    <button type="button" className="hud theme-reset" onClick={resetColors} title="Restore the original orange theme">
       ↺ Original colors
+    </button>
+  )
+}
+
+export function ThemeToggle() {
+  const theme = useStore((s) => s.theme)
+  const next = theme === 'light' ? 'dark' : 'light'
+  return (
+    <button type="button" className="hud theme-toggle" onClick={toggleTheme} aria-label={`Switch to ${next} theme`} title={`Switch to ${next} theme`}>
+      <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
     </button>
   )
 }

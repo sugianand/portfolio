@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { accents, getState, hexToRgb, on, useStore } from '../lib/store'
+import { accentHex, getState, hexToRgb, on, useStore } from '../lib/store'
 
 const vertex = `
 attribute vec2 p;
@@ -16,6 +16,7 @@ uniform vec2 uMouse;
 uniform float uScroll;
 uniform vec3 uAccent;
 uniform float uPulse;
+uniform float uLight;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float noise(vec2 p) {
@@ -46,15 +47,21 @@ void main() {
   float major = 1.0 - smoothstep(0.0, 0.03, min(c5, 1.0 - c5));
 
   float glow = exp(-d * 2.6) + uPulse * 0.6;
-  vec3 col = vec3(0.039, 0.039, 0.035) + vec3(0.03) * h;
-  vec3 lineCol = mix(vec3(0.17, 0.165, 0.15), uAccent, clamp(glow, 0.0, 1.0));
-  col += lineCol * line * 0.55;
-  col += uAccent * major * 0.25 * glow;
-  col += uAccent * 0.06 * exp(-d * 5.0);
-
   float vig = smoothstep(1.25, 0.35, length(uv * vec2(0.8, 1.0)));
-  col *= 0.55 + 0.45 * vig;
-  gl_FragColor = vec4(col, 1.0);
+
+  vec3 dark = vec3(0.039, 0.039, 0.035) + vec3(0.03) * h;
+  dark += mix(vec3(0.17, 0.165, 0.15), uAccent, clamp(glow, 0.0, 1.0)) * line * 0.55;
+  dark += uAccent * major * 0.25 * glow;
+  dark += uAccent * 0.06 * exp(-d * 5.0);
+  dark *= 0.55 + 0.45 * vig;
+
+  // Light theme: faint ink contours on paper, so text on top keeps its contrast.
+  vec3 light = vec3(0.965, 0.953, 0.925) - vec3(0.02) * h;
+  light = mix(light, mix(vec3(0.80, 0.78, 0.74), uAccent, clamp(glow, 0.0, 1.0) * 0.6), line * 0.5);
+  light = mix(light, uAccent, major * 0.15 * glow);
+  light *= 0.94 + 0.06 * vig;
+
+  gl_FragColor = vec4(mix(dark, light, uLight), 1.0);
 }
 `
 
@@ -69,11 +76,16 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
 export function ShaderBackdrop() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const accent = useStore((s) => s.accent)
-  const accentRef = useRef(hexToRgb(accents[getState().accent]))
+  const theme = useStore((s) => s.theme)
+  const accentRef = useRef(hexToRgb(accentHex(getState().accent, getState().theme)))
+  const lightRef = useRef(getState().theme === 'light' ? 1 : 0)
+  const redrawRef = useRef<() => void>(undefined)
 
   useEffect(() => {
-    accentRef.current = hexToRgb(accents[accent])
-  }, [accent])
+    accentRef.current = hexToRgb(accentHex(accent, theme))
+    lightRef.current = theme === 'light' ? 1 : 0
+    redrawRef.current?.()
+  }, [accent, theme])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -103,7 +115,7 @@ export function ShaderBackdrop() {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
 
     const u = (name: string) => gl.getUniformLocation(program, name)
-    const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uAccent = u('uAccent'), uPulse = u('uPulse')
+    const uRes = u('uRes'), uTime = u('uTime'), uMouse = u('uMouse'), uScroll = u('uScroll'), uAccent = u('uAccent'), uPulse = u('uPulse'), uLight = u('uLight')
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     // Touch devices have no hover to react to, so render smaller and at 30 fps there.
@@ -114,6 +126,9 @@ export function ShaderBackdrop() {
     const mouse = { x: window.innerWidth * 0.7, y: window.innerHeight * 0.4 }
     const eased = { ...mouse }
     const color = [...accentRef.current]
+    let light = lightRef.current
+    // With reduced motion only single frames are drawn, so colors snap instead of easing.
+    const ease = reduce ? 1 : 0.05
     let pulse = 0
     let raf = 0
     let running = true
@@ -129,13 +144,15 @@ export function ShaderBackdrop() {
       eased.x += (mouse.x - eased.x) * 0.06
       eased.y += (mouse.y - eased.y) * 0.06
       pulse *= 0.94
-      for (let i = 0; i < 3; i++) color[i] += (accentRef.current[i] - color[i]) * 0.05
+      for (let i = 0; i < 3; i++) color[i] += (accentRef.current[i] - color[i]) * ease
+      light += (lightRef.current - light) * ease
       gl.uniform2f(uRes, canvas.width, canvas.height)
       gl.uniform1f(uTime, time / 1000)
       gl.uniform2f(uMouse, eased.x * scale, canvas.height - eased.y * scale)
       gl.uniform1f(uScroll, window.scrollY / window.innerHeight)
       gl.uniform3f(uAccent, color[0], color[1], color[2])
       gl.uniform1f(uPulse, pulse)
+      gl.uniform1f(uLight, light)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
 
@@ -163,10 +180,13 @@ export function ShaderBackdrop() {
     document.addEventListener('visibilitychange', onVisibility)
     const offPulse = on('scatter', () => { pulse = 1 })
     const offConfetti = on('confetti', () => { pulse = 1 })
-    if (reduce) draw(0)
-    else raf = requestAnimationFrame(loop)
+    if (reduce) {
+      draw(0)
+      redrawRef.current = () => draw(0)
+    } else raf = requestAnimationFrame(loop)
 
     return () => {
+      redrawRef.current = undefined
       running = false
       cancelAnimationFrame(raf)
       offPulse()

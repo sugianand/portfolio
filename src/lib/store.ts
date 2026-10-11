@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { accentHex, accents, type AccentName, type Theme } from './palette.ts'
 
 export const achievementList = [
   { id: 'recruiter', name: 'Speed Reader', hint: 'Open the 60-second overview' },
@@ -16,21 +17,14 @@ export const achievementList = [
 
 export type AchievementId = (typeof achievementList)[number]['id']
 
-export const accents = {
-  orange: '#fa6945',
-  green: '#8ee19c',
-  blue: '#7aa7ff',
-  pink: '#ff6bcb',
-  yellow: '#f5d547',
-} as const
-
-export type AccentName = keyof typeof accents
+export { accentHex, accents, lightAccents, type AccentName, type Theme } from './palette.ts'
 
 type Toast = { id: number; title: string; body: string }
 
 type State = {
   unlocked: AchievementId[]
   accent: AccentName
+  theme: Theme
   toasts: Toast[]
 }
 
@@ -58,15 +52,23 @@ const readAccent = (): AccentName => {
   }
 }
 
-const applyAccent = (accent: AccentName) => {
-  const hex = accents[accent]
+const THEME_KEY = 'sa26:theme'
+const THEME_COLORS: Record<Theme, string> = { dark: '#0a0a09', light: '#f6f3ec' }
+
+// index.html sets data-theme before first paint from the saved choice or the OS setting.
+const readTheme = (): Theme => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark')
+const systemTheme = (): Theme => (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+
+const applyAccent = (accent: AccentName, theme: Theme) => {
+  const hex = accentHex(accent, theme)
   const root = document.documentElement
   root.style.setProperty('--accent', hex)
   root.style.setProperty('--accent-rgb', hexToRgb(hex).map((v) => Math.round(v * 255)).join(', '))
+  root.style.setProperty('--accent-night', accents[accent])
 }
 
-let state: State = { unlocked: read(), accent: readAccent(), toasts: [] }
-if (state.accent !== DEFAULT_ACCENT) applyAccent(state.accent)
+let state: State = { unlocked: read(), accent: readAccent(), theme: readTheme(), toasts: [] }
+if (state.accent !== DEFAULT_ACCENT) applyAccent(state.accent, state.theme)
 const listeners = new Set<() => void>()
 
 const set = (patch: Partial<State>) => {
@@ -119,7 +121,7 @@ export const resetAchievements = () => {
 }
 
 export const setAccent = (accent: AccentName) => {
-  applyAccent(accent)
+  applyAccent(accent, state.theme)
   const changed = accent !== state.accent
   set({ accent })
   try {
@@ -135,6 +137,47 @@ export const setAccent = (accent: AccentName) => {
 }
 
 export const resetAccent = () => setAccent(DEFAULT_ACCENT)
+
+const applyTheme = (theme: Theme) => {
+  document.documentElement.dataset.theme = theme
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[theme])
+  applyAccent(state.accent, theme)
+  set({ theme })
+}
+
+/** Light or dark. Picking what the OS already prefers clears the override so the site follows the OS again. */
+export const setTheme = (theme: Theme) => {
+  applyTheme(theme)
+  try {
+    if (theme === systemTheme()) localStorage.removeItem(THEME_KEY)
+    else localStorage.setItem(THEME_KEY, theme)
+  } catch {
+    /* storage unavailable: the theme lasts for this visit only */
+  }
+}
+
+export const toggleTheme = () => setTheme(state.theme === 'light' ? 'dark' : 'light')
+
+/** Back to the original look: the OS light/dark preference and the orange accent. */
+export const resetColors = () => {
+  try {
+    localStorage.removeItem(THEME_KEY)
+  } catch {
+    /* ignore */
+  }
+  applyTheme(systemTheme())
+  resetAccent()
+}
+
+window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+  let saved: string | null = null
+  try {
+    saved = localStorage.getItem(THEME_KEY)
+  } catch {
+    /* ignore */
+  }
+  if (!saved) applyTheme(systemTheme())
+})
 
 export const cycleAccent = () => {
   const names = Object.keys(accents) as AccentName[]

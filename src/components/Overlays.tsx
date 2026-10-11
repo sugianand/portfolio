@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { profile, projects } from '../data'
-import { copyEmail, cycleAccent, emit, on, resetAccent, scrollToId, unlock } from '../lib/store'
+import { copyEmail, cycleAccent, emit, on, resetColors, scrollToId, toggleTheme, unlock } from '../lib/store'
 
 type Action = { id: string; label: string; hint: string; run: () => void }
 
@@ -26,7 +26,8 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'linkedin', label: 'Open LinkedIn', hint: 'linkedin', run: () => open(profile.linkedin) },
     ...projects.map((p) => ({ id: `p-${p.id}`, label: `Project: ${p.title}`, hint: p.kind, run: () => { window.location.hash = `project/${p.id}` } })),
     { id: 'accent', label: 'Cycle accent color', hint: 'theme', run: cycleAccent },
-    { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetAccent },
+    { id: 'light-dark', label: 'Switch light / dark theme', hint: 'theme', run: toggleTheme },
+    { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetColors },
     { id: 'confetti', label: 'Celebrate', hint: 'why not', run: () => emit('confetti') },
     { id: 'secrets', label: 'Show achievements', hint: 'secrets', run: onAchievements },
     { id: 'shortcuts', label: 'Show keyboard shortcuts', hint: '?', run: () => emit('shortcuts') },
@@ -230,8 +231,8 @@ export function Confetti() {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()
-      const colors = [accent, '#f4f0e9', '#8ee19c', '#7aa7ff', '#f5d547']
+      const css = getComputedStyle(document.documentElement)
+      const colors = ['--accent', '--cream', '--green', '--blue', '--yellow'].map((v) => css.getPropertyValue(v).trim())
       for (const side of [0, 1]) {
         for (let i = 0; i < 90; i++) {
           const angle = side ? Math.PI + 0.35 + Math.random() * 0.7 : -0.35 - Math.random() * 0.7

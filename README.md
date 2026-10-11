@@ -19,6 +19,7 @@ Personal site for Suganeshwara "Sugi" Anand: Software Engineer + AI Builder, M.S
 | Skill evidence | Every skill links to the projects or roles where it's used; skills without public evidence say so. |
 | Currently building | Repos pushed in the last 45 days, live from the GitHub API. |
 | WebGL + Canvas | A GLSL topographic shader and a fixed-timestep particle name, both paused when hidden and lighter on touch devices. |
+| Light / dark | Follows the OS setting, with a ☀/☾ toggle that remembers your choice. Every accent has a light twin that keeps AA contrast, and "↺ Original colors" resets both. |
 | Extras | ⌘K command palette, `?` shortcuts overlay, achievements, and a Konami code. |
 
 ## Editing content

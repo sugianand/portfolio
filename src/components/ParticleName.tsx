@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { emit, isBooted, on, unlock } from '../lib/store'
+import { emit, isBooted, on, unlock, useStore } from '../lib/store'
 
 type Particle = { x: number; y: number; tx: number; ty: number; vx: number; vy: number; accent: boolean }
 
@@ -13,6 +13,14 @@ const MAX_PARTICLES = 7000
 export function ParticleName() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const redrawRef = useRef<() => void>(undefined)
+  const theme = useStore((s) => s.theme)
+  const accent = useStore((s) => s.accent)
+
+  // The animated loop picks up color changes on its own; a reduced-motion still needs a repaint.
+  useEffect(() => {
+    redrawRef.current?.()
+  }, [theme, accent])
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -33,7 +41,7 @@ export function ParticleName() {
     let assembled = isBooted()
     let disposed = false
 
-    const accentColor = () => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#fa6945'
+    const cssColor = (name: string, fallback: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
 
     const build = async () => {
       try {
@@ -104,8 +112,8 @@ export function ParticleName() {
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height)
-      const cream = '#f4f0e9'
-      const accent = accentColor()
+      const cream = cssColor('--cream', '#f4f0e9')
+      const accent = cssColor('--accent', '#fa6945')
       ctx.fillStyle = cream
       for (const p of particles) if (!p.accent) ctx.fillRect(p.x, p.y, size, size)
       ctx.fillStyle = accent
@@ -204,6 +212,7 @@ export function ParticleName() {
     })
 
     build()
+    if (reduce) redrawRef.current = draw
     if (!reduce) {
       raf = requestAnimationFrame(loop)
       canvas.addEventListener('pointermove', onMove)
@@ -214,6 +223,7 @@ export function ParticleName() {
     window.addEventListener('resize', onResize)
 
     return () => {
+      redrawRef.current = undefined
       disposed = true
       cancelAnimationFrame(raf)
       io.disconnect()
