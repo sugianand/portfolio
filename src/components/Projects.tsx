@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { projects, type Category, type Project } from '../data'
 import { scrollToId } from '../lib/store'
+import { miniTopology } from '../lib/topology'
 import { Reveal } from './effects'
 import { SectionHead } from './Sections'
 
@@ -51,10 +52,32 @@ function FeaturedCard({ project, onOpen }: { project: Project; onOpen: () => voi
   )
 }
 
+/** A tiny, decorative sketch of the project's architecture (or its loop, when it has none). */
+function CardGlyph({ project }: { project: Project }) {
+  const w = 112
+  const h = 36
+  if (!project.architecture) {
+    return (
+      <svg className="ccard-glyph" viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
+        <circle className="glyph-edge" cx={h / 2} cy={h / 2} r={12} fill="none" />
+        <circle className="glyph-node glyph-lead" cx={h / 2} cy={h / 2 - 12} r={3.5} />
+      </svg>
+    )
+  }
+  const { nodes, edges } = miniTopology(project.architecture, w, h)
+  return (
+    <svg className="ccard-glyph" viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
+      {edges.map((e) => <line key={e.key} className="glyph-edge" x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} />)}
+      {nodes.map((n) => <circle key={n.id} className={`glyph-node${n.tier === 0 ? ' glyph-lead' : ''}`} cx={n.x} cy={n.y} r={3.5} />)}
+    </svg>
+  )
+}
+
 function CompactCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
   return (
     <article className="ccard">
       <button type="button" className="pcard-hit" onClick={onOpen} onPointerEnter={loadDetail} onFocus={loadDetail} aria-label={`Read the ${project.title} case study`} data-cursor="read" />
+      <CardGlyph project={project} />
       <p className="pcard-top mono"><span>{project.kind}</span><span>{project.year}</span></p>
       <h3>{project.title}</h3>
       <p className="pcard-body">{project.body}</p>
