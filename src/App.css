@@ -637,8 +637,34 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .rv-stats { grid-template-columns: repeat(2, 1fr); }
   .hero-targets { font-size: 12.5px; }
 }
+/* With the overview open, printing gives just the overview as a one-page resume. */
 @media print {
-  .rv { position: static; background: none; padding: 0; }
+  body:has(> .rv) > :not(.rv) { display: none !important; }
+  .rv { position: static; background: none; padding: 0; overflow: visible; }
+  .rv-box { max-width: none; padding: 0; border: 0; background: none; gap: 10pt; }
+  .rv-close, .rv-foot, .rv-actions .chip-solid { display: none; }
+  .rv-kicker { display: none; }
+  .rv-head h2 { font-size: 28pt; }
+  .rv-headline { margin-top: 4pt; font-size: 12pt; color: #111; }
+  .rv-actions { gap: 4pt 16pt; }
+  .rv-actions .chip { padding: 0; border: 0; background: none; font-size: 10pt; color: #111; }
+  .rv-actions a.chip[href^="http"]::after { content: ' ' attr(href); color: var(--muted); }
+  .rv-grid { grid-template-columns: 1fr 1fr; }
+  .rv-grid section { background: #fff; padding: 8pt 10pt; gap: 4pt; break-inside: avoid; }
+  .rv-grid h3 { font-size: 9pt; }
+  .rv-grid p, .rv-roles b, .rv-stack dd { font-size: 10pt; color: #111; }
+  .rv-strong { font-size: 11pt !important; color: #111 !important; }
+  .rv-projects { grid-template-columns: repeat(3, 1fr); gap: 6pt; }
+  .rv-projects button { padding: 6pt 8pt; background: #fff; color: #111; }
+  .rv-projects b { font-size: 11pt; }
+  .rv-projects span { font-size: 9.5pt; color: #111; }
+  .rv-projects em { font-size: 9pt; }
+  .rv-roles { gap: 4pt; }
+  .rv-roles span, .rv-stack dt, .rv-stats dd { font-size: 9pt; }
+  .rv-stack { gap: 3pt; }
+  .rv-stack div { grid-template-columns: 80pt 1fr; }
+  .rv-stats { grid-template-columns: repeat(4, 1fr); }
+  .rv-stats dt { font-size: 18pt; }
 }
 
 /* ---------- skill evidence ---------- */
