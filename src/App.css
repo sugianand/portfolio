@@ -578,6 +578,14 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .arch-node { flex: 1 1 0; min-width: 0; padding: 10px 11px; align-content: start; }
   .arch-node b, .arch-node span { overflow-wrap: break-word; }
   .pv-results li { grid-template-columns: 96px 1fr 28px; font-size: 13px; }
+  /* Phones: keep the case study bar on one line, give its buttons thumb-sized
+     targets, and tile the metrics two-up instead of one tall column. */
+  .detail-bar { gap: 10px; letter-spacing: .04em; }
+  .detail-count { white-space: nowrap; }
+  .detail-nav button { min-width: 36px; min-height: 36px; padding: 6px; }
+  .detail-esc { display: none; }
+  .detail-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .detail-metrics > div { padding: 12px 0; border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent); }
   .demo-dims li { grid-template-columns: 110px 1fr 28px; }
   .fcard-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .fcard-metrics dt { font-size: 22px; }

@@ -60,11 +60,11 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
       <article className="detail-sheet" ref={sheetRef} tabIndex={-1} onClick={(e) => e.stopPropagation()} key={project.id}>
         <header className={`detail-hero tone-${project.tone}`}>
           <div className="detail-bar mono">
-            <span>Case study {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
+            <span>Case study <span className="detail-count">{String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span></span>
             <span className="detail-nav">
               <button type="button" onClick={() => onNav(-1)} aria-label="Previous project">←</button>
               <button type="button" onClick={() => onNav(1)} aria-label="Next project">→</button>
-              <button type="button" onClick={onClose} aria-label="Close">esc ✕</button>
+              <button type="button" onClick={onClose} aria-label="Close"><span className="detail-esc">esc </span>✕</button>
             </span>
           </div>
           <p className="detail-kind mono">{project.kind} · {project.year}</p>
