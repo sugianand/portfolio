@@ -772,8 +772,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
 
 /* ---------- currently building ---------- */
 .now { padding: 18px 20px; border-bottom: 1px solid var(--line); display: grid; gap: 12px; }
-.now-title { font-size: 12.5px; text-transform: uppercase; letter-spacing: .12em; color: var(--cream); display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
-.now-title span { color: var(--muted); text-transform: none; letter-spacing: 0; }
+.now-title { font-size: 12.5px; text-transform: uppercase; letter-spacing: .12em; color: var(--cream); display: flex; align-items: center; gap: 10px; }
 .now ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 10px; }
 .now li > a, .now-static { display: grid; gap: 4px; height: 100%; padding: 12px 14px; border: 1px solid var(--line); background: var(--ink); transition: border-color .2s; }
 .now li > a:hover, .now li > a:focus-visible { border-color: var(--accent); }

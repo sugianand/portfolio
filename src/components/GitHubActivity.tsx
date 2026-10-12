@@ -61,7 +61,7 @@ const ago = (iso: string) => {
 function CurrentlyBuilding({ repos }: { repos: Repo[] }) {
   return (
     <div className="now">
-      <p className="now-title mono"><i className="dot" /> Currently building <span>· live from GitHub</span></p>
+      <p className="now-title mono"><i className="dot" /> Currently building</p>
       <ul>
         {repos.map((r) => (
           <li key={r.name}>
