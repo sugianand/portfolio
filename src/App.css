@@ -143,6 +143,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .drawer-open .drawer-scrim { opacity: 1; }
 .drawer-panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); background: var(--ink-2); border-left: 1px solid var(--line); padding: 24px; overflow-y: auto; transform: translateX(100%); transition: transform .45s var(--ease); display: flex; flex-direction: column; gap: 18px; }
 .drawer-open .drawer-panel { transform: none; }
+.drawer-panel:focus { outline: none; }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; }
 .drawer-close, .drawer-reset { font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
 .drawer-close:hover, .drawer-reset:hover { color: var(--accent); }

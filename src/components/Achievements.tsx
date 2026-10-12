@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { achievementList, DEFAULT_ACCENT, resetAchievements, resetColors, toggleTheme, useStore } from '../lib/store'
 
 export function ThemeReset() {
@@ -33,6 +33,15 @@ export function AchievementButton({ onOpen }: { onOpen: () => void }) {
 
 export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const unlocked = useStore((s) => s.unlocked)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  // Move focus into the drawer and hand it back to wherever it came from on close.
+  useEffect(() => {
+    if (!open) return
+    const previous = document.activeElement as HTMLElement | null
+    panelRef.current?.focus({ preventScroll: true })
+    return () => previous?.focus({ preventScroll: true })
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -46,7 +55,7 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
   return (
     <div className={`drawer ${open ? 'drawer-open' : ''}`} inert={!open}>
       <button type="button" className="drawer-scrim" onClick={onClose} aria-label="Close achievements" />
-      <aside className="drawer-panel" role="dialog" aria-label="Achievements">
+      <div className="drawer-panel" ref={panelRef} role="dialog" aria-modal="true" aria-label="Achievements" tabIndex={-1}>
         <div className="drawer-head">
           <p className="kicker mono"><span>◆</span> Secrets</p>
           <button type="button" className="mono drawer-close" onClick={onClose}>esc ✕</button>
@@ -68,7 +77,7 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
           })}
         </ul>
         <button type="button" className="mono drawer-reset" onClick={resetAchievements}>reset progress</button>
-      </aside>
+      </div>
     </div>
   )
 }
