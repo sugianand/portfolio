@@ -24,8 +24,8 @@ export function ThemeToggle() {
 export function AchievementButton({ onOpen }: { onOpen: () => void }) {
   const count = useStore((s) => s.unlocked.length)
   return (
-    <button type="button" className="hud mono" onClick={onOpen} aria-label={`Achievements: ${count} of ${achievementList.length} found`} data-cursor="secrets">
-      <span className="hud-gem">◆</span>
+    <button type="button" className="hud mono" onClick={onOpen} aria-label={`${count}/${achievementList.length} achievements found`} data-cursor="secrets">
+      <span className="hud-gem" aria-hidden="true">◆</span>
       {count}/{achievementList.length}
     </button>
   )

@@ -77,6 +77,13 @@ const SHORT: Record<string, string> = {
   'GitHub Actions': 'Actions', 'WebGL / GLSL': 'WebGL', 'Django / DRF': 'Django',
 }
 
+// Screen-reader detail after the visible tile name. Keeping the name as real text rather than an
+// aria-label means what voice users see is what they say (WCAG 2.5.3).
+const skillDetail = ({ name, evidence }: { name: string; evidence?: string[] }) => {
+  const parts = [SHORT[name] && name, evidence && `used in ${evidence.length}`].filter(Boolean)
+  return parts.length ? ` (${parts.join(', ')})` : ''
+}
+
 /** The stack as a periodic table: one tile per skill, colored by family; dots count where it is used. */
 function SkillMap() {
   const [active, setActive] = useState<string | null>(null)
@@ -98,11 +105,11 @@ function SkillMap() {
             onFocus={() => setActive(i.name)}
             onClick={() => setActive(i.name)}
             aria-pressed={active === i.name}
-            aria-label={`${i.name}${i.evidence ? `, used in ${i.evidence.length}` : ''}`}
           >
-            <span className="el-n mono">{n + 1}</span>
-            <b>{SYMBOLS[i.name] ?? i.name.slice(0, 2)}</b>
+            <span className="el-n mono" aria-hidden="true">{n + 1}</span>
+            <b aria-hidden="true">{SYMBOLS[i.name] ?? i.name.slice(0, 2)}</b>
             <span className="el-name">{SHORT[i.name] ?? i.name}</span>
+            <span className="sr-only">{skillDetail(i)}</span>
             <span className="el-dots" aria-hidden="true">{(i.evidence ?? []).map((e) => <i key={e} />)}</span>
           </button>
         ))}
