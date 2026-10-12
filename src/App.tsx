@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState, type ReactNode } from 'react'
 import './App.css'
 import { emit } from './lib/store'
 import { AchievementButton, AchievementDrawer, ThemeReset, ThemeToggle, Toasts } from './components/Achievements'
@@ -9,11 +9,18 @@ import { CommandPalette, Confetti, Konami, Shortcuts } from './components/Overla
 import { Assistant } from './components/Assistant'
 import { RecruiterView } from './components/RecruiterView'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
-import { About } from './components/About'
-import { GitHubActivity } from './components/GitHubActivity'
 import { Projects } from './components/Projects'
 import { Contact, Footer, GitLog, Marquee } from './components/Sections'
 
+// Below-the-fold sections load as separate chunks so the first paint only parses what it
+// shows. Each fallback keeps the section's id, so #section deep links and the nav still
+// have somewhere to land while the chunk arrives.
+const About = lazy(() => import('./components/About').then((m) => ({ default: m.About })))
+const GitHubActivity = lazy(() => import('./components/GitHubActivity').then((m) => ({ default: m.GitHubActivity })))
+
+const Deferred = ({ id, children }: { id: string; children: ReactNode }) => (
+  <Suspense fallback={<section className="section section-pending" id={id} aria-busy="true" />}>{children}</Suspense>
+)
 
 const navItems: NavItem[] = [
   { id: 'about', label: 'About' },
@@ -55,10 +62,10 @@ function App() {
       <main>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />
-        <About />
+        <Deferred id="about"><About /></Deferred>
         <Projects />
         <GitLog />
-        <GitHubActivity />
+        <Deferred id="github"><GitHubActivity /></Deferred>
         <Marquee words={['Curious enough to ask why', 'Practical enough to ship']} reverse />
         <Contact />
       </main>
