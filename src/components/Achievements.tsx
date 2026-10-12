@@ -58,7 +58,7 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
       <div className="drawer-panel" ref={panelRef} role="dialog" aria-modal="true" aria-label="Achievements" tabIndex={-1}>
         <div className="drawer-head">
           <p className="kicker mono"><span>◆</span> Secrets</p>
-          <button type="button" className="mono drawer-close" onClick={onClose}>esc ✕</button>
+          <button type="button" className="mono drawer-close" onClick={onClose} aria-label="Esc, close achievements">esc ✕</button>
         </div>
         <h3>{pct}% <em>found.</em></h3>
         <div className="drawer-bar"><span style={{ transform: `scaleX(${pct / 100})` }} /></div>

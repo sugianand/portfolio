@@ -82,7 +82,7 @@ export function RecruiterView() {
             <h2 id="rv-title">{profile.name} <span>(Sugi)</span></h2>
             <p className="rv-headline">{profile.headline} · {profile.location}</p>
           </div>
-          <button type="button" className="mono rv-close" onClick={close} aria-label="Close overview">esc ✕</button>
+          <button type="button" className="mono rv-close" onClick={close} aria-label="Esc, close overview">esc ✕</button>
         </div>
 
         <div className="rv-actions">

@@ -82,7 +82,7 @@ export function Assistant() {
               <strong>Ask about Sugi</strong>
               <span className="mono">BM25 retrieval over this site&apos;s verified data · every answer is quoted and cited</span>
             </div>
-            <button type="button" className="mono ask-close" onClick={() => setOpen(false)} aria-label="Close assistant">esc ✕</button>
+            <button type="button" className="mono ask-close" onClick={() => setOpen(false)} aria-label="Esc, close assistant">esc ✕</button>
           </div>
 
           <div className="ask-log" ref={logRef} aria-live="polite">

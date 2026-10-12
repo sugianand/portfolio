@@ -64,7 +64,7 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
             <span className="detail-nav">
               <button type="button" onClick={() => onNav(-1)} aria-label="Previous project">←</button>
               <button type="button" onClick={() => onNav(1)} aria-label="Next project">→</button>
-              <button type="button" onClick={onClose} aria-label="Close"><span className="detail-esc">esc </span>✕</button>
+              <button type="button" onClick={onClose} aria-label="Esc, close case study"><span className="detail-esc">esc </span>✕</button>
             </span>
           </div>
           <p className="detail-kind mono">{project.kind} · {project.year}</p>

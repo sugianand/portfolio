@@ -152,8 +152,8 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .drawer-bar { height: 2px; background: var(--line); }
 .drawer-bar span { display: block; height: 100%; background: var(--accent); transform-origin: left; transition: transform .6s var(--ease); }
 .ach-list { display: grid; gap: 2px; }
-.ach-list li { display: flex; gap: 14px; padding: 12px; background: var(--ink); align-items: start; opacity: .55; }
-.ach-list li.got { opacity: 1; }
+.ach-list li { display: flex; gap: 14px; padding: 12px; background: var(--ink); align-items: start; }
+.ach-list li:not(.got) b { color: var(--muted); }
 .ach-icon { color: var(--dim); font-size: 16px; line-height: 1.2; }
 .got .ach-icon { color: var(--accent); }
 .ach-list b { display: block; font-size: 15px; font-weight: 600; }
