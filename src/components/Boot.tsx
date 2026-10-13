@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { markBooted } from '../lib/store'
 
 // Plays once per browser session (new tab or new visit), not on every reload within it.
@@ -27,26 +27,29 @@ const extrude = (tone: Tone, depth = 18) => {
 }
 
 const FACE = `${import.meta.env.BASE_URL}titlecard/sugi-face.jpg`
+const WALK = `${import.meta.env.BASE_URL}titlecard/sugi-walk.mp4`
+const WALK_POSTER = `${import.meta.env.BASE_URL}titlecard/sugi-walk.jpg`
 
 type Shot =
-  | { kind: 'warp' | 'title'; at: number }
+  | { kind: 'film' | 'warp' | 'title'; at: number }
   | { kind: 'glyph'; at: number; text: string; tone: Tone; tilt: number }
   | { kind: 'eye'; at: number; tone: Tone; x: number; y: number; zoom: number }
 
-// The title card, in beats (ms from start): light-speed bursts cut hard against block letters.
-// An 'eye' shot zooms into FACE at x/y (% of the image) by zoom; add them once there's a close-up photo.
+// The title card, in beats (ms from start). Opens on Sugi's walk-away clip, then eye close-ups
+// from the selfie cut hard against block letters. Eye x/y is the focus point (% of FACE).
 const SHOTS: Shot[] = [
-  { kind: 'warp', at: 0 },
-  { kind: 'glyph', at: 450, text: 'S', tone: 'gold', tilt: -28 },
-  { kind: 'warp', at: 1000 },
-  { kind: 'glyph', at: 1300, text: 'U', tone: 'blue', tilt: 24 },
-  { kind: 'warp', at: 1850 },
-  { kind: 'glyph', at: 2150, text: 'G', tone: 'red', tilt: -20 },
-  { kind: 'warp', at: 2700 },
-  { kind: 'glyph', at: 3000, text: 'I', tone: 'gold', tilt: 18 },
-  { kind: 'title', at: 3550 },
+  { kind: 'film', at: 0 },
+  { kind: 'eye', at: 3600, tone: 'gold', x: 47.5, y: 47.5, zoom: 1.5 },
+  { kind: 'glyph', at: 4150, text: 'S', tone: 'gold', tilt: -28 },
+  { kind: 'warp', at: 4600 },
+  { kind: 'eye', at: 4850, tone: 'blue', x: 47.5, y: 47.5, zoom: 2.3 },
+  { kind: 'glyph', at: 5350, text: 'U', tone: 'blue', tilt: 24 },
+  { kind: 'eye', at: 5800, tone: 'red', x: 37.5, y: 47.5, zoom: 4 },
+  { kind: 'glyph', at: 6250, text: 'G', tone: 'red', tilt: -20 },
+  { kind: 'glyph', at: 6700, text: 'I', tone: 'gold', tilt: 18 },
+  { kind: 'title', at: 7200 },
 ]
-const END = 5300
+const END = 8900
 
 const STREAKS = Array.from({ length: 64 }, (_, i) => ({
   '--a': `${(i / 64) * 360 + Math.random() * 4}deg`,
@@ -67,6 +70,7 @@ export function Boot() {
   const [shot, setShot] = useState(-1)
   const [leaving, setLeaving] = useState(false)
   const [gone, setGone] = useState(!active)
+  const video = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     if (!active) {
@@ -89,17 +93,24 @@ export function Boot() {
       window.setTimeout(() => setGone(true), 900)
     }
 
-    // Wait briefly for the display font and face photo so the first letter doesn't pop in as a fallback face.
+    // Wait briefly for the font, face photo and clip so nothing pops in half-loaded.
     const fonts = Promise.all([
       document.fonts?.load('400 100px "Archivo Black"', 'SUGI'),
-      SHOTS.some((s) => s.kind === 'eye') && new Promise((resolve) => {
+      new Promise((resolve) => {
         const img = new Image()
         img.onload = img.onerror = resolve
         img.src = FACE
       }),
+      new Promise((resolve) => {
+        const v = video.current
+        if (!v || v.readyState >= 4) return resolve(undefined)
+        v.addEventListener('canplaythrough', resolve, { once: true })
+        v.addEventListener('error', resolve, { once: true })
+      }),
     ]).catch(() => undefined)
-    Promise.race([fonts, new Promise((r) => setTimeout(r, 700))]).then(() => {
+    Promise.race([fonts, new Promise((r) => setTimeout(r, 1500))]).then(() => {
       if (cancelled) return
+      video.current?.play().catch(() => undefined)
       SHOTS.forEach((s, i) => timers.push(window.setTimeout(() => setShot(i), s.at)))
       timers.push(window.setTimeout(finish, END))
     })
@@ -137,6 +148,13 @@ export function Boot() {
 
   return (
     <div className={`boot tc ${leaving ? 'boot-leave' : ''}`} role="status" aria-label="Loading Sugi's portfolio">
+      {shot <= 0 && (
+        <div className={`tc-film ${shot === 0 ? 'is-on' : ''}`} aria-hidden="true">
+          <img className="tc-film-bg" src={WALK_POSTER} alt="" />
+          <video ref={video} src={WALK} poster={WALK_POSTER} muted playsInline preload="auto" />
+        </div>
+      )}
+
       {current?.kind === 'warp' && (
         <div className="tc-warp" aria-hidden="true">
           {STREAKS.map((style, i) => <span key={i} style={style} />)}
