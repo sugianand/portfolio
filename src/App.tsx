@@ -1,6 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useState, type ReactNode } from 'react'
 import './App.css'
-import { emit } from './lib/store'
 import { AchievementButton, AchievementDrawer, ThemeReset, ThemeToggle, Toasts } from './components/Achievements'
 import { Boot } from './components/Boot'
 import { Hero } from './components/Hero'
@@ -58,7 +57,7 @@ function App() {
     <>
       <Boot />
       <ShaderBackdrop />
-      <Nav items={navItems} extra={<><ThemeReset /><ThemeToggle /><button type="button" className="hud rv-trigger hide-sm" onClick={() => emit('recruiter')}>60s overview</button><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
+      <Nav items={navItems} extra={<><ThemeReset /><ThemeToggle /><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
       <main>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />

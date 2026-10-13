@@ -24,11 +24,6 @@ export function About() {
           <p>
             I like the hard middle of a problem: edge cases, architecture, the moment an idea becomes real. I&apos;ve tested automotive software, built financial backends, and shipped a recommender and a multiplayer game.
           </p>
-          <div className="about-actions mono">
-            <a className="chip chip-solid" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
-            <a className="chip" href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-            <a className="chip" href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-          </div>
         </Reveal>
         <Reveal className="facts" delay={120}>
           <dl>
