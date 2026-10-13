@@ -22,7 +22,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'github', label: 'Go to GitHub activity', hint: 'section', run: () => scrollToId('github') },
     { id: 'contact', label: 'Go to Contact', hint: 'section', run: () => scrollToId('contact') },
     { id: 'email', label: 'Copy email address', hint: profile.email, run: () => copyEmail(profile.email) },
-    { id: 'resume', label: 'Open resume (PDF)', hint: 'new tab', run: () => open(profile.resume) },
+    { id: 'resume', label: 'Open resume', hint: 'new tab', run: () => open(profile.resume) },
     { id: 'open-github', label: 'Open GitHub', hint: 'github.com/sugianand', run: () => open(profile.github) },
     { id: 'linkedin', label: 'Open LinkedIn', hint: 'linkedin', run: () => open(profile.linkedin) },
     ...projects.map((p) => ({ id: `p-${p.id}`, label: `Project: ${p.title}`, hint: p.kind, run: () => { window.location.hash = `project/${p.id}` } })),
