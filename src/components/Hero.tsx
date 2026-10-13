@@ -16,7 +16,6 @@ function Aliases() {
     <p className="aka mono" aria-label={`Also known as ${ALIASES.join(', ')}`}>
       <span>a.k.a.</span>
       <b aria-hidden="true"><Scramble key={index} text={ALIASES[index]} /></b>
-      <span className="aka-count hide-sm" aria-hidden="true">psst: click the name</span>
     </p>
   )
 }

@@ -70,9 +70,6 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .aka { display: flex; align-items: baseline; gap: 14px; margin: -2vh 0 4vh; font-size: clamp(14px, 1.6vw, 22px); color: var(--muted); }
 .aka b { color: var(--accent); font-weight: 500; min-width: 0; }
 .aka b::after { content: '_'; animation: blink .9s steps(1) infinite; margin-left: 2px; }
-.aka-count { margin-left: auto; font-size: 13px; color: var(--cream); letter-spacing: .1em; padding: 6px 10px; border: 1px dashed rgba(var(--accent-rgb), .6); animation: hint-pulse 2.4s ease-in-out infinite; }
-.aka-count::before { content: '↖ '; color: var(--accent); }
-@keyframes hint-pulse { 50% { border-color: var(--accent); box-shadow: 0 0 18px rgba(var(--accent-rgb), .25); } }
 .chip-ghost { border-style: dashed; color: var(--muted); background: transparent; backdrop-filter: none; }
 .chip-ghost:hover { transform: none; border-color: var(--line); }
 .hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
@@ -737,7 +734,6 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .hero-name { align-items: center; }
   .hero-name span:last-child { align-self: center; }
   .aka { justify-content: center; flex-wrap: wrap; margin: 0; row-gap: 10px; }
-  .aka-count { margin-left: 10px; }
   .hero-foot { flex-direction: column; align-items: center; justify-content: center; gap: 28px; width: 100%; }
   .hero-copy { justify-items: center; max-width: 720px; gap: 14px; }
   .hero-copy .hero-intro { max-width: 640px; }
