@@ -2,11 +2,11 @@
 
 Personal site for Suganeshwara "Sugi" Anand: Software Engineer + AI Builder, M.S. in Artificial Intelligence at Wayne State.
 
-**Live:** [sugianand.github.io](https://sugianand.github.io) (forwards to [sugianand.github.io/portfolio](https://sugianand.github.io/portfolio/) via [sugianand/sugianand.github.io](https://github.com/sugianand/sugianand.github.io))
+**Live:** [sugianand.vercel.app](https://sugianand.vercel.app) (deployed by Vercel on every push to `main`; the old [sugianand.github.io](https://sugianand.github.io) address forwards here)
 
 ## Two layers
 
-**For someone with 60 seconds:** the hero states the role, what I build, and the roles I'm targeting. The **Quick summary** (hero button, nav, `R`, or [`#recruiter`](https://sugianand.github.io/portfolio/#recruiter)) puts education, top projects, recent experience, core stack, and contact links on one screen.
+**For someone with 60 seconds:** the hero states the role, what I build, and the roles I'm targeting. The **Quick summary** (hero button, nav, `R`, or [`#recruiter`](https://sugianand.vercel.app/#recruiter)) puts education, top projects, recent experience, core stack, and contact links on one screen.
 
 **For engineers who want depth:**
 

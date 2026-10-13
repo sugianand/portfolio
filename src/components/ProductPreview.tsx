@@ -89,7 +89,7 @@ function PortfolioPreview() {
   const step = reduceMotion() ? 999 : tick % 70
   return (
     <div ref={ref}>
-      <Browser url="sugianand.github.io">
+      <Browser url="sugianand.vercel.app">
         <div className="pv-term mono">
           {TERM.map(([cmd, out], i) => {
             const typed = Math.max(0, Math.min(cmd.length, step - STARTS[i]))
