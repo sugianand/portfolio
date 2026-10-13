@@ -29,7 +29,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     { id: 'light-dark', label: 'Switch light / dark theme', hint: 'theme', run: toggleTheme },
     { id: 'accent-reset', label: 'Reset to original colors', hint: 'theme', run: resetColors },
     { id: 'confetti', label: 'Celebrate', hint: 'why not', run: () => emit('confetti') },
-    { id: 'secrets', label: 'Show achievements', hint: 'secrets', run: onAchievements },
+    { id: 'quests', label: 'Show side quests', hint: 'quests', run: onAchievements },
     { id: 'shortcuts', label: 'Show keyboard shortcuts', hint: '?', run: () => emit('shortcuts') },
     { id: 'source', label: 'View site source', hint: 'github', run: () => open(profile.source) },
   ], [onAchievements])

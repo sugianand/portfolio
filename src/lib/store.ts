@@ -19,7 +19,7 @@ export type AchievementId = (typeof achievementList)[number]['id']
 
 export { accentHex, accents, lightAccents, type AccentName, type Theme } from './palette.ts'
 
-type Toast = { id: number; title: string; body: string }
+type Toast = { id: number; title: string; body: string; icon?: AchievementId }
 
 type State = {
   unlocked: AchievementId[]
@@ -86,9 +86,9 @@ export const useStore = <T,>(select: (s: State) => T) => useSyncExternalStore(su
 export const getState = () => state
 
 let toastId = 0
-export const toast = (title: string, body: string) => {
+export const toast = (title: string, body: string, icon?: AchievementId) => {
   const id = ++toastId
-  set({ toasts: [...state.toasts, { id, title, body }] })
+  set({ toasts: [...state.toasts, { id, title, body, icon }] })
   window.setTimeout(() => set({ toasts: state.toasts.filter((t) => t.id !== id) }), 4200)
 }
 
@@ -102,14 +102,17 @@ export const unlock = (id: AchievementId) => {
     /* storage unavailable: progress lasts for this visit only */
   }
   const meta = achievementList.find((a) => a.id === id)!
-  toast(`Achievement unlocked · ${unlocked.length}/${achievementList.length}`, meta.name)
+  toast(`Quest cleared · ${unlocked.length}/${achievementList.length}`, meta.name, id)
   if (unlocked.length === achievementList.length) {
     window.setTimeout(() => {
-      toast('100% complete', 'You found every secret. Email me, seriously.')
+      toast('Legend rank reached', 'Every quest cleared. Email me, seriously.')
       emit('confetti')
     }, 900)
   }
 }
+
+const RANKS = ['Visitor', 'Rookie', 'Rookie', 'Rookie', 'Adventurer', 'Adventurer', 'Adventurer', 'Veteran', 'Veteran', 'Veteran', 'Elite', 'Legend'] as const
+export const rankFor = (cleared: number) => RANKS[Math.min(cleared, RANKS.length - 1)]
 
 export const resetAchievements = () => {
   set({ unlocked: [] })

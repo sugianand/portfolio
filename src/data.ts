@@ -212,7 +212,7 @@ export const projects: Project[] = [
     features: [
       'WebGL terrain that bends around the pointer and follows the theme color',
       'Particle-text name that scatters and reforms',
-      'Retrieval assistant, recruiter view, ⌘K palette, and achievements',
+      'Retrieval assistant, recruiter view, ⌘K palette, and side quests',
       'Case studies with interactive architecture diagrams',
     ],
     challenges: [

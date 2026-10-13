@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { achievementList, DEFAULT_ACCENT, resetAchievements, resetColors, toggleTheme, useStore } from '../lib/store'
+import { achievementList, DEFAULT_ACCENT, rankFor, resetAchievements, resetColors, toggleTheme, useStore } from '../lib/store'
+import { QuestSprite } from './QuestSprite'
 
 export function ThemeReset() {
   const accent = useStore((s) => s.accent)
@@ -24,9 +25,8 @@ export function ThemeToggle() {
 export function AchievementButton({ onOpen }: { onOpen: () => void }) {
   const count = useStore((s) => s.unlocked.length)
   return (
-    <button type="button" className="hud mono" onClick={onOpen} aria-label={`${count}/${achievementList.length} achievements found`} data-cursor="secrets">
-      <span className="hud-gem" aria-hidden="true">◆</span>
-      {count}/{achievementList.length}
+    <button type="button" className="quest-hud" onClick={onOpen} aria-label={`Side quests: ${count} of ${achievementList.length} cleared`} title={`Side quests · ${count}/${achievementList.length}`} data-cursor="quests">
+      <span className="quest-lv" aria-hidden="true">{count}</span>
     </button>
   )
 }
@@ -50,28 +50,36 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  const pct = Math.round((unlocked.length / achievementList.length) * 100)
+  const cleared = unlocked.length
+  const total = achievementList.length
 
   return (
     <div className={`drawer ${open ? 'drawer-open' : ''}`} inert={!open}>
-      <button type="button" className="drawer-scrim" onClick={onClose} aria-label="Close achievements" />
-      <div className="drawer-panel" ref={panelRef} role="dialog" aria-modal={open} aria-label="Achievements" tabIndex={-1}>
+      <button type="button" className="drawer-scrim" onClick={onClose} aria-label="Close side quests" />
+      <div className="drawer-panel" ref={panelRef} role="dialog" aria-modal={open} aria-label="Side quests" tabIndex={-1}>
         <div className="drawer-head">
-          <p className="kicker mono"><span>◆</span> Secrets</p>
-          <button type="button" className="mono drawer-close" onClick={onClose} aria-label="Esc, close achievements">esc ✕</button>
+          <p className="kicker mono"><QuestSprite name="sword" className="kicker-sprite" /> Side quests</p>
+          <button type="button" className="mono drawer-close" onClick={onClose} aria-label="Esc, close side quests">esc ✕</button>
         </div>
-        <h3>{pct}% <em>found.</em></h3>
-        <div className="drawer-bar"><span style={{ transform: `scaleX(${pct / 100})` }} /></div>
-        <ul className="ach-list">
+        <div className="quest-player">
+          <span className="quest-lv quest-lv-lg">{cleared}</span>
+          <div>
+            <p className="mono">Level {cleared} · {cleared * 100}/{total * 100} XP</p>
+            <h3>{rankFor(cleared)}</h3>
+          </div>
+        </div>
+        <div className="quest-xp" role="progressbar" aria-label="Quests cleared" aria-valuemin={0} aria-valuemax={total} aria-valuenow={cleared}>
+          {achievementList.map((a, i) => <i key={a.id} className={i < cleared ? 'on' : ''} />)}
+        </div>
+        <ul className="quest-grid">
           {achievementList.map((a) => {
             const got = unlocked.includes(a.id)
             return (
               <li key={a.id} className={got ? 'got' : ''}>
-                <span className="ach-icon">{got ? '◆' : '◇'}</span>
-                <span>
-                  <b>{got ? a.name : '???'}</b>
-                  <i className="mono">{a.hint}</i>
-                </span>
+                <span className="quest-tile-icon"><QuestSprite name={got ? a.id : 'lock'} /></span>
+                <b>{got ? a.name : '???'}</b>
+                <i className="mono">{a.hint}</i>
+                <span className="quest-reward mono">{got ? '✓ cleared' : '+100 XP'}</span>
               </li>
             )
           })}
@@ -88,7 +96,7 @@ export function Toasts() {
     <div className="toasts" aria-live="polite">
       {toasts.map((t) => (
         <div key={t.id} className="toast">
-          <span className="toast-gem">◆</span>
+          <span className="toast-gem">{t.icon ? <QuestSprite name={t.icon} /> : '◆'}</span>
           <div>
             <p className="mono">{t.title}</p>
             <strong>{t.body}</strong>
