@@ -1,3 +1,4 @@
+import { projects, skillGroups } from '../data.ts'
 import { buildKnowledge } from './knowledge.ts'
 import { extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
 
@@ -9,6 +10,13 @@ const getIndex = () => (index ??= new Index(buildKnowledge()))
 
 /** Below this BM25 score the best passage is not about the question. */
 export const MIN_SCORE = 3
+
+// One-word project and skill names. Each appears in many passages, so its IDF
+// is too low to clear MIN_SCORE alone, yet a question that names one ("What is
+// CineDNA?", "Does he know React?") is always on topic.
+let names: Set<string> | null = null
+const getNames = () =>
+  (names ??= new Set([...projects.map((p) => p.title), ...skillGroups.flatMap((g) => g.items.map((i) => i.name))].map(tokenize).filter((t) => t.length === 1).map(([t]) => t)))
 
 /**
  * Retrieval-only answering: rank passages with BM25, keep the ones close to
@@ -43,7 +51,8 @@ export function answer(question: string): Answer {
   const terms = raw.terms
   const hits = rerank(question, raw.hits)
   const trace = [...terms.entries()]
-  if (!hits.length || hits[0].score < MIN_SCORE) return { snippets: [], hits, terms: trace }
+  const named = tokenize(question).some((t) => getNames().has(t))
+  if (!hits.length || (hits[0].score < MIN_SCORE && !named)) return { snippets: [], hits, terms: trace }
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))

@@ -15,7 +15,7 @@ export type Doc = {
 
 export type Hit = { doc: Doc; score: number }
 
-const STOP = new Set('a an and are as at be but by can did do does for from has have he her his how i in is it its me of on or our she so than that the their them they this to was what when where which who why will with would you your about tell sugi suganeshwara anand any some has had into also just more most best need see'.split(' '))
+const STOP = new Set('a an and are as at be but by can did do does for from has have he her his how i in is it its me of on or our she so than that the their them they this to was what when where which who why will with would you your about tell sugi suganeshwara anand any some has had into also just more most best need see use used using'.split(' '))
 
 // Query-side expansion: recruiter vocabulary mapped onto words that appear in the data.
 const EXPAND: Record<string, string[]> = {

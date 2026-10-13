@@ -23,6 +23,10 @@ const cases: [string, RegExp][] = [
   ['What databases has he used?', /^skills-data/],
   ['Can I see his resume?', /^contact/],
   ['What was the hardest problem he solved?', /-hardest$/],
+  ['What is CineDNA?', /^cinedna-/],
+  ['Tell me about 11Planner', /^11planner-/],
+  ['Does he know React?', /^skills-frontend/],
+  ['Has he used Docker?', /^skills-infra/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
@@ -38,7 +42,7 @@ for (const [q, expected] of cases) {
 }
 
 test('refuses questions outside the data', () => {
-  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?']) {
+  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?', 'Has he used AWS?', 'Is he a US citizen?']) {
     assert.equal(answer(q).snippets.length, 0, q)
   }
 })
