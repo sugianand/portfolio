@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useState, type ReactNode } from
 import './App.css'
 import { AchievementButton, AchievementDrawer, ThemeReset, ThemeToggle, Toasts } from './components/Achievements'
 import { Boot } from './components/Boot'
+import { FilmHud } from './components/FilmHud'
 import { Hero } from './components/Hero'
 import { Nav, type NavItem } from './components/Nav'
 import { CommandPalette, Confetti, Konami, Shortcuts } from './components/Overlays'
@@ -57,6 +58,7 @@ function App() {
     <>
       <Boot />
       <ShaderBackdrop />
+      <FilmHud items={navItems} />
       <Nav items={navItems} extra={<><ThemeReset /><ThemeToggle /><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
       <main>
         <Hero />
