@@ -823,3 +823,19 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .ps > div:last-child span { color: var(--accent); }
 .detail-main .ps p { font-size: 16px; }
 @media (max-width: 640px) { .ps { grid-template-columns: 1fr; } }
+
+/* ---------- project marks ---------- */
+.ptitle { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.picon { flex-shrink: 0; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 12px; border: 1.5px solid color-mix(in srgb, currentColor 30%, transparent); background: color-mix(in srgb, currentColor 7%, transparent); }
+.picon svg { width: 30px; height: 30px; }
+.ccard .picon { width: 44px; height: 44px; border-radius: 10px; color: var(--accent); border-color: rgba(var(--accent-rgb), .45); background: rgba(var(--accent-rgb), .08); }
+.ccard .picon svg { width: 25px; height: 25px; }
+.ccard .ptitle h3 { color: var(--cream); }
+.ptitle-lg .picon { width: 64px; height: 64px; border-radius: 14px; }
+.ptitle-lg .picon svg { width: 38px; height: 38px; }
+.rv-projects .ptitle { gap: 10px; }
+.rv-projects .picon { width: 34px; height: 34px; border-radius: 8px; color: var(--accent); border-color: rgba(var(--accent-rgb), .45); }
+.rv-projects .picon svg { width: 20px; height: 20px; }
+.fcard:hover .picon svg, .ccard:hover .picon svg { transform: rotate(-6deg) scale(1.06); }
+.picon svg { transition: transform .35s var(--ease); }
+@media (max-width: 640px) { .picon { width: 44px; height: 44px; } .picon svg { width: 25px; height: 25px; } .ptitle-lg .picon { width: 52px; height: 52px; } }

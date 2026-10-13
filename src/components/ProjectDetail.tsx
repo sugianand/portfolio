@@ -3,6 +3,7 @@ import { projects, type Project } from '../data'
 import { ArchDiagram } from './ArchDiagram'
 import { CineDNADemo } from './CineDNADemo'
 import { unlock } from '../lib/store'
+import { ProjectIcon } from './ProjectIcon'
 import { ProjectLink } from './Projects'
 
 type Block = { title: string; body: ReactNode }
@@ -68,7 +69,7 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
             </span>
           </div>
           <p className="detail-kind mono">{project.kind} · {project.year}</p>
-          <h2>{project.title}</h2>
+          <div className="ptitle ptitle-lg"><ProjectIcon id={project.id} /><h2>{project.title}</h2></div>
           <p className="detail-tagline">{project.tagline}</p>
           {project.metrics && (
             <dl className="detail-metrics">

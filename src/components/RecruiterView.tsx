@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { profile, projects, roles, stats } from '../data'
 import { copyEmail, on, scrollToId, unlock } from '../lib/store'
+import { ProjectIcon } from './ProjectIcon'
 
 const HASH = '#recruiter'
 
@@ -109,7 +110,7 @@ export function RecruiterView() {
               {top.map((p) => (
                 <li key={p.id}>
                   <button type="button" onClick={() => openCase(p.id)}>
-                    <b>{p.title}</b>
+                    <span className="ptitle"><ProjectIcon id={p.id} /><b>{p.title}</b></span>
                     <span>{p.body}</span>
                     {p.metrics && <em className="mono">{p.metrics.slice(0, 2).map((m) => `${m.value} ${m.label}`).join(' · ')}</em>}
                   </button>

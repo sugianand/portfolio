@@ -4,6 +4,7 @@ import { projects, type Category, type Project } from '../data'
 import { scrollToId } from '../lib/store'
 import { miniTopology } from '../lib/topology'
 import { Reveal } from './effects'
+import { ProjectIcon } from './ProjectIcon'
 import { SectionHead } from './Sections'
 
 const FILTERS: ('All' | Category)[] = ['All', 'AI', 'Backend', 'Full Stack', 'Realtime', 'Games']
@@ -33,7 +34,7 @@ function FeaturedCard({ project, onOpen }: { project: Project; onOpen: () => voi
       <div className="fcard-preview"><Suspense fallback={<div className="pv pv-placeholder" aria-hidden="true" />}><ProductPreview id={project.id} /></Suspense></div>
       <div className="fcard-copy">
         <p className="pcard-top mono"><span>{project.kind}</span><span>{project.year}</span></p>
-        <h3>{project.title}</h3>
+        <div className="ptitle"><ProjectIcon id={project.id} /><h3>{project.title}</h3></div>
         <p className="pcard-tagline">{project.tagline}</p>
         <p className="pcard-body">{project.body}</p>
         {project.metrics && (
@@ -79,7 +80,7 @@ function CompactCard({ project, onOpen }: { project: Project; onOpen: () => void
       <button type="button" className="pcard-hit" onClick={onOpen} onPointerEnter={loadDetail} onFocus={loadDetail} aria-label={`Read the ${project.title} case study`} data-cursor="read" />
       <CardGlyph project={project} />
       <p className="pcard-top mono"><span>{project.kind}</span><span>{project.year}</span></p>
-      <h3>{project.title}</h3>
+      <div className="ptitle"><ProjectIcon id={project.id} /><h3>{project.title}</h3></div>
       <p className="pcard-body">{project.body}</p>
       <div className="pcard-stack mono">{project.stack.slice(0, 4).map((s) => <span key={s}>{s}</span>)}</div>
       <div className="pcard-foot mono">
