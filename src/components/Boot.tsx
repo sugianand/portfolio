@@ -90,14 +90,23 @@ export function Boot() {
       timers.push(window.setTimeout(finish, END))
     })
 
-    window.addEventListener('keydown', finish, { once: true })
+    // The skip key is consumed so it doesn't also fire a site shortcut (/, r, ?) underneath.
+    // Browser chords (reload, devtools) pass through untouched.
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+      finish()
+    }
+    window.addEventListener('keydown', onKey, { capture: true, once: true })
     window.addEventListener('pointerdown', finish, { once: true })
     window.addEventListener('wheel', finish, { once: true, passive: true })
     document.documentElement.style.overflow = 'hidden'
     return () => {
       cancelled = true
       timers.forEach(clearTimeout)
-      window.removeEventListener('keydown', finish)
+      window.removeEventListener('keydown', onKey, { capture: true })
       window.removeEventListener('pointerdown', finish)
       window.removeEventListener('wheel', finish)
       document.documentElement.style.overflow = ''
