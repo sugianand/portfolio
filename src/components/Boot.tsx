@@ -26,17 +26,27 @@ const extrude = (tone: Tone, depth = 18) => {
   return Array.from({ length: depth }, (_, i) => `${(i + 1) * 0.004}em ${(i + 1) * 0.004}em 0 ${i < depth / 2 ? near : far}`).join(', ')
 }
 
-// The title card, in beats (ms from start). Each beat is one shot.
-const SHOTS = [
+const FACE = `${import.meta.env.BASE_URL}titlecard/sugi-face.jpg`
+
+type Shot =
+  | { kind: 'warp' | 'title'; at: number }
+  | { kind: 'glyph'; at: number; text: string; tone: Tone; tilt: number }
+  | { kind: 'eye'; at: number; tone: Tone; x: number; y: number; zoom: number }
+
+// The title card, in beats (ms from start): light-speed bursts cut hard against block letters.
+// An 'eye' shot zooms into FACE at x/y (% of the image) by zoom; add them once there's a close-up photo.
+const SHOTS: Shot[] = [
   { kind: 'warp', at: 0 },
-  { kind: 'glyph', at: 650, text: 'S', tone: 'gold', tilt: -28 },
+  { kind: 'glyph', at: 450, text: 'S', tone: 'gold', tilt: -28 },
+  { kind: 'warp', at: 1000 },
   { kind: 'glyph', at: 1300, text: 'U', tone: 'blue', tilt: 24 },
-  { kind: 'glyph', at: 1950, text: 'G', tone: 'red', tilt: -20 },
-  { kind: 'glyph', at: 2600, text: 'I', tone: 'gold', tilt: 18 },
-  { kind: 'tamil', at: 3250 },
-  { kind: 'title', at: 4150 },
-] as const
-const END = 5700
+  { kind: 'warp', at: 1850 },
+  { kind: 'glyph', at: 2150, text: 'G', tone: 'red', tilt: -20 },
+  { kind: 'warp', at: 2700 },
+  { kind: 'glyph', at: 3000, text: 'I', tone: 'gold', tilt: 18 },
+  { kind: 'title', at: 3550 },
+]
+const END = 5300
 
 const STREAKS = Array.from({ length: 64 }, (_, i) => ({
   '--a': `${(i / 64) * 360 + Math.random() * 4}deg`,
@@ -79,10 +89,14 @@ export function Boot() {
       window.setTimeout(() => setGone(true), 900)
     }
 
-    // Wait briefly for the display fonts so the first letter doesn't pop in as a fallback face.
+    // Wait briefly for the display font and face photo so the first letter doesn't pop in as a fallback face.
     const fonts = Promise.all([
       document.fonts?.load('400 100px "Archivo Black"', 'SUGI'),
-      document.fonts?.load('900 100px "Catamaran"', 'சுகி'),
+      SHOTS.some((s) => s.kind === 'eye') && new Promise((resolve) => {
+        const img = new Image()
+        img.onload = img.onerror = resolve
+        img.src = FACE
+      }),
     ]).catch(() => undefined)
     Promise.race([fonts, new Promise((r) => setTimeout(r, 700))]).then(() => {
       if (cancelled) return
@@ -135,10 +149,9 @@ export function Boot() {
         </div>
       )}
 
-      {current?.kind === 'tamil' && (
-        <div key={shot} className="tc-card tc-card-tamil" aria-hidden="true">
-          <Block text="சுகி" tone="gold" className="tc-name tc-tamil" />
-          <span className="tc-flare" />
+      {current?.kind === 'eye' && (
+        <div key={shot} className={`tc-eye tc-eye-${current.tone}`} aria-hidden="true">
+          <img src={FACE} alt="" style={{ '--x': `${current.x}%`, '--y': `${current.y}%`, '--zoom': current.zoom } as CSSProperties} />
         </div>
       )}
 
@@ -150,6 +163,7 @@ export function Boot() {
         </div>
       )}
 
+      {shot > 0 && <span key={`flash-${shot}`} className="tc-flash" aria-hidden="true" />}
       <span className="tc-grain" aria-hidden="true" />
       <p className="tc-skip mono">click or press any key to skip</p>
     </div>
