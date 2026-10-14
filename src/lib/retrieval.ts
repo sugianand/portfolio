@@ -20,9 +20,8 @@ const STOP = new Set('a an and are as at be but by can did do does for from has 
 // Query-side expansion: recruiter vocabulary mapped onto words that appear in the data.
 const EXPAND: Record<string, string[]> = {
   ai: ['ml', 'llm', 'recommendation', 'ranking', 'retrieval', 'intelligence', 'nlu', 'bm25', 'openai'],
-  ml: ['ai', 'learning', 'recommendation', 'ranking', 'pytorch', 'tensorflow'],
-  machine: ['ml', 'learning'],
-  learn: ['ml', 'ai'],
+  ml: ['ai', 'recommendation', 'ranking', 'pytorch', 'tensorflow'],
+  lesson: ['learn', 'challenge'],
   llm: ['openai', 'ai', 'estimator'],
   llms: ['llm', 'openai', 'estimator'],
   rag: ['retrieval', 'bm25', 'assistant'],
@@ -52,6 +51,7 @@ const EXPAND: Record<string, string[]> = {
   graduation: ['education', 'degree', 'progress'],
   undergrad: ['education', 'completed'],
   undergraduate: ['education', 'completed'],
+  student: ['education', 'degree', 'progress'],
   study: ['education', 'master', 'degree', 'intelligence', 'progress'],
   location: ['detroit'],
   currently: ['current', 'now', 'progress'],
@@ -89,6 +89,10 @@ export function tokenize(text: string) {
     .toLowerCase()
     .replace(/full[\s-]?stack/g, 'fullstack')
     .replace(/real[\s-]?time/g, 'realtime')
+    // "Learn" alone asks for lessons; "machine learning" asks for ML, and "years of
+    // experience" for the roles (the year count is not in the data).
+    .replace(/\b(machine|deep)[\s-]?learning\b/g, 'ml')
+    .replace(/\bhow many years of experience\b/g, 'experience')
     .replace(/\blocated\b/g, 'location')
     .split(/[^a-z0-9+#]+/)
     .filter((w) => w && !STOP.has(w))

@@ -51,13 +51,14 @@ export function buildKnowledge(): Doc[] {
 
   for (const p of projects) {
     const src = { kind: 'project', id: p.id } as const
-    docs.push({ id: `${p.id}-summary`, title: `${p.title}: ${p.tagline}`, text: `${p.title} (${p.kind}, ${p.year}). ${p.body} Role: ${p.role}. Status: ${p.status}. Stack: ${p.stack.join(', ')}.`, source: src, boost: 3 })
+    docs.push({ id: `${p.id}-summary`, title: `${p.title}: ${p.tagline}`, text: `${p.title} (${p.kind}, ${p.year}): ${p.body} Role: ${p.role}. Status: ${p.status}. Stack: ${p.stack.join(', ')}.`, source: src, boost: 3 })
     docs.push({ id: `${p.id}-problem`, title: `${p.title} problem and solution`, text: `${p.problem} ${p.overview}`, source: src })
     if (p.hardest) docs.push({ id: `${p.id}-hardest`, title: `${p.title} hardest engineering problem`, text: p.hardest, source: src })
     if (p.built) docs.push({ id: `${p.id}-built`, title: `What Sugi built in ${p.title}`, text: p.built.map((b) => `${b}.`).join(' '), source: src })
     if (p.metrics) docs.push({ id: `${p.id}-metrics`, title: `${p.title} numbers`, text: p.metrics.map((m) => `${p.title}: ${m.value} ${m.label}.`).join(' '), source: src })
     if (p.architecture) docs.push({ id: `${p.id}-arch`, title: `${p.title} architecture`, text: p.architecture.nodes.map((n) => `${n.label} (${n.tech}): ${n.detail}`).join(' '), source: src })
-    docs.push({ id: `${p.id}-features`, title: `${p.title} features and lessons`, text: [...p.features, ...p.challenges].map((f) => f.replace(/\.?$/, '.')).join(' '), source: src })
+    docs.push({ id: `${p.id}-features`, title: `${p.title} features`, text: p.features.map((f) => f.replace(/\.?$/, '.')).join(' '), source: src })
+    docs.push({ id: `${p.id}-lessons`, title: `What Sugi learned from ${p.title}: challenges and lessons`, text: `Challenges and lessons learned: ${p.challenges.map((c) => c.replace(/\.?$/, '.')).join(' ')}`, source: src })
   }
 
   for (const g of skillGroups) {

@@ -36,10 +36,20 @@ const cases: [string, RegExp][] = [
   ['Has he done machine learning?', /^skills-ai_ml/],
   ['What does he build?', /^profile/],
   ['Summarize Sugi in one line', /^profile/],
+  ['Is he a student?', /^education/],
+  ['What did he learn from CineDNA?', /^cinedna-lessons$/],
+  ['What lessons did he learn from Three Clues?', /^three-clues-lessons$/],
+  ['What challenges did he face building 11Planner?', /^11planner-lessons$/],
+  ['Does he know machine learning?', /^skills-ai_ml/],
+  ['How many years of experience does he have?', /^role-/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
   assert.match(answer('When does he graduate?').snippets[0].text, /^M\.S\. Artificial Intelligence/)
+})
+
+test('says what a project does, not just its name', () => {
+  assert.match(answer('What does 11Planner do?').snippets[0].text, /study planner/)
 })
 
 for (const [q, expected] of cases) {
