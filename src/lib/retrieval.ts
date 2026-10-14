@@ -54,6 +54,7 @@ const EXPAND: Record<string, string[]> = {
   study: ['education', 'master', 'degree'],
   location: ['detroit'],
   currently: ['current', 'now', 'progress'],
+  current: ['now'],
   leadership: ['mentor', 'coach', 'taught', 'lead'],
   lead: ['mentor', 'coach', 'taught'],
   hire: ['looking', 'roles', 'availability', 'internships', 'co'],
@@ -65,6 +66,7 @@ const EXPAND: Record<string, string[]> = {
   tech: ['stack', 'skills', 'languages'],
   technology: ['stack', 'skills'],
   skill: ['skills', 'stack'],
+  framework: ['react', 'next', 'fastapi', 'django', 'express', 'blazor'],
   project: ['projects', 'built'],
 }
 

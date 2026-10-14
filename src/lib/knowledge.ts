@@ -44,7 +44,7 @@ export function buildKnowledge(): Doc[] {
     docs.push({
       id: `role-${r.hash}`,
       title: `${r.title} at ${r.org}`,
-      text: `${r.title} at ${r.org}, ${r.place} (${r.date === 'now' ? 'current' : r.date}). ${r.diff.map((d) => d.replace(/\.?$/, '.')).join(' ')}`,
+      text: `${r.title} at ${r.org}, ${r.place} (${r.date === 'now' ? 'current' : r.date.endsWith('now') ? `${r.date}, current` : r.date}). ${r.diff.map((d) => d.replace(/\.?$/, '.')).join(' ')}`,
       source: { kind: 'section', id: 'log' },
     })
   }

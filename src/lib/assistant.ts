@@ -1,4 +1,4 @@
-import { projects, skillGroups } from '../data.ts'
+import { profile, projects, skillGroups } from '../data.ts'
 import { buildKnowledge } from './knowledge.ts'
 import { extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
 
@@ -22,16 +22,20 @@ const getNames = () =>
  * Retrieval-only answering: rank passages with BM25, keep the ones close to
  * the best match, and quote their most relevant sentences with citations.
  */
+// The timeline lists the degree in progress next to the jobs; it is not a job.
+const degrees = profile.education.map((e) => e.degree)
+const isJob = (d: Doc) => d.id.startsWith('role-') && !degrees.some((deg) => d.title.startsWith(deg))
+
 // Retrieve-then-rerank: what the question asks for (projects, roles, skills)
 // decides which kind of passage should lead.
 const INTENTS: [RegExp, (d: Doc) => boolean][] = [
   [/^(project|built|build|demonstrat|show)$/, (d) => d.source.kind === 'project'],
-  [/^(experience|intern|internship|job|role|work|worked|company)$/, (d) => d.id.startsWith('role-')],
-  [/^(skill|stack|language|know)$/, (d) => d.id.startsWith('skills-')],
+  [/^(experience|intern|internship|job|role|work|worked|company)$/, isJob],
+  [/^(skill|stack|language|know|framework)$/, (d) => d.id.startsWith('skills-')],
 ]
 
 // Words that say what kind of passage is wanted, not what it should be about.
-const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show', 'experience', 'intern', 'internship', 'job', 'role', 'work', 'worked', 'company', 'skill', 'stack', 'language', 'know'])
+const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show', 'experience', 'intern', 'internship', 'job', 'role', 'work', 'worked', 'company', 'skill', 'stack', 'language', 'know', 'framework'])
 
 const wantedKinds = (question: string) => {
   const tokens = tokenize(question)
@@ -52,7 +56,9 @@ export function answer(question: string): Answer {
   const hits = rerank(question, raw.hits)
   const trace = [...terms.entries()]
   const named = tokenize(question).some((t) => getNames().has(t))
-  if (!hits.length || (hits[0].score < MIN_SCORE && !named)) return { snippets: [], hits, terms: trace }
+  // Relevance is judged before the rerank: it only reorders passages, so it
+  // must not turn an on-topic question into a refusal.
+  if (!hits.length || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: [], hits, terms: trace }
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))
