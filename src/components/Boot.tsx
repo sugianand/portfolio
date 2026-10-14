@@ -1,16 +1,19 @@
 import { useEffect, useState, type CSSProperties } from 'react'
+import { shouldPlayIntro } from '../lib/intro'
 import { markBooted } from '../lib/store'
 
 // Plays once per browser session (new tab or new visit), not on every reload within it.
 const KEY = 'sa26:titlecard'
 
 const shouldBoot = () => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  let seen = false
   try {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
-    return sessionStorage.getItem(KEY) !== '1'
+    seen = sessionStorage.getItem(KEY) === '1'
   } catch {
-    return true
+    /* storage blocked: play it */
   }
+  return shouldPlayIntro({ reducedMotion, seen, hash: window.location.hash })
 }
 
 type Tone = 'gold' | 'blue' | 'red'
