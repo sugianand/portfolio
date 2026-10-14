@@ -22,6 +22,7 @@ const EXPAND: Record<string, string[]> = {
   ai: ['ml', 'llm', 'recommendation', 'ranking', 'retrieval', 'intelligence', 'nlu', 'bm25', 'openai'],
   ml: ['ai', 'learning', 'recommendation', 'ranking', 'pytorch', 'tensorflow'],
   machine: ['ml', 'learning'],
+  learn: ['ml', 'ai'],
   llm: ['openai', 'ai', 'estimator'],
   llms: ['llm', 'openai', 'estimator'],
   rag: ['retrieval', 'bm25', 'assistant'],
@@ -51,12 +52,13 @@ const EXPAND: Record<string, string[]> = {
   graduation: ['education', 'degree', 'progress'],
   undergrad: ['education', 'completed'],
   undergraduate: ['education', 'completed'],
-  study: ['education', 'master', 'degree'],
+  study: ['education', 'master', 'degree', 'intelligence', 'progress'],
   location: ['detroit'],
   currently: ['current', 'now', 'progress'],
   current: ['now'],
   leadership: ['mentor', 'coach', 'taught', 'lead'],
   lead: ['mentor', 'coach', 'taught'],
+  available: ['looking', 'availability', 'roles'],
   hire: ['looking', 'roles', 'availability', 'internships', 'co'],
   fit: ['looking', 'roles', 'ai', 'built'],
   contact: ['email', 'linkedin', 'github', 'resume'],
@@ -68,6 +70,10 @@ const EXPAND: Record<string, string[]> = {
   skill: ['skills', 'stack'],
   framework: ['react', 'next', 'fastapi', 'django', 'express', 'blazor'],
   project: ['projects', 'built'],
+  build: ['builder', 'builds'],
+  summarize: ['builder', 'engineer', 'software'],
+  summary: ['builder', 'engineer', 'software'],
+  overview: ['builder', 'engineer', 'software'],
 }
 
 export function stem(word: string) {

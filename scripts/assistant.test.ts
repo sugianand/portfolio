@@ -31,6 +31,11 @@ const cases: [string, RegExp][] = [
   ['What is his current role?', /^role-(4e8b1d0|9b2f6a4)/],
   ['Where does he currently work?', /^role-(4e8b1d0|9b2f6a4)/],
   ['What frameworks does he use?', /^skills-(frontend|backend)/],
+  ['What is he studying?', /^education/],
+  ['Is he available for internships?', /^looking/],
+  ['Has he done machine learning?', /^skills-ai_ml/],
+  ['What does he build?', /^profile/],
+  ['Summarize Sugi in one line', /^profile/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
