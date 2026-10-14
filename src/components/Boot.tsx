@@ -42,23 +42,39 @@ type Shot =
 // from the selfie cut hard against block letters. Eye x/y is the focus point (% of FACE).
 const SHOTS: Shot[] = [
   { kind: 'film', at: 0 },
-  { kind: 'eye', at: 3600, tone: 'gold', x: 47.5, y: 47.5, zoom: 1.5 },
-  { kind: 'glyph', at: 4150, text: 'S', tone: 'gold', tilt: -28 },
-  { kind: 'warp', at: 4600 },
-  { kind: 'eye', at: 4850, tone: 'blue', x: 47.5, y: 47.5, zoom: 2.3 },
-  { kind: 'glyph', at: 5350, text: 'U', tone: 'blue', tilt: 24 },
-  { kind: 'eye', at: 5800, tone: 'red', x: 37.5, y: 47.5, zoom: 4 },
-  { kind: 'glyph', at: 6250, text: 'G', tone: 'red', tilt: -20 },
-  { kind: 'glyph', at: 6700, text: 'I', tone: 'gold', tilt: 18 },
-  { kind: 'title', at: 7200 },
+  { kind: 'eye', at: 4700, tone: 'gold', x: 47.5, y: 47.5, zoom: 1.5 },
+  { kind: 'glyph', at: 5250, text: 'S', tone: 'gold', tilt: -28 },
+  { kind: 'warp', at: 5700 },
+  { kind: 'eye', at: 5950, tone: 'blue', x: 47.5, y: 47.5, zoom: 2.3 },
+  { kind: 'glyph', at: 6450, text: 'U', tone: 'blue', tilt: 24 },
+  { kind: 'eye', at: 6900, tone: 'red', x: 37.5, y: 47.5, zoom: 4 },
+  { kind: 'glyph', at: 7350, text: 'G', tone: 'red', tilt: -20 },
+  { kind: 'glyph', at: 7800, text: 'I', tone: 'gold', tilt: 18 },
+  { kind: 'title', at: 8300 },
 ]
-const END = 8900
+const END = 10000
+// Where in the clip (ms) the turn begins; from here it plays at 0.4x.
+const SLOWMO_AT = 2700
 
 const STREAKS = Array.from({ length: 64 }, (_, i) => ({
   '--a': `${(i / 64) * 360 + Math.random() * 4}deg`,
   '--d': `${Math.random() * 280}ms`,
   '--l': `${18 + Math.random() * 34}vmax`,
 }) as CSSProperties)
+
+const EMBERS = Array.from({ length: 34 }, () => ({
+  '--x': `${Math.random() * 100}%`,
+  '--s': `${2 + Math.random() * 4}px`,
+  '--d': `${-Math.random() * 1.6}s`,
+  '--t': `${1.2 + Math.random() * 1.4}s`,
+  '--drift': `${(Math.random() - 0.5) * 80}px`,
+}) as CSSProperties)
+
+const Embers = () => (
+  <div className="tc-embers" aria-hidden="true">
+    {EMBERS.map((style, i) => <i key={i} style={style} />)}
+  </div>
+)
 
 function Block({ text, tone, className = '' }: { text: string; tone: Tone; className?: string }) {
   return (
@@ -114,6 +130,7 @@ export function Boot() {
     Promise.race([fonts, new Promise((r) => setTimeout(r, 1500))]).then(() => {
       if (cancelled) return
       video.current?.play().catch(() => undefined)
+      timers.push(window.setTimeout(() => { if (video.current) video.current.playbackRate = 0.4 }, SLOWMO_AT))
       SHOTS.forEach((s, i) => timers.push(window.setTimeout(() => setShot(i), s.at)))
       timers.push(window.setTimeout(finish, END))
     })
@@ -166,6 +183,7 @@ export function Boot() {
 
       {current?.kind === 'glyph' && (
         <div key={shot} className={`tc-shot tc-glow-${current.tone}`} style={{ '--tilt': `${current.tilt}deg` } as CSSProperties} aria-hidden="true">
+          <Embers />
           <Block text={current.text} tone={current.tone} className="tc-giant" />
         </div>
       )}
@@ -178,6 +196,7 @@ export function Boot() {
 
       {current?.kind === 'title' && (
         <div key={shot} className="tc-card">
+          <Embers />
           <span className="tc-kicker">Suganeshwara Anand</span>
           <Block text="SUGI" tone="gold" className="tc-name tc-shine" />
           <span className="tc-flare" />
