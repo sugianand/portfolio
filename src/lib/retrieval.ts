@@ -35,6 +35,8 @@ const EXPAND: Record<string, string[]> = {
   database: ['sql', 'mysql', 'postgresql', 'supabase', 'd1', 'sqlite'],
   db: ['database', 'sql'],
   cloud: ['cloudflare', 'worker', 'vercel', 'render', 'docker'],
+  production: ['live', 'deploy'],
+  deploy: ['live', 'deployment', 'vercel'],
   devops: ['docker', 'ci', 'github', 'actions', 'deploy'],
   test: ['testing', 'qa', 'regression', 'unit', 'integration', 'miniflare'],
   qa: ['test', 'regression', 'defect', 'accurate'],
@@ -94,6 +96,11 @@ export function tokenize(text: string) {
     .replace(/\b(machine|deep)[\s-]?learning\b/g, 'ml')
     .replace(/\bhow many years of experience\b/g, 'experience')
     .replace(/\blocated\b/g, 'location')
+    // "Experience with RAG" asks about RAG, not about jobs; "how does X work"
+    // asks how X works, not where he works; "when can he start" asks for availability.
+    .replace(/\bexperience (with|in|using)\b/g, ' ')
+    .replace(/^(\s*how\b.*)\bworks?\b/, '$1')
+    .replace(/\b(when can (he|sugi) start|start (immediately|soon|right away)|start date)\b/g, 'available')
     .split(/[^a-z0-9+#]+/)
     .filter((w) => w && !STOP.has(w))
     .map(stem)

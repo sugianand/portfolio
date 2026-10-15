@@ -42,6 +42,11 @@ const cases: [string, RegExp][] = [
   ['What challenges did he face building 11Planner?', /^11planner-lessons$/],
   ['Does he know machine learning?', /^skills-ai_ml/],
   ['How many years of experience does he have?', /^role-/],
+  ['What is his experience with RAG?', /^portfolio-/],
+  ['How does the portfolio assistant work?', /^portfolio-/],
+  ['Has he deployed anything to production?', /^(home-cleaning|11planner|portfolio|cinedna)-/],
+  ['Can he start immediately?', /^looking$/],
+  ['When can he start?', /^looking$/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
@@ -50,6 +55,10 @@ test('quotes abbreviations like M.S. whole', () => {
 
 test('says what a project does, not just its name', () => {
   assert.match(answer('What does 11Planner do?').snippets[0].text, /study planner/)
+})
+
+test('refuses work authorization questions the data cannot answer', () => {
+  assert.equal(answer('Does he need visa sponsorship?').snippets.length, 0)
 })
 
 for (const [q, expected] of cases) {
