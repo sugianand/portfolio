@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { profile, projects, roles, stats } from '../data'
+import { trapTab } from '../lib/focusTrap'
 import { copyEmail, on, scrollToId, unlock } from '../lib/store'
 import { ProjectIcon } from './ProjectIcon'
 
@@ -52,6 +53,7 @@ export function RecruiterView() {
     const previous = document.activeElement as HTMLElement | null
     boxRef.current?.focus({ preventScroll: true })
     const onKey = (e: KeyboardEvent) => {
+      trapTab(e, boxRef.current)
       if (e.key !== 'Escape') return
       setOpen(false)
       clearHash()

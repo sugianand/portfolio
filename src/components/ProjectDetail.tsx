@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import { projects, type Project } from '../data'
 import { ArchDiagram } from './ArchDiagram'
 import { CineDNADemo } from './CineDNADemo'
+import { trapTab } from '../lib/focusTrap'
 import { unlock } from '../lib/store'
 import { ProjectIcon } from './ProjectIcon'
 import { ProjectLink } from './Projects'
@@ -43,6 +44,7 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      trapTab(e, sheetRef.current)
       if ((e.target as HTMLElement).closest('input, textarea')) return
       if (e.key === 'Escape') onClose()
       if (e.key === 'ArrowRight') onNav(1)

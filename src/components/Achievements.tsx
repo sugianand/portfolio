@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { trapTab } from '../lib/focusTrap'
 import { achievementList, DEFAULT_ACCENT, rankFor, resetAchievements, resetColors, toggleTheme, useStore } from '../lib/store'
 import { QuestSprite } from './QuestSprite'
 
@@ -45,7 +46,10 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
 
   useEffect(() => {
     if (!open) return
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      else trapTab(e, panelRef.current)
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])

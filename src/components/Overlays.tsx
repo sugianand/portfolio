@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { profile, projects } from '../data'
+import { trapTab } from '../lib/focusTrap'
 import { copyEmail, cycleAccent, emit, on, resetColors, scrollToId, toggleTheme, unlock } from '../lib/store'
 
 type Action = { id: string; label: string; hint: string; run: () => void }
@@ -134,6 +135,8 @@ export function Shortcuts() {
         setOpen((o) => !o)
       } else if (e.key === 'Escape') {
         setOpen(false)
+      } else {
+        trapTab(e, boxRef.current)
       }
     }
     window.addEventListener('keydown', onKey)
