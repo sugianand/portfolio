@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { profile } from '../data'
-import { scrollToId } from '../lib/store'
+import { scrollBehavior, scrollToId } from '../lib/store'
 
 export type NavItem = { id: string; label: string; short?: string }
 
@@ -31,7 +31,7 @@ export function Nav({ items, extra }: { items: NavItem[]; extra?: ReactNode }) {
   return (
     <header className="nav">
       <div className="nav-progress" style={{ transform: `scaleX(${progress})` }} />
-      <a className="wordmark" href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} data-cursor="top">
+      <a className="wordmark" href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: scrollBehavior() }) }} data-cursor="top">
         {profile.short}<span>/</span>26
       </a>
       <nav className="nav-links" aria-label="Sections">
