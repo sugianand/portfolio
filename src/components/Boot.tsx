@@ -13,7 +13,8 @@ const shouldBoot = () => {
   } catch {
     /* storage blocked: play it */
   }
-  return shouldPlayIntro({ reducedMotion, seen, hash: window.location.hash })
+  const forced = new URLSearchParams(window.location.search).has('intro')
+  return shouldPlayIntro({ enabled: __INTRO__, forced, reducedMotion, seen, hash: window.location.hash })
 }
 
 type Tone = 'gold' | 'blue' | 'red'
