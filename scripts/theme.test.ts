@@ -56,3 +56,19 @@ test('light text tokens keep AA contrast on the light backgrounds', () => {
     }
   }
 })
+
+test('the film slate stays AA over any backdrop, including the light footer', () => {
+  const app = readFileSync(new URL('../src/App.css', import.meta.url), 'utf8')
+  const rule = (sel: string) => app.match(new RegExp(`\\${sel} \\{([^}]*)\\}`))![1]
+  const [r, g, b, a] = rule('.film-slate').match(/background: rgba\(([^)]*)\)/)![1].split(',').map(Number)
+  // The slate is translucent, so its effective background depends on what it floats over.
+  for (const under of ['#000000', '#ffffff', dark.ink, light.ink]) {
+    const n = parseInt(under.slice(1), 16)
+    const mix = [r, g, b].map((c, i) => Math.round(c * a + ((n >> (16 - 8 * i)) & 255) * (1 - a)))
+    const bg = '#' + mix.map((c) => c.toString(16).padStart(2, '0')).join('')
+    for (const sel of ['.film-slate', '.film-rec', '.film-tc']) {
+      const fg = rule(sel).match(/(?:^|;)\s*color: (#[0-9a-f]{3,6})/)![1].replace(/^#(.)(.)(.)$/, '#$1$1$2$2$3$3')
+      assert.ok(contrast(fg, bg) >= 4.5, `${sel} ${fg} over ${under} (${bg}): ${contrast(fg, bg).toFixed(2)}`)
+    }
+  }
+})
