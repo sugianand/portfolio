@@ -72,3 +72,12 @@ test('the film slate stays AA over any backdrop, including the light footer', ()
     }
   }
 })
+
+test('the film slate text never blinks below AA', () => {
+  const app = readFileSync(new URL('../src/App.css', import.meta.url), 'utf8')
+  // Fading text with opacity drops its contrast mid-animation; only the decorative dot may blink.
+  for (const sel of ['.film-slate', '.film-rec', '.film-tc']) {
+    const body = app.match(new RegExp(`\\${sel} \\{([^}]*)\\}`))![1]
+    assert.ok(!/animation|opacity/.test(body), `${sel} animates its text: ${body}`)
+  }
+})

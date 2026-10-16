@@ -54,7 +54,7 @@ export function FilmHud({ items }: { items: NavItem[] }) {
     <div className="film-hud" aria-hidden="true">
       <div className="film-rail" ref={rail} />
       <div className="film-slate mono">
-        <span className="film-rec">● REC</span>
+        <span className="film-rec">REC</span>
         <span ref={scene} />
         <span ref={tc} className="film-tc" />
       </div>
