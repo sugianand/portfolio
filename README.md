@@ -39,7 +39,7 @@ npm ci
 npm run dev      # http://localhost:5173
 npm run lint
 npm test         # CineDNA parity + assistant retrieval tests
-npm run build
+npm run build    # also fails if initial JS breaks the "<100 KB gzip" claim
 ```
 
 ## Deployment
