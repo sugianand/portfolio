@@ -47,6 +47,9 @@ const cases: [string, RegExp][] = [
   ['Has he deployed anything to production?', /^(home-cleaning|11planner|portfolio|cinedna)-/],
   ['Can he start immediately?', /^looking$/],
   ['When can he start?', /^looking$/],
+  // "like AWS" must not match CineDNA's "like Interstellar", nor "services" its services/ai.py.
+  ['Has he worked with cloud services like AWS?', /^skills-infra$/],
+  ['What cloud platforms has he used?', /^skills-infra$/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
