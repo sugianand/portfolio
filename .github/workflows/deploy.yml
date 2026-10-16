@@ -1,10 +1,10 @@
-name: Deploy portfolio to GitHub Pages
+# Vercel hosts the site. This checks every push and points GitHub Pages at Vercel
+# so old github.io links forward instead of serving a stale copy.
+name: CI and Pages redirect
 
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -40,7 +40,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./scripts/pages-redirect
 
   deploy:
     environment:

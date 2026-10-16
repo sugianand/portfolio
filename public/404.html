@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0a0a09" />
     <meta name="robots" content="noindex" />
-    <!-- GitHub Pages serves this for any missing path, at any depth, so links are absolute. -->
-    <link rel="icon" type="image/svg+xml" href="/portfolio/favicon.svg" />
+    <!-- Vercel serves this for any missing path, at any depth, so links are absolute. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" />
@@ -61,15 +61,15 @@
         <div class="err">cd: no such file or directory</div>
       </div>
       <nav class="actions" aria-label="Where to next">
-        <a class="btn primary" href="/portfolio/">Back to the portfolio</a>
-        <a class="btn" href="/portfolio/#projects">See projects</a>
-        <a class="btn" href="/portfolio/#contact">Get in touch</a>
+        <a class="btn primary" href="/">Back to the portfolio</a>
+        <a class="btn" href="/#projects">See projects</a>
+        <a class="btn" href="/#contact">Get in touch</a>
       </nav>
     </main>
     <script>
       // Echo the missing path into the fake shell; textContent keeps it inert.
       try {
-        var p = decodeURIComponent(location.pathname.replace(/^\/portfolio\/?/, '')) || 'this-page'
+        var p = decodeURIComponent(location.pathname.replace(/^\//, '')) || 'this-page'
         document.getElementById('path').textContent = p.length > 80 ? p.slice(0, 77) + '…' : p
       } catch (e) {}
     </script>

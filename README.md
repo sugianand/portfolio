@@ -2,7 +2,7 @@
 
 Personal site for Suganeshwara "Sugi" Anand: Software Engineer + AI Builder, M.S. in Artificial Intelligence at Wayne State.
 
-**Live:** [sugianand.vercel.app](https://sugianand.vercel.app) (deployed by Vercel on every push to `main`; the old [sugianand.github.io](https://sugianand.github.io) address forwards here)
+**Live:** [sugianand.vercel.app](https://sugianand.vercel.app) (deployed by Vercel on every push to `main`)
 
 ## Two layers
 
