@@ -5,8 +5,10 @@ import { extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
 export type Snippet = { text: string; doc: Doc; score: number }
 export type Answer = { snippets: Snippet[]; hits: Hit[]; terms: [string, number][] }
 
+let docs: Doc[] | null = null
+const getDocs = () => (docs ??= buildKnowledge())
 let index: Index | null = null
-const getIndex = () => (index ??= new Index(buildKnowledge()))
+const getIndex = () => (index ??= new Index(getDocs()))
 
 /** Below this BM25 score the best passage is not about the question. */
 export const MIN_SCORE = 3
@@ -29,13 +31,16 @@ const isJob = (d: Doc) => d.id.startsWith('role-') && !degrees.some((deg) => d.t
 // Retrieve-then-rerank: what the question asks for (projects, roles, skills)
 // decides which kind of passage should lead.
 const INTENTS: [RegExp, (d: Doc) => boolean][] = [
+  [/^(intern|internship)$/, (d) => isJob(d) && /\bIntern\b/.test(d.title)],
   [/^(project|built|build|demonstrat|show)$/, (d) => d.source.kind === 'project'],
-  [/^(experience|intern|internship|job|role|work|worked|company)$/, isJob],
+  [/^(experience|jobs?|role|work|worked|company)$/, isJob],
   [/^(skill|stack|language|know|framework)$/, (d) => d.id.startsWith('skills-')],
 ]
 
 // Words that say what kind of passage is wanted, not what it should be about.
-const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show', 'experience', 'intern', 'internship', 'job', 'role', 'work', 'worked', 'company', 'skill', 'stack', 'language', 'know', 'framework'])
+const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show', 'experience', 'intern', 'internship', 'job', 'jobs', 'role', 'work', 'worked', 'company', 'skill', 'stack', 'language', 'know', 'framework'])
+
+const KIND_VERBS = new Set(['build', 'demonstrat', 'show', 'know'])
 
 const wantedKinds = (question: string) => {
   const tokens = tokenize(question)
@@ -50,15 +55,36 @@ function rerank(question: string, hits: Hit[]) {
   return hits.map((h) => ({ ...h, score: h.score * weight(h.doc) })).sort((a, b) => b.score - a.score)
 }
 
+/**
+ * "What jobs has he had?" or "List his projects" names only a kind of passage,
+ * so no text scores well; answer with the first passage of each such source.
+ */
+function kindAnswer(kinds: ((d: Doc) => boolean)[]): Snippet[] {
+  const seen = new Set<string>()
+  const out: Snippet[] = []
+  for (const doc of getDocs()) {
+    const key = doc.source.kind === 'project' ? doc.source.id : doc.id
+    if (out.length >= 4 || seen.has(key) || !kinds.some((m) => m(doc))) continue
+    seen.add(key)
+    out.push({ text: doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0], doc, score: 0 })
+  }
+  return out
+}
+
 export function answer(question: string): Answer {
   const raw = getIndex().search(question, 14)
   const terms = raw.terms
   const hits = rerank(question, raw.hits)
   const trace = [...terms.entries()]
-  const named = tokenize(question).some((t) => getNames().has(t))
+  const kinds = wantedKinds(question)
+  // "What does he build?" asks what he does, so verbs alone don't make a kind-only question.
+  const tokens = tokenize(question)
+  const kindOnly = kinds.length > 0 && tokens.every((t) => INTENT_WORDS.has(t)) && !tokens.every((t) => KIND_VERBS.has(t))
+  const fallback = kindOnly ? kindAnswer(kinds) : []
+  const named = tokens.some((t) => getNames().has(t))
   // Relevance is judged before the rerank: it only reorders passages, so it
   // must not turn an on-topic question into a refusal.
-  if (!hits.length || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: [], hits, terms: trace }
+  if (!hits.length || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))
@@ -85,11 +111,12 @@ export function answer(question: string): Answer {
   // question only names a kind of thing ("what technologies…"), so pass 2
   // lets passages of that kind answer on their own, along with passages whose
   // title names the topic ("hardest problem") even if their text never does.
-  const kinds = wantedKinds(question)
   const titled = (d: Doc) => tokenize(d.title).some((t) => topical.has(t))
   let snippets = collect((h) => extract(h.doc.text, topical, 2))
   if (!snippets.length) {
     snippets = collect((h) => (kinds.some((m) => m(h.doc)) || titled(h.doc) ? extract(h.doc.text, terms, 2) || h.doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] : ''))
   }
+  // A kind-only question led by a passage of some other kind missed its point.
+  if (kindOnly && !(snippets.length && kinds.some((m) => m(snippets[0].doc)))) snippets = fallback
   return { snippets, hits, terms: trace }
 }

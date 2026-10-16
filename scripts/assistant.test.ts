@@ -50,6 +50,15 @@ const cases: [string, RegExp][] = [
   // "like AWS" must not match CineDNA's "like Interstellar", nor "services" its services/ai.py.
   ['Has he worked with cloud services like AWS?', /^skills-infra$/],
   ['What cloud platforms has he used?', /^skills-infra$/],
+  ['Has he done any internships?', /^role-(6f1a8e9|7c3d2b8)$/],
+  ['What internships has he had?', /^role-(6f1a8e9|7c3d2b8)$/],
+  ['Is he looking for internships?', /^looking$/],
+  // Questions that name only a kind of passage list that kind.
+  ['What jobs has he had?', /^role-/],
+  ['Where has he worked?', /^role-/],
+  ['List his projects', /^cinedna-summary$/],
+  ['Show me his projects', /^cinedna-summary$/],
+  ['What has he built?', /^cinedna-summary$/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
@@ -58,6 +67,11 @@ test('quotes abbreviations like M.S. whole', () => {
 
 test('says what a project does, not just its name', () => {
   assert.match(answer('What does 11Planner do?').snippets[0].text, /study planner/)
+})
+
+test('lists only the internships when asked about internships', () => {
+  const ids = answer('Has he done any internships?').snippets.map((s) => s.doc.id)
+  assert.deepEqual(ids.sort(), ['role-6f1a8e9', 'role-7c3d2b8'])
 })
 
 test('refuses work authorization questions the data cannot answer', () => {
@@ -73,7 +87,7 @@ for (const [q, expected] of cases) {
 }
 
 test('refuses questions outside the data', () => {
-  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?', 'Has he used AWS?', 'Is he a US citizen?']) {
+  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?', 'Has he used AWS?', 'Is he a US citizen?', 'Has he worked at Google?']) {
     assert.equal(answer(q).snippets.length, 0, q)
   }
 })
