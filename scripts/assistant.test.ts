@@ -59,6 +59,11 @@ const cases: [string, RegExp][] = [
   ['List his projects', /^cinedna-summary$/],
   ['Show me his projects', /^cinedna-summary$/],
   ['What has he built?', /^cinedna-summary$/],
+  // Superlatives and "what's" add nothing to rank by, so these list the projects too.
+  ['What is his strongest project?', /^cinedna-summary$/],
+  ["What's his most impressive project?", /^cinedna-summary$/],
+  ['Which project is he proudest of?', /^cinedna-summary$/],
+  ["What's his GitHub?", /^contact$/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
