@@ -64,6 +64,10 @@ const cases: [string, RegExp][] = [
   ["What's his most impressive project?", /^cinedna-summary$/],
   ['Which project is he proudest of?', /^cinedna-summary$/],
   ["What's his GitHub?", /^contact$/],
+  // "APIs" skips the stemmer; it must find the APIs he built, not the "LLM APIs" skill.
+  ['Has he built APIs?', /^(three-clues|home-cleaning|cinedna|11planner)-/],
+  ['Has he built REST APIs?', /^(home-cleaning|cinedna|skills-backend)/],
+  ['Has he worked with LLM APIs?', /^(skills-ai_ml|11planner)/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {

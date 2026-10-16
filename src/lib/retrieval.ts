@@ -99,6 +99,10 @@ export function tokenize(text: string) {
     .replace(/\b(machine|deep)[\s-]?learning\b/g, 'ml')
     .replace(/\bhow many years of experience\b/g, 'experience')
     .replace(/\blocated\b/g, 'location')
+    // Short plurals skip the stemmer, so "APIs" would only match "LLM APIs";
+    // and "LLM APIs" ask about LLMs, not about building APIs.
+    .replace(/\bllms? apis?\b/g, 'llms')
+    .replace(/\bapis\b/g, 'api')
     // "Cloud services" asks about cloud, not about a file like services/ai.py.
     .replace(/\bcloud (services?|platforms?|providers?|computing)\b/g, 'cloud')
     // "Experience with RAG" asks about RAG, not about jobs; "how does X work"
