@@ -503,9 +503,17 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .skill-group { padding: 8pt; gap: 6pt; }
   .skill-group span { color: #111; padding: 2pt 5pt; }
 
-  .pgrid { grid-template-columns: 1fr 1fr; gap: 8pt; }
-  .pcard { background: #fff !important; color: #111 !important; border: 1px solid var(--line); padding: 10pt; gap: 5pt; transform: none !important; }
-  .pcard h3 { font-size: 15pt; margin: 0; }
+  /* Backgrounds don't print, so tone cards go dark-on-white and drop the live previews. */
+  .fgrid, .cgrid { grid-template-columns: 1fr 1fr; gap: 8pt; }
+  .fcard, .fcard:nth-child(even), .ccard { display: flex; flex-direction: column; gap: 5pt; background: #fff !important; color: #111 !important; border: 1px solid var(--line); padding: 10pt; transform: none !important; break-inside: avoid; }
+  .fcard-preview, .ccard-glyph, .more-label { display: none; }
+  .fcard-copy { gap: 5pt; }
+  .fcard h3, .ccard .ptitle h3 { font-size: 15pt; color: #111; margin: 0; }
+  .picon, .ccard .picon { width: 26pt; height: 26pt; border-radius: 6pt; color: var(--accent); border-color: var(--line); background: none; }
+  .picon svg, .ccard .picon svg { width: 16pt; height: 16pt; }
+  .fcard-metrics { gap: 4pt 14pt; margin: 2pt 0; }
+  .fcard-metrics dt { font-size: 14pt; }
+  .fcard-metrics dd { font-size: 9pt; opacity: 1; }
   .pcard-body, .pcard-tagline, .pcard-top { opacity: 1; font-size: 10pt; }
   .pcard-foot { padding-top: 6pt; justify-content: flex-start; }
 
