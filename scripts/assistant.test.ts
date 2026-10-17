@@ -45,6 +45,9 @@ const cases: [string, RegExp][] = [
   ['What is his experience with RAG?', /^portfolio-/],
   ['How does the portfolio assistant work?', /^portfolio-/],
   ['Has he deployed anything to production?', /^(home-cleaning|11planner|portfolio|cinedna)-/],
+  // "Hosted" asks about deployment, not Three Clues' game host.
+  ['Where is the portfolio hosted?', /^portfolio-/],
+  ['Where is this site hosted?', /^portfolio-/],
   ['Can he start immediately?', /^looking$/],
   ['When can he start?', /^looking$/],
   // "like AWS" must not match CineDNA's "like Interstellar", nor "services" its services/ai.py.

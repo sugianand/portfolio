@@ -105,6 +105,8 @@ export function tokenize(text: string) {
     .replace(/\bapis\b/g, 'api')
     // "Cloud services" asks about cloud, not about a file like services/ai.py.
     .replace(/\bcloud (services?|platforms?|providers?|computing)\b/g, 'cloud')
+    // "Where is it hosted?" asks about deployment, not Three Clues' game host.
+    .replace(/\b(hosted|hosting)\b/g, 'deploy')
     // "Experience with RAG" asks about RAG, not about jobs; "how does X work"
     // asks how X works, not where he works; "when can he start" asks for availability.
     .replace(/\bexperience (with|in|using)\b/g, ' ')

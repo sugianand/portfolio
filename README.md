@@ -28,7 +28,7 @@ Everything lives in [`src/data.ts`](./src/data.ts): `profile`, `projects` (cards
 
 ## Tech
 
-React 19 · TypeScript · Vite · hand-written WebGL and Canvas 2D · no runtime dependencies besides React · GitHub Pages via GitHub Actions
+React 19 · TypeScript · Vite · hand-written WebGL and Canvas 2D · no runtime dependencies besides React · Vercel, with CI in GitHub Actions
 
 ## Development
 
@@ -44,4 +44,4 @@ npm run build    # also fails if initial JS breaks the "<100 KB gzip" claim
 
 ## Deployment
 
-[`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) lints, tests, builds, and publishes `dist/` to GitHub Pages on every push to `main`. The build uses a relative base path, and it injects the commit hash and count shown in the footer.
+[`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) lints, tests, and builds every push to `main`; Vercel deploys the same push. The build uses a relative base path, and it injects the commit hash and count shown in the footer.
