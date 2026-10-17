@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
 import { unlock } from '../lib/store'
+import { gutterRoute } from '../lib/topology'
 
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
@@ -29,6 +30,8 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
     if (!wrap) return
     const measure = () => {
       const box = wrap.getBoundingClientRect()
+      const style = getComputedStyle(wrap)
+      const tierOf = new Map(arch.nodes.map((n) => [n.id, n.tier]))
       const rect = (id: string) => {
         const r = nodeRefs.current.get(id)!.getBoundingClientRect()
         return { l: r.left - box.left, r: r.right - box.left, t: r.top - box.top, b: r.bottom - box.top, cx: r.left - box.left + r.width / 2, cy: r.top - box.top + r.height / 2 }
@@ -37,6 +40,11 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
         const a = rect(from)
         const b = rect(to)
         const horizontal = b.l >= a.r - 4
+        // A straight line past a whole tier would run behind its nodes, so detour.
+        if (Math.abs(tierOf.get(to)! - tierOf.get(from)!) > 1) {
+          const gap = parseFloat(horizontal ? style.columnGap : style.rowGap)
+          return { key: `${from}-${to}`, from, to, d: gutterRoute(a, b, horizontal, { w: box.width, h: box.height }, gap, parseFloat(style.paddingTop) / 2) }
+        }
         if (horizontal) {
           const x1 = a.r, y1 = a.cy, x2 = b.l, y2 = b.cy, mx = (x1 + x2) / 2
           return { key: `${from}-${to}`, from, to, d: `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}` }

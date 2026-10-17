@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { projects } from '../src/data.ts'
-import { miniTopology } from '../src/lib/topology.ts'
+import { gutterRoute, miniTopology, roundedPath } from '../src/lib/topology.ts'
 
 const W = 112
 const H = 36
@@ -25,4 +25,30 @@ for (const p of projects.filter((p) => p.architecture)) {
 test('edges to unknown nodes are dropped instead of drawn at NaN', () => {
   const { edges } = miniTopology({ nodes: [{ id: 'a', label: 'A', tech: '', detail: '', tier: 0 }], edges: [['a', 'missing']] }, W, H)
   assert.deepEqual(edges, [])
+})
+
+// Edges that skip a tier detour through the gutter instead of behind nodes.
+const box = (l: number, t: number, w: number, h: number) => ({ l, t, r: l + w, b: t + h, cx: l + w / 2, cy: t + h / 2 })
+const corners = (d: string) => [...d.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map((m) => [Number(m[1]), Number(m[2])])
+
+test('a skip edge across columns runs through the gaps and the nearer gutter', () => {
+  const d = gutterRoute(box(22, 30, 100, 40), box(400, 20, 100, 40), true, { w: 522, h: 200 }, 34, 11)
+  const pts = corners(d)
+  assert.deepEqual(pts[0], [122, 50], 'leaves the source on its right edge')
+  assert.deepEqual(pts.at(-1), [400, 40], 'enters the target on its left edge')
+  assert.ok(pts.every(([, y]) => y >= 11), 'stays inside the canvas')
+  assert.ok(pts.some(([, y]) => y === 11), 'uses the top gutter, the nearer one')
+  assert.ok(pts.filter(([, y]) => y !== 11).every(([x]) => x <= 139 || x >= 383), 'off the gutter, it stays in the gaps')
+})
+
+test('a skip edge down rows uses the side gutter and enters from above', () => {
+  const pts = corners(gutterRoute(box(16, 16, 120, 60), box(16, 300, 300, 60), false, { w: 332, h: 400 }, 26, 8))
+  assert.deepEqual(pts[0], [76, 76])
+  assert.deepEqual(pts.at(-1), [166, 300])
+  assert.ok(pts.some(([x]) => x === 8), 'uses the left gutter')
+})
+
+test('rounded corners never overshoot short segments', () => {
+  const d = roundedPath([[0, 0], [4, 0], [4, 100]], 8)
+  assert.ok(!/L-|L[5-9]/.test(d), d)
 })
