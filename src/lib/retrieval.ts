@@ -56,6 +56,10 @@ const EXPAND: Record<string, string[]> = {
   graduation: ['education', 'degree', 'progress'],
   undergrad: ['education', 'completed'],
   undergraduate: ['education', 'completed'],
+  bachelor: ['education', 'completed', 'computer', 'science'],
+  master: ['education', 'progress', 'artificial', 'intelligence'],
+  recommendation: ['recommendations', 'ranking', 'rank'],
+  recommender: ['recommendation', 'recommendations', 'ranking'],
   student: ['education', 'degree', 'progress'],
   study: ['education', 'master', 'degree', 'intelligence', 'progress'],
   location: ['detroit'],
@@ -112,6 +116,10 @@ export function tokenize(text: string) {
     .replace(/\bexperience (with|in|using)\b/g, ' ')
     .replace(/^(\s*how\b.*)\bworks?\b/, '$1')
     .replace(/\b(when can (he|sugi) start|start (immediately|soon|right away)|start date)\b/g, 'available')
+    // "Who is Sugi?" asks for the one-line summary; its other words are all stop words.
+    .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
+    // The data has no phone number, and "number" alone would match the stats.
+    .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)
     .filter((w) => w && !STOP.has(w))
     .map(stem)

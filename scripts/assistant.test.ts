@@ -71,6 +71,12 @@ const cases: [string, RegExp][] = [
   ['Has he built APIs?', /^(three-clues|home-cleaning|cinedna|11planner)-/],
   ['Has he built REST APIs?', /^(home-cleaning|cinedna|skills-backend)/],
   ['Has he worked with LLM APIs?', /^(skills-ai_ml|11planner)/],
+  // Identity questions are all stop words apart from the name.
+  ['Who is Sugi?', /^profile$/],
+  ['Tell me about yourself', /^profile$/],
+  ['What is his bachelors in?', /^education$/],
+  ["Does he have a master's degree?", /^(education|role-a1f09e3)$/],
+  ['Has he built a recommendation system?', /^cinedna-/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
@@ -99,7 +105,7 @@ for (const [q, expected] of cases) {
 }
 
 test('refuses questions outside the data', () => {
-  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?', 'Has he used AWS?', 'Is he a US citizen?', 'Has he worked at Google?']) {
+  for (const q of ['What is the capital of France?', 'Give me a pizza recipe', 'zzzz', 'Does he need visa sponsorship?', 'Is he open to relocation?', 'What is his salary expectation?', 'Has he used AWS?', 'Is he a US citizen?', 'Has he worked at Google?', 'What is his phone number?']) {
     assert.equal(answer(q).snippets.length, 0, q)
   }
 })
