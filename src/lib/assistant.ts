@@ -56,6 +56,26 @@ function rerank(question: string, hits: Hit[]) {
 }
 
 /**
+ * "What is Three Clues?" names a project and nothing else, so its summary should
+ * lead, even when a passage that repeats the title (its numbers) scores higher.
+ */
+function namedProject(question: string) {
+  const tokens = tokenize(question)
+  if (!tokens.length) return undefined
+  return projects.find((p) => {
+    const title = tokenize(p.title)
+    return tokens.every((t) => title.includes(t)) && tokens.length * 2 >= title.length
+  })
+}
+
+function leadWithSummary(question: string, hits: Hit[]) {
+  const project = namedProject(question)
+  const i = project ? hits.findIndex((h) => h.doc.id === `${project.id}-summary`) : -1
+  if (i <= 0) return hits
+  return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
+}
+
+/**
  * "What jobs has he had?" or "List his projects" names only a kind of passage,
  * so no text scores well; answer with the first passage of each such source.
  */
@@ -71,10 +91,12 @@ function kindAnswer(kinds: ((d: Doc) => boolean)[]): Snippet[] {
   return out
 }
 
-export function answer(question: string): Answer {
+export function answer(asked: string): Answer {
+  // The data only uses "go" as a verb ("tasks go in"), so "Does he know Go?" must not match it.
+  const question = asked.replace(/\bgo(lang)?\b/gi, 'golang')
   const raw = getIndex().search(question, 14)
   const terms = raw.terms
-  const hits = rerank(question, raw.hits)
+  const hits = leadWithSummary(question, rerank(question, raw.hits))
   const trace = [...terms.entries()]
   const kinds = wantedKinds(question)
   // "What does he build?" asks what he does, so verbs alone don't make a kind-only question.
