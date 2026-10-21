@@ -483,7 +483,8 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .tone-cream.fcard { background: var(--cream); color: var(--ink); }
 .tone-ink.fcard { background: var(--ink-3); color: var(--cream); }
 .more-label { margin: clamp(40px, 6vh, 64px) 0 16px; font-size: 13px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
-.cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+/* At most three columns, so the three compact cards span the row on wide screens. */
+.cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, max(320px, calc((100% - 28px) / 3))), 1fr)); gap: 14px; }
 .ccard { position: relative; padding: 22px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--line); background: color-mix(in srgb, var(--ink-2) 85%, transparent); backdrop-filter: blur(10px); transition: border-color .25s, transform .3s var(--ease); }
 .ccard:hover { border-color: var(--accent); transform: translateY(-3px); }
 .ccard a { position: relative; z-index: 2; }
