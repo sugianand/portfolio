@@ -9,7 +9,9 @@ const src = new URL('../src/', import.meta.url)
 const read = (path: string) => readFileSync(new URL(path, src), 'utf8')
 
 test('no stylesheet sets a font size under 12px', () => {
-  for (const file of ['index.css', 'App.css']) {
+  const components = readdirSync(new URL('components/', src)).filter((f) => f.endsWith('.css')).map((f) => `components/${f}`)
+  assert.ok(components.includes('components/TitleCard.css'))
+  for (const file of ['index.css', 'App.css', ...components]) {
     for (const [decl, value] of read(file).matchAll(/font-size:\s*([^;}]+)/g)) {
       const floor = value.match(/^(?:clamp\(\s*|max\(\s*)?(\d+(?:\.\d+)?)px/)
       if (floor) assert.ok(Number(floor[1]) >= MIN, `${file}: ${decl.trim()}`)

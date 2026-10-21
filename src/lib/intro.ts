@@ -7,3 +7,6 @@ type IntroContext = { enabled: boolean; forced: boolean; reducedMotion: boolean;
  */
 export const shouldPlayIntro = ({ enabled, forced, reducedMotion, seen, hash }: IntroContext) =>
   forced || (enabled && !reducedMotion && !seen && hash.replace(/^#/, '') === '')
+
+/** sessionStorage flag: the title card plays once per browser session, not on every reload. */
+export const INTRO_KEY = 'sa26:titlecard'
