@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { on, unlock } from '../lib/store'
 import type { Turn } from './AssistantPanel'
 
@@ -19,8 +19,16 @@ export function Assistant() {
   const [turns, setTurns] = useState<Turn[]>([])
   const [busy, setBusy] = useState(false)
   const close = useCallback(() => setOpen(false), [])
+  const launchRef = useRef<HTMLButtonElement>(null)
+  const wasOpen = useRef(false)
 
   useEffect(() => on('assistant', () => setOpen(true)), [])
+
+  // Closing unmounts the focused panel, which drops keyboard focus to <body>; hand it back to the launcher.
+  useEffect(() => {
+    if (open) wasOpen.current = true
+    else if (wasOpen.current && document.activeElement === document.body) launchRef.current?.focus({ preventScroll: true })
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -42,7 +50,7 @@ export function Assistant() {
 
   return (
     <>
-      <button type="button" className={`ask-launch ${open ? 'hidden-launch' : ''}`} onClick={() => setOpen(true)} onPointerEnter={prefetch} onFocus={prefetch} aria-expanded={open} aria-controls="ask-panel">
+      <button ref={launchRef} type="button" className={`ask-launch ${open ? 'hidden-launch' : ''}`} onClick={() => setOpen(true)} onPointerEnter={prefetch} onFocus={prefetch} aria-expanded={open} aria-controls="ask-panel">
         <span aria-hidden="true">✦</span> <b>Ask about Sugi</b>
       </button>
       {open && <Suspense fallback={null}><AssistantPanel turns={turns} busy={busy} onAsk={ask} onClose={close} /></Suspense>}
