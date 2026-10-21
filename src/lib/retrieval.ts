@@ -19,6 +19,9 @@ const STOP = new Set('a an and are as at be but by can did do does for from has 
 // Superlatives ("his strongest project") rank nothing the data says, like "best" above,
 // and neither does the "s" left over from "what's" or "he's".
 for (const w of 's strongest proudest proud impressive favorite favourite standout flagship greatest coolest'.split(' ')) STOP.add(w)
+// "Give me a quick summary" asks for the profile; "quick" would otherwise match
+// the contact passage that names the Quick summary panel.
+for (const w of 'give quick brief short'.split(' ')) STOP.add(w)
 
 // Query-side expansion: recruiter vocabulary mapped onto words that appear in the data.
 const EXPAND: Record<string, string[]> = {

@@ -36,6 +36,10 @@ const cases: [string, RegExp][] = [
   ['Has he done machine learning?', /^skills-ai_ml/],
   ['What does he build?', /^profile/],
   ['Summarize Sugi in one line', /^profile/],
+  // "Quick" must not match the contact passage that names the Quick summary panel.
+  ['Give me a quick summary', /^profile$/],
+  ['Can I get a short summary of Sugi?', /^profile$/],
+  ['Give me a brief overview', /^profile$/],
   ['Is he a student?', /^education/],
   ['What did he learn from CineDNA?', /^cinedna-lessons$/],
   ['What lessons did he learn from Three Clues?', /^three-clues-lessons$/],
