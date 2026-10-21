@@ -418,6 +418,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .about .stat { padding: 8pt 10pt; border-bottom: 0; }
   .stat strong { font-size: 22pt; }
   .skills { margin-top: 12pt; }
+  .skill-evidence { display: none; }
   .skill-group { padding: 8pt; gap: 6pt; }
   .skill-group span { color: #111; padding: 2pt 5pt; }
 
@@ -429,9 +430,9 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .fcard h3, .ccard .ptitle h3 { font-size: 15pt; color: #111; margin: 0; }
   .picon, .ccard .picon { width: 26pt; height: 26pt; border-radius: 6pt; color: var(--accent); border-color: var(--line); background: none; }
   .picon svg, .ccard .picon svg { width: 16pt; height: 16pt; }
-  .fcard-metrics { gap: 4pt 14pt; margin: 2pt 0; }
-  .fcard-metrics dt { font-size: 14pt; }
-  .fcard-metrics dd { font-size: 9pt; opacity: 1; }
+  .fcard .fcard-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4pt 10pt; margin: 2pt 0; }
+  .fcard .fcard-metrics dt { font-size: 14pt; }
+  .fcard .fcard-metrics dd { font-size: 9pt; line-height: 1.3; opacity: 1; }
   .pcard-body, .pcard-tagline, .pcard-top { opacity: 1; font-size: 10pt; }
   .pcard-foot { padding-top: 6pt; justify-content: flex-start; }
 
@@ -444,12 +445,15 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .diff-meta { display: none; }
   .diff li { background: none; color: #111; padding: 1pt 0; font-size: 10pt; }
 
-  .contact { min-height: 0; gap: 8pt; padding-bottom: 0; }
+  .contact { min-height: 0; gap: 8pt; padding-bottom: 0; break-inside: avoid; }
   .contact-title { font-size: 26pt; }
   .contact-email { font-size: 14pt; border-bottom: 0; }
   .contact-links { display: grid; gap: 4pt; color: #111; }
   .contact-links a, .contact-links a:last-child { color: #111; padding: 0; border: 0; background: none; }
-  .contact-links a[href^="http"]::after, .contact-links a[href^="mailto"]::after { content: ' ' attr(href); text-transform: none; letter-spacing: 0; color: var(--muted); }
+  /* The address is already printed above; the relative resume link gets its public URL. */
+  .contact-links a[href^="mailto"] { display: none; }
+  .contact-links a::after { content: ' ' attr(href); text-transform: none; letter-spacing: 0; color: var(--muted); }
+  .contact-links a[href$="resume.pdf"]::after { content: ' https://sugianand.vercel.app/resume.pdf'; }
 }
 
 /* Mid-width screens (small laptops, phones held sideways): the six tabs don't
