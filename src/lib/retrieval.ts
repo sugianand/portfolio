@@ -30,6 +30,8 @@ const EXPAND: Record<string, string[]> = {
   lesson: ['learn', 'challenge'],
   llm: ['openai', 'ai', 'estimator'],
   llms: ['llm', 'openai', 'estimator'],
+  openai: ['llm', 'estimator'],
+  nlp: ['nlu', 'natural', 'language'],
   rag: ['retrieval', 'bm25', 'assistant'],
   backend: ['api', 'fastapi', 'django', 'drf', 'express', 'worker', 'server', 'rest'],
   api: ['rest', 'fastapi', 'endpoint', 'express'],
@@ -106,6 +108,8 @@ export function tokenize(text: string) {
     .replace(/\b(machine|deep)[\s-]?learning\b/g, 'ml')
     .replace(/\bhow many years of experience\b/g, 'experience')
     .replace(/\blocated\b/g, 'location')
+    // The data says "Remote", so "has he worked remotely?" must find that role.
+    .replace(/\bremotely\b/g, 'remote')
     // Short plurals skip the stemmer, so "APIs" would only match "LLM APIs";
     // and "LLM APIs" ask about LLMs, not about building APIs.
     .replace(/\bllms? apis?\b/g, 'llms')

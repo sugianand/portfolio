@@ -92,6 +92,10 @@ const cases: [string, RegExp][] = [
   ['What is The Frantic Run?', /^frantic-run-summary$/],
   // "Go" the verb still works; only the language is missing from the data.
   ['Where did he go to school?', /^education$/],
+  // Names that appear only in a project's stack or a role's place still answer.
+  ['Has he used OpenAI?', /^11planner-/],
+  ['Has he worked remotely?', /^role-6f1a8e9$/],
+  ['Does he have experience with NLP?', /^(cinedna-|skills-ai_ml|looking)/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
