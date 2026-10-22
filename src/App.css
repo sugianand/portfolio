@@ -359,7 +359,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .commit-body > div { padding-left: 16px; }
   .skills { grid-template-columns: 1fr 1fr; }
   .footer { padding-bottom: 140px; }
-  .toasts { bottom: 80px; }
+  .toasts { bottom: 136px; } /* above the Ask launcher (bottom 82–84px, ~42px tall) */
 }
 
 @media (max-width: 480px) {
@@ -463,7 +463,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .nav-links { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); }
   .nav-links a { padding: 8px 12px; font-size: 14px; }
   .footer { padding-bottom: 140px; }
-  .toasts { bottom: 80px; }
+  .toasts { bottom: 136px; } /* above the Ask launcher (bottom 82–84px, ~42px tall) */
 }
 
 /* ---------- featured projects ---------- */
