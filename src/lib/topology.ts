@@ -45,6 +45,14 @@ export function roundedPath(points: Point[], radius = 8) {
 }
 
 /**
+ * Whether an edge runs sideways. Edges between tiers follow the layout's tier
+ * axis (`across`: tiers are columns); guessing from box positions alone would
+ * turn a stacked edge to a node down and to the right into a squeezed sideways
+ * curve. Same-tier siblings run sideways only when they sit side by side.
+ */
+export const runsAcross = (a: Box, b: Box, sameTier: boolean, across: boolean) => (sameTier ? b.l >= a.r - 4 : across)
+
+/**
  * Routes an edge that skips one or more tiers around the nodes in between:
  * out through the gap beside its source, along the canvas gutter (whichever
  * side is nearer), and back in through the gap beside its target. Tiers are

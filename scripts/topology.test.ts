@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { projects } from '../src/data.ts'
-import { gutterRoute, miniTopology, roundedPath } from '../src/lib/topology.ts'
+import { gutterRoute, miniTopology, roundedPath, runsAcross, type Box } from '../src/lib/topology.ts'
 
 const W = 112
 const H = 36
@@ -51,4 +51,13 @@ test('a skip edge down rows uses the side gutter and enters from above', () => {
 test('rounded corners never overshoot short segments', () => {
   const d = roundedPath([[0, 0], [4, 0], [4, 100]], 8)
   assert.ok(!/L-|L[5-9]/.test(d), d)
+})
+
+test('edges between stacked tiers run down even when the target sits to the right', () => {
+  const box = (l: number, t: number, w = 100, h = 60): Box => ({ l, r: l + w, t, b: t + h, cx: l + w / 2, cy: t + h / 2 })
+  const react = box(0, 100), renderLayer = box(110, 100), ci = box(110, 200)
+  assert.equal(runsAcross(react, ci, false, false), false)
+  assert.equal(runsAcross(react, renderLayer, true, false), true)
+  assert.equal(runsAcross(box(0, 0), box(140, 120), false, true), true)
+  assert.equal(runsAcross(box(0, 0), box(0, 80), true, true), false)
 })

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
 import { unlock } from '../lib/store'
-import { gutterRoute } from '../lib/topology'
+import { gutterRoute, runsAcross } from '../lib/topology'
 
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
@@ -36,10 +36,12 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
         const r = nodeRefs.current.get(id)!.getBoundingClientRect()
         return { l: r.left - box.left, r: r.right - box.left, t: r.top - box.top, b: r.bottom - box.top, cx: r.left - box.left + r.width / 2, cy: r.top - box.top + r.height / 2 }
       }
+      const first = (t: number) => rect(arch.nodes.find((n) => n.tier === t)!.id)
+      const across = tiers > 1 && first(1).l >= first(0).r - 4
       const next = arch.edges.map(([from, to]) => {
         const a = rect(from)
         const b = rect(to)
-        const horizontal = b.l >= a.r - 4
+        const horizontal = runsAcross(a, b, tierOf.get(from) === tierOf.get(to), across)
         // A straight line past a whole tier would run behind its nodes, so detour.
         if (Math.abs(tierOf.get(to)! - tierOf.get(from)!) > 1) {
           const gap = parseFloat(horizontal ? style.columnGap : style.rowGap)
@@ -60,7 +62,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
     const ro = new ResizeObserver(measure)
     ro.observe(wrap)
     return () => ro.disconnect()
-  }, [arch])
+  }, [arch, tiers])
 
   const current = arch.nodes.find((n) => n.id === active)!
   const linked = new Set(arch.edges.filter(([a, b]) => a === active || b === active).flatMap(([a, b]) => [a, b]))
