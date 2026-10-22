@@ -121,6 +121,8 @@ export function tokenize(text: string) {
     .replace(/\b(when can (he|sugi) start|start (immediately|soon|right away)|start date)\b/g, 'available')
     // "Who is Sugi?" asks for the one-line summary; its other words are all stop words.
     .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
+    // "Where can I see his code?" asks for his GitHub, not the "Code-split" bullet.
+    .replace(/\b(his|sugi'?s) (source )?code\b|\bsource code\b|\bopen[\s-]?source\b|\b(code )?repo(s|sitory|sitories)?\b/g, 'github')
     // The data has no phone number, and "number" alone would match the stats.
     .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)

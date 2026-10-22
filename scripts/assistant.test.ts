@@ -58,6 +58,10 @@ const cases: [string, RegExp][] = [
   ['Has he worked with cloud services like AWS?', /^skills-infra$/],
   ['What cloud platforms has he used?', /^skills-infra$/],
   ['Has he done any internships?', /^role-(6f1a8e9|7c3d2b8)$/],
+  // "His code" asks for GitHub, not the portfolio's "Code-split" bullet.
+  ['Where can I see his code?', /^contact$/],
+  ['Can I see his repos?', /^contact$/],
+  ['Is the code open source?', /^contact$/],
   ['What internships has he had?', /^role-(6f1a8e9|7c3d2b8)$/],
   ['Is he looking for internships?', /^looking$/],
   // Questions that name only a kind of passage list that kind.
