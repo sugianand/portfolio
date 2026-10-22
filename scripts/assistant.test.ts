@@ -96,6 +96,12 @@ const cases: [string, RegExp][] = [
   ['Has he used OpenAI?', /^11planner-/],
   ['Has he worked remotely?', /^role-6f1a8e9$/],
   ['Does he have experience with NLP?', /^(cinedna-|skills-ai_ml|looking)/],
+  // Strengths questions ask why he fits; they were refused for lack of matching words.
+  ['What are his strengths?', /^looking$/],
+  ['What are his key strengths?', /^looking$/],
+  ['What makes him stand out?', /^looking$/],
+  ['What sets him apart?', /^looking$/],
+  ["What's he good at?", /^looking$/],
 ]
 
 test('quotes abbreviations like M.S. whole', () => {
@@ -109,6 +115,10 @@ test('says what a project does, not just its name', () => {
 test('lists only the internships when asked about internships', () => {
   const ids = answer('Has he done any internships?').snippets.map((s) => s.doc.id)
   assert.deepEqual(ids.sort(), ['role-6f1a8e9', 'role-7c3d2b8'])
+})
+
+test('reads "good at" as strengths only when nothing follows it', () => {
+  assert.notEqual(answer('Is he good at Python?').snippets[0].doc.id, 'looking')
 })
 
 test('refuses work authorization questions the data cannot answer', () => {

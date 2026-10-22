@@ -127,6 +127,9 @@ export function tokenize(text: string) {
     .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
     // "Where can I see his code?" asks for his GitHub, not the "Code-split" bullet.
     .replace(/\b(his|sugi'?s) (source )?code\b|\bsource code\b|\bopen[\s-]?source\b|\b(code )?repo(s|sitory|sitories)?\b/g, 'github')
+    // "What are his strengths?" or "what makes him stand out?" asks why he fits,
+    // which the data answers with what he builds and the roles he wants.
+    .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?good at\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b/g, 'fit')
     // The data has no phone number, and "number" alone would match the stats.
     .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)
