@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react'
 import { profile } from '../data'
 import { emit, scrollToId } from '../lib/store'
+import { useInView } from '../lib/useInView'
 import { Clock, Scramble } from './effects'
 import { ParticleName } from './ParticleName'
 
 const ALIASES = ['Sugi', 'SA', 'sugianand', 'the one who reads the logs', 'root-cause enthusiast', 'edge-case collector', 'professional debugger']
 
+/** Cycles while on screen; stays on the first alias for reduced motion. */
 function Aliases() {
+  const [ref, inView] = useInView<HTMLParagraphElement>(0.2, false)
   const [index, setIndex] = useState(0)
   useEffect(() => {
+    if (!inView || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const id = window.setInterval(() => setIndex((i) => (i + 1) % ALIASES.length), 2600)
     return () => window.clearInterval(id)
-  }, [])
+  }, [inView])
   return (
-    <p className="aka mono" aria-label={`Also known as ${ALIASES.join(', ')}`}>
+    <p ref={ref} className="aka mono" aria-label={`Also known as ${ALIASES.join(', ')}`}>
       <span>a.k.a.</span>
       <b aria-hidden="true"><Scramble key={index} text={ALIASES[index]} /></b>
     </p>
