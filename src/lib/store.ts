@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { holdWhileBusy } from './holdToasts.ts'
 import { accentHex, accents, type AccentName, type Theme } from './palette.ts'
 
 export const achievementList = [
@@ -92,6 +93,10 @@ export const toast = (title: string, body: string, icon?: AchievementId) => {
   window.setTimeout(() => set({ toasts: state.toasts.filter((t) => t.id !== id) }), 4200)
 }
 
+// Quest toasts wait until dialogs and the assistant close, so they never cover what's being read.
+const dialogOpen = () => document.querySelector('[aria-modal="true"], #ask-panel') !== null
+const celebrate = holdWhileBusy<() => void>(dialogOpen, (fire) => fire(), (retry) => window.setTimeout(retry, 600))
+
 export const unlock = (id: AchievementId) => {
   if (state.unlocked.includes(id)) return
   const unlocked = [...state.unlocked, id]
@@ -102,12 +107,12 @@ export const unlock = (id: AchievementId) => {
     /* storage unavailable: progress lasts for this visit only */
   }
   const meta = achievementList.find((a) => a.id === id)!
-  toast(`Quest cleared · ${unlocked.length}/${achievementList.length}`, meta.name, id)
+  celebrate(() => toast(`Quest cleared · ${unlocked.length}/${achievementList.length}`, meta.name, id))
   if (unlocked.length === achievementList.length) {
-    window.setTimeout(() => {
+    celebrate(() => window.setTimeout(() => {
       toast('Legend rank reached', 'Every quest cleared. Email me, seriously.')
       emit('confetti')
-    }, 900)
+    }, 900))
   }
 }
 
