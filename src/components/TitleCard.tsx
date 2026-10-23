@@ -85,6 +85,7 @@ export function TitleCard() {
       if (cancelled) return
       cancelled = true
       timers.forEach(clearTimeout)
+      detach()
       try {
         sessionStorage.setItem(INTRO_KEY, '1')
       } catch {
@@ -127,6 +128,13 @@ export function TitleCard() {
       }
       finish()
     }
+    // Detached as soon as the card ends, however it ends, so a click or scroll skip (or the
+    // clip running out) doesn't leave the next key, like Esc in a dialog, to be swallowed.
+    function detach() {
+      window.removeEventListener('keydown', onKey, { capture: true })
+      window.removeEventListener('pointerdown', finish)
+      window.removeEventListener('wheel', finish)
+    }
     window.addEventListener('keydown', onKey, { capture: true, once: true })
     window.addEventListener('pointerdown', finish, { once: true })
     window.addEventListener('wheel', finish, { once: true, passive: true })
@@ -134,9 +142,7 @@ export function TitleCard() {
     return () => {
       cancelled = true
       timers.forEach(clearTimeout)
-      window.removeEventListener('keydown', onKey, { capture: true })
-      window.removeEventListener('pointerdown', finish)
-      window.removeEventListener('wheel', finish)
+      detach()
       document.documentElement.style.overflow = ''
     }
   }, [])
