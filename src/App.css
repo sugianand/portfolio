@@ -669,6 +669,8 @@ main, .nav, .footer { position: relative; z-index: 1; }
   .rv-stats { grid-template-columns: repeat(2, 1fr); }
   .hero-targets { font-size: 12.5px; }
 }
+/* "Suganeshwara" can't wrap, so scale the name with the viewport to leave room for the close button. */
+@media screen and (max-width: 400px) { .rv-head h2 { font-size: 7.2vw; } }
 /* With the overview open, printing gives just the overview as a one-page resume. */
 @media print {
   body:has(> .rv) > :not(.rv) { display: none !important; }
