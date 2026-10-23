@@ -130,6 +130,12 @@ export function tokenize(text: string) {
     // "What are his strengths?" or "what makes him stand out?" asks why he fits,
     // which the data answers with what he builds and the roles he wants.
     .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?good at\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b/g, 'fit')
+    // ML terms must not collide with look-alike words: "embeddings" and "embedded"
+    // stem alike, "fine-tuned" is not the game's "tuning", and "computer vision"
+    // is not "Computer Science".
+    .replace(/\bembedded\b/g, 'embeddedsystem')
+    .replace(/\bfine[\s-]?tun(e|ed|es|ing)\b/g, 'finetune')
+    .replace(/\bcomputer vision\b/g, 'computervision')
     // The data has no phone number, and "number" alone would match the stats.
     .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)

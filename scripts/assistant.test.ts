@@ -121,6 +121,14 @@ test('reads "good at" as strengths only when nothing follows it', () => {
   assert.notEqual(answer('Is he good at Python?').snippets[0].doc.id, 'looking')
 })
 
+test('keeps ML terms apart from look-alike words', () => {
+  assert.ok(!answer('Has he worked with embeddings?').snippets.some((s) => s.doc.id === 'role-7c3d2b8'))
+  assert.ok(!answer('Has he fine-tuned models?').snippets.some((s) => s.doc.id === 'frantic-run-lessons'))
+  assert.equal(answer('Has he worked with computer vision?').snippets.length, 0)
+  assert.equal(answer('Has he tested embedded software?').snippets[0].doc.id, 'role-7c3d2b8')
+  assert.equal(answer('What computer science degree does he have?').snippets[0].doc.id, 'education')
+})
+
 test('refuses work authorization questions the data cannot answer', () => {
   assert.equal(answer('Does he need visa sponsorship?').snippets.length, 0)
 })
