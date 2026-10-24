@@ -113,6 +113,10 @@ export function tokenize(text: string) {
     .replace(/\b(machine|deep)[\s-]?learning\b/g, 'ml')
     .replace(/\bhow many years of experience\b/g, 'experience')
     .replace(/\blocated\b/g, 'location')
+    // "Where is he based?" asks for his location; "rule-based" in the data must not match it.
+    .replace(/^(\s*where\b.*)\bbased\b|\bbased (in|out of)\b/, '$1location')
+    // "How can I reach him?" or "get in touch" asks for contact details.
+    .replace(/\breach (out to )?(him|sugi)\b|\breach out\b|\bget in touch\b/g, 'contact')
     // The data says "Remote", so "has he worked remotely?" must find that role.
     .replace(/\bremotely\b/g, 'remote')
     // Short plurals skip the stemmer, so "APIs" would only match "LLM APIs";

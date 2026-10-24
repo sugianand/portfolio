@@ -112,7 +112,18 @@ const cases: [string, RegExp][] = [
   ['Which roles is he seeking?', /^looking$/],
   ['What roles has he held?', /^role-/],
   ['Why should we hire him?', /^looking$/],
+  // Everyday phrasings of "where is he?" and "how do I contact him?".
+  ['Where is he based?', /^profile$/],
+  ['Where is Sugi based out of?', /^profile$/],
+  ['Is he based in Michigan?', /^profile$/],
+  ['How can I reach him?', /^contact$/],
+  ['How do I reach out to Sugi?', /^contact$/],
+  ['How can I get in touch?', /^contact$/],
 ]
+
+test('keeps "rule-based" apart from "where is he based"', () => {
+  assert.equal(answer('Has he built a rule-based parser?').snippets[0]?.doc.id.startsWith('cinedna-'), true)
+})
 
 test('strips -es only after a hissing sound', () => {
   assert.equal(stem('games'), stem('game'))
