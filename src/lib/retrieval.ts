@@ -184,6 +184,11 @@ export class Index {
     this.avg = this.len.reduce((a, b) => a + b, 0) / Math.max(1, docs.length)
   }
 
+  /** Whether any passage contains the term. */
+  has(term: string) {
+    return this.df.has(term)
+  }
+
   /** BM25 (k1 = 1.2, b = 0.75) over expanded query terms. */
   search(query: string, k = 6): { hits: Hit[]; terms: Map<string, number> } {
     const terms = expand(tokenize(query))

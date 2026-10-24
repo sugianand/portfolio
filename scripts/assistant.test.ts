@@ -151,6 +151,14 @@ test('keeps ML terms apart from look-alike words', () => {
   assert.equal(answer('What computer science degree does he have?').snippets[0].doc.id, 'education')
 })
 
+test('refuses kinds of apps and deployments the data never mentions', () => {
+  for (const q of ['Has he built a mobile app?', 'Has he built an iOS app?', 'Has he built a blockchain app?', 'Has he built a desktop application?', 'Does he have experience with Kubernetes deployments?']) {
+    assert.equal(answer(q).snippets.length, 0, q)
+  }
+  assert.equal(answer('Has he built a realtime system?').snippets[0].doc.id, 'three-clues-summary')
+  assert.equal(answer('Has he built a Next.js app?').snippets[0].doc.id, '11planner-summary')
+})
+
 test('refuses work authorization questions the data cannot answer', () => {
   assert.equal(answer('Does he need visa sponsorship?').snippets.length, 0)
 })

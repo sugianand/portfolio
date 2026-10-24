@@ -1,6 +1,6 @@
 import { profile, projects, skillGroups } from '../data.ts'
 import { buildKnowledge } from './knowledge.ts'
-import { extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
+import { expand, extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
 
 export type Snippet = { text: string; doc: Doc; score: number }
 export type Answer = { snippets: Snippet[]; hits: Hit[]; terms: [string, number][] }
@@ -75,6 +75,14 @@ function leadWithSummary(question: string, hits: Hit[]) {
   return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
 }
 
+// Nouns so common in the data that they match on their own. "Has he built an
+// iOS app?" asks about a kind of app, so when the word before one of these is
+// nowhere in the data, any passage about some other app is the wrong answer.
+const GENERIC = new Set(tokenize('app application deployment system platform website service model software'))
+
+const unknownModifier = (tokens: string[]) =>
+  tokens.some((t, i) => GENERIC.has(tokens[i + 1]) && ![...expand([t]).keys()].some((e) => getIndex().has(e)))
+
 /**
  * "What jobs has he had?" or "List his projects" names only a kind of passage,
  * so no text scores well; answer with the first passage of each such source.
@@ -106,7 +114,7 @@ export function answer(asked: string): Answer {
   const named = tokens.some((t) => getNames().has(t))
   // Relevance is judged before the rerank: it only reorders passages, so it
   // must not turn an on-topic question into a refusal.
-  if (!hits.length || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
+  if (!hits.length || unknownModifier(tokens) || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))
