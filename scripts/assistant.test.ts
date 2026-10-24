@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { answer } from '../src/lib/assistant.ts'
+import { stem } from '../src/lib/retrieval.ts'
 
 const cases: [string, RegExp][] = [
   ['What AI projects has Sugi built?', /^(cinedna|portfolio|looking|11planner)/],
@@ -102,7 +103,28 @@ const cases: [string, RegExp][] = [
   ['What makes him stand out?', /^looking$/],
   ['What sets him apart?', /^looking$/],
   ["What's he good at?", /^looking$/],
+  // Plurals like "games" and "roles" keep their e, so they meet "game" and "role".
+  ['Has he built games?', /^(three-clues|frantic-run)-/],
+  ['What games has he made?', /^(three-clues|frantic-run)-summary$/],
+  // Roles he wants are not roles he has held.
+  ['What roles is he targeting?', /^looking$/],
+  ['Is he open to full-time roles?', /^looking$/],
+  ['Which roles is he seeking?', /^looking$/],
+  ['What roles has he held?', /^role-/],
+  ['Why should we hire him?', /^looking$/],
 ]
+
+test('strips -es only after a hissing sound', () => {
+  assert.equal(stem('games'), stem('game'))
+  assert.equal(stem('roles'), stem('role'))
+  assert.equal(stem('boxes'), 'box')
+  assert.equal(stem('matches'), 'match')
+})
+
+test('lists both games when asked about games', () => {
+  const ids = answer('Has he built games?').snippets.map((s) => s.doc.source.kind === 'project' && s.doc.source.id)
+  assert.ok(ids.includes('three-clues') && ids.includes('frantic-run'), String(ids))
+})
 
 test('quotes abbreviations like M.S. whole', () => {
   assert.match(answer('When does he graduate?').snippets[0].text, /^M\.S\. Artificial Intelligence/)

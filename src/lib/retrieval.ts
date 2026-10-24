@@ -22,6 +22,8 @@ for (const w of 's strongest proudest proud impressive favorite favourite stando
 // "Give me a quick summary" asks for the profile; "quick" would otherwise match
 // the contact passage that names the Quick summary panel.
 for (const w of 'give quick brief short'.split(' ')) STOP.add(w)
+// "What roles has he held?" names only a kind of passage, so it lists the jobs.
+STOP.add('held')
 
 // Query-side expansion: recruiter vocabulary mapped onto words that appear in the data.
 const EXPAND: Record<string, string[]> = {
@@ -92,7 +94,10 @@ const EXPAND: Record<string, string[]> = {
 
 export function stem(word: string) {
   if (word.length <= 4) return word
+  // "-es" is a suffix only after a hiss ("classes", "matches"); in "games" or "roles"
+  // the e belongs to the word, so only the s goes and the plural meets its singular.
   for (const suffix of ['ings', 'ing', 'ies', 'ed', 'es', 's']) {
+    if (suffix === 'es' && !/(s|x|z|ch|sh)es$/.test(word)) continue
     if (word.endsWith(suffix) && word.length - suffix.length >= 3) return suffix === 'ies' ? `${word.slice(0, -3)}y` : word.slice(0, -suffix.length)
   }
   return word
@@ -123,6 +128,8 @@ export function tokenize(text: string) {
     .replace(/\bexperience (with|in|using)\b/g, ' ')
     .replace(/^(\s*how\b.*)\bworks?\b/, '$1')
     .replace(/\b(when can (he|sugi) start|start (immediately|soon|right away)|start date)\b/g, 'available')
+    // "Roles he's targeting" or "open to full-time roles" asks what he wants next, not his past jobs.
+    .replace(/\broles?\b(?=.*\b(targets?|targeting|seeking|open to|looking for)\b)|(?<=\b(targets?|targeting|seeking|open to|looking for)\b.*)\broles?\b/g, 'available')
     // "Who is Sugi?" asks for the one-line summary; its other words are all stop words.
     .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
     // "Where can I see his code?" asks for his GitHub, not the "Code-split" bullet.
