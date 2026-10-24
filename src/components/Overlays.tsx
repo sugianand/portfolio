@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { profile, projects } from '../data'
 import { trapTab } from '../lib/focusTrap'
+import { MOD } from '../lib/platform'
 import { copyEmail, cycleAccent, emit, on, resetColors, scrollToId, toggleTheme, unlock } from '../lib/store'
 
 type Action = { id: string; label: string; hint: string; run: () => void }
@@ -83,7 +84,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     <div className="palette" role="dialog" aria-label="Command palette" onClick={() => setOpen(false)}>
       <div className="palette-box" onClick={(e) => e.stopPropagation()}>
         <div className="palette-input">
-          <span className="mono">⌘K</span>
+          <span className="mono">{MOD === '⌘' ? '⌘K' : 'Ctrl K'}</span>
           <input
             ref={inputRef}
             value={query}
@@ -115,7 +116,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
 }
 
 const SHORTCUTS: [keys: string[], action: string][] = [
-  [['⌘', 'K'], 'Open the command palette'],
+  [[MOD, 'K'], 'Open the command palette'],
   [['/'], 'Open the command palette'],
   [['R'], 'Open the quick summary for recruiters'],
   [['?'], 'Show these shortcuts'],
