@@ -24,6 +24,9 @@ kbd { font-family: var(--mono); font-size: 12px; padding: 2px 6px; border: 1px s
 .shader-fallback { background: radial-gradient(circle at 70% 30%, rgba(var(--accent-rgb), .18), transparent 40%), var(--ink); }
 main, .nav, .footer { position: relative; z-index: 1; }
 .nav { position: fixed; z-index: 50; }
+.skip-link { position: fixed; left: var(--gutter); top: 12px; z-index: 210; padding: 10px 16px; border-radius: 999px; background: var(--cream); color: var(--ink); font: 500 15px var(--sans); transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+main:focus { outline: none; }
 
 /* ---------- boot: cinematic title card ---------- */
 .boot { position: fixed; inset: 0; z-index: 200; background: #030303; overflow: hidden; display: grid; place-items: center; clip-path: inset(0 0 0 0); transition: clip-path .9s cubic-bezier(.8, 0, .2, 1); }
@@ -388,7 +391,7 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   html, body { background: #fff !important; color: #111; font-size: 12pt; }
   *, *::before, *::after { animation: none !important; transition: none !important; box-shadow: none !important; text-shadow: none !important; backdrop-filter: none !important; }
 
-  .boot, .shader, .nav, .marquee, .toasts, .drawer, .palette, .confetti, .detail,
+  .skip-link, .boot, .shader, .nav, .marquee, .toasts, .drawer, .palette, .confetti, .detail,
   .aka, .hero-actions, .filters, .pcard-art, .pcard-hit, .pcard-cta, .contact-email span,
   .activity, .footer, .dot, .hide-sm { display: none !important; }
 

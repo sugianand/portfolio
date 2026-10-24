@@ -30,6 +30,21 @@ const navItems: NavItem[] = [
   { id: 'contact', label: 'Contact' },
 ]
 
+// The first Tab stop, so keyboard and screen-reader users can jump past the nav controls.
+// Focus moves without touching the hash, which the case-study and summary routes listen to.
+const SkipLink = () => (
+  <a
+    className="skip-link"
+    href="#main"
+    onClick={(e) => {
+      e.preventDefault()
+      document.getElementById('main')?.focus()
+    }}
+  >
+    Skip to content
+  </a>
+)
+
 // The browser tries to jump to #section before React has rendered it, so deep links
 // (shared URLs, the 404 page) need a hand. Lazy chunks and web fonts shift the layout
 // for a moment after mount, so re-pin until then unless the visitor starts scrolling.
@@ -56,11 +71,12 @@ function App() {
 
   return (
     <>
+      <SkipLink />
       <Boot />
       <ShaderBackdrop />
       <FilmHud items={navItems} />
       <Nav items={navItems} extra={<><ThemeReset /><ThemeToggle /><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />
         <Deferred id="about"><About /></Deferred>
