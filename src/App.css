@@ -161,6 +161,8 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .drawer-reset { align-self: flex-start; margin-top: auto; }
 .drawer-panel h3 { font-size: 44px; letter-spacing: -.04em; line-height: 1; }
 .toasts { position: fixed; left: var(--gutter); bottom: 64px; z-index: 150; display: grid; gap: 8px; pointer-events: none; }
+/* A toast already showing when a dialog opens would cover it; new ones are held in store.ts. */
+body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .toast { display: flex; gap: 12px; align-items: center; padding: 12px 16px 12px 12px; background: var(--cream); color: var(--ink); min-width: 260px; max-width: calc(100vw - 2 * var(--gutter)); animation: toast-in .5s var(--ease) both, toast-out .4s ease-in 3.8s forwards; box-shadow: 0 20px 50px rgba(0, 0, 0, .5); }
 .toast-gem { width: 38px; height: 38px; display: grid; place-items: center; background: var(--accent); color: var(--ink); flex-shrink: 0; }
 .toast-gem .sprite { width: 22px; height: 22px; }
