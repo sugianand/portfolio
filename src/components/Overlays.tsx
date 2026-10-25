@@ -13,6 +13,7 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
+  const boxRef = useRef<HTMLDivElement>(null)
 
   const actions = useMemo<Action[]>(() => [
     { id: 'recruiter', label: 'Quick summary (for recruiters)', hint: 'R', run: () => emit('recruiter') },
@@ -52,6 +53,8 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
         setOpen((o) => !o)
       } else if (e.key === 'Escape') {
         setOpen(false)
+      } else {
+        trapTab(e, boxRef.current)
       }
     }
     window.addEventListener('keydown', onKey)
@@ -66,10 +69,17 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
     }
   }, [])
 
+  // Hand focus back to wherever it came from on close; a chosen action that opens its own
+  // dialog takes focus from there and returns it to the same place.
   useEffect(() => {
     if (!isOpen) return
     unlock('palette')
-    window.setTimeout(() => inputRef.current?.focus(), 30)
+    const previous = document.activeElement as HTMLElement | null
+    const id = window.setTimeout(() => inputRef.current?.focus(), 30)
+    return () => {
+      window.clearTimeout(id)
+      previous?.focus({ preventScroll: true })
+    }
   }, [isOpen])
 
   const choose = (action?: Action) => {
@@ -81,8 +91,8 @@ export function CommandPalette({ onAchievements }: { onAchievements: () => void 
   if (!isOpen) return null
 
   return (
-    <div className="palette" role="dialog" aria-label="Command palette" onClick={() => setOpen(false)}>
-      <div className="palette-box" onClick={(e) => e.stopPropagation()}>
+    <div className="palette" onClick={() => setOpen(false)}>
+      <div ref={boxRef} className="palette-box" role="dialog" aria-modal="true" aria-label="Command palette" onClick={(e) => e.stopPropagation()}>
         <div className="palette-input">
           <span className="mono">{MOD === '⌘' ? '⌘K' : 'Ctrl K'}</span>
           <input
