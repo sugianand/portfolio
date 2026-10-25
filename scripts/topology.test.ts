@@ -34,8 +34,8 @@ const corners = (d: string) => [...d.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map
 test('a skip edge across columns runs through the gaps and the nearer gutter', () => {
   const d = gutterRoute(box(22, 30, 100, 40), box(400, 20, 100, 40), true, { w: 522, h: 200 }, 34, 11)
   const pts = corners(d)
-  assert.deepEqual(pts[0], [122, 50], 'leaves the source on its right edge')
-  assert.deepEqual(pts.at(-1), [400, 40], 'enters the target on its left edge')
+  assert.deepEqual(pts[0], [122, 40], 'leaves the source on its right edge, toward the gutter')
+  assert.deepEqual(pts.at(-1), [400, 30], 'enters the target on its left edge, toward the gutter')
   assert.ok(pts.every(([, y]) => y >= 11), 'stays inside the canvas')
   assert.ok(pts.some(([, y]) => y === 11), 'uses the top gutter, the nearer one')
   assert.ok(pts.filter(([, y]) => y !== 11).every(([x]) => x <= 139 || x >= 383), 'off the gutter, it stays in the gaps')
@@ -43,9 +43,20 @@ test('a skip edge across columns runs through the gaps and the nearer gutter', (
 
 test('a skip edge down rows uses the side gutter and enters from above', () => {
   const pts = corners(gutterRoute(box(16, 16, 120, 60), box(16, 300, 300, 60), false, { w: 332, h: 400 }, 26, 8))
-  assert.deepEqual(pts[0], [76, 76])
-  assert.deepEqual(pts.at(-1), [166, 300])
+  assert.deepEqual(pts[0], [32, 76])
+  assert.deepEqual(pts.at(-1), [32, 300])
   assert.ok(pts.some(([x]) => x === 8), 'uses the left gutter')
+})
+
+test('a skip edge keeps off the port and lane of the direct edges beside it', () => {
+  // On phones this portfolio's "data.ts → Assistant" detour used to start at the
+  // same point as "data.ts → React UI" and run along that edge's midline.
+  const src = box(16, 20, 280, 60), right = box(312, 20, 280, 60)
+  const pts = corners(gutterRoute(src, box(16, 300, 280, 60), false, { w: 312, h: 400 }, 26, 8))
+  assert.notDeepEqual(pts[0], [src.cx, src.b], 'not the centre port the direct edges use')
+  assert.ok(pts[1][1] - src.b <= 26 / 4, 'turns in the quarter of the gap nearest the source')
+  const mirrored = corners(gutterRoute(right, box(312, 300, 280, 60), false, { w: 608, h: 400 }, 26, 8))
+  assert.ok(mirrored[0][0] > right.cx && mirrored.some(([x]) => x === 600), 'mirrors toward the right gutter')
 })
 
 test('rounded corners never overshoot short segments', () => {

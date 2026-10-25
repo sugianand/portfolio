@@ -56,17 +56,27 @@ export const runsAcross = (a: Box, b: Box, sameTier: boolean, across: boolean) =
  * Routes an edge that skips one or more tiers around the nodes in between:
  * out through the gap beside its source, along the canvas gutter (whichever
  * side is nearer), and back in through the gap beside its target. Tiers are
- * columns when `across` is true and rows otherwise.
+ * columns when `across` is true and rows otherwise. Its ports sit toward the
+ * gutter and it turns close to each node, so it never shares a port or a lane
+ * with the direct edges that leave the middle of the same face.
  */
 export function gutterRoute(a: Box, b: Box, across: boolean, size: { w: number; h: number }, gap: number, gutter: number) {
+  const turn = gap / 4
+  const inset = (len: number) => Math.min(16, len / 4)
   if (across) {
     const dir = b.cx >= a.cx ? 1 : -1
     const x1 = dir > 0 ? a.r : a.l, x2 = dir > 0 ? b.l : b.r
-    const gy = (a.cy + b.cy) / 2 <= size.h / 2 ? gutter : size.h - gutter
-    return roundedPath([[x1, a.cy], [x1 + (dir * gap) / 2, a.cy], [x1 + (dir * gap) / 2, gy], [x2 - (dir * gap) / 2, gy], [x2 - (dir * gap) / 2, b.cy], [x2, b.cy]])
+    const top = (a.cy + b.cy) / 2 <= size.h / 2
+    const gy = top ? gutter : size.h - gutter
+    const y1 = top ? a.t + inset(a.b - a.t) : a.b - inset(a.b - a.t)
+    const y2 = top ? b.t + inset(b.b - b.t) : b.b - inset(b.b - b.t)
+    return roundedPath([[x1, y1], [x1 + dir * turn, y1], [x1 + dir * turn, gy], [x2 - dir * turn, gy], [x2 - dir * turn, y2], [x2, y2]])
   }
   const dir = b.cy >= a.cy ? 1 : -1
   const y1 = dir > 0 ? a.b : a.t, y2 = dir > 0 ? b.t : b.b
-  const gx = (a.cx + b.cx) / 2 <= size.w / 2 ? gutter : size.w - gutter
-  return roundedPath([[a.cx, y1], [a.cx, y1 + (dir * gap) / 2], [gx, y1 + (dir * gap) / 2], [gx, y2 - (dir * gap) / 2], [b.cx, y2 - (dir * gap) / 2], [b.cx, y2]])
+  const left = (a.cx + b.cx) / 2 <= size.w / 2
+  const gx = left ? gutter : size.w - gutter
+  const x1 = left ? a.l + inset(a.r - a.l) : a.r - inset(a.r - a.l)
+  const x2 = left ? b.l + inset(b.r - b.l) : b.r - inset(b.r - b.l)
+  return roundedPath([[x1, y1], [x1, y1 + dir * turn], [gx, y1 + dir * turn], [gx, y2 - dir * turn], [x2, y2 - dir * turn], [x2, y2]])
 }
