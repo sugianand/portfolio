@@ -60,7 +60,8 @@ function rerank(question: string, hits: Hit[]) {
  * lead, even when a passage that repeats the title (its numbers) scores higher.
  */
 function namedProject(question: string) {
-  const tokens = tokenize(question)
+  // "What is this site built with?" still names only the project: "built" says what kind of answer.
+  const tokens = tokenize(question).filter((t) => !INTENT_WORDS.has(t))
   if (!tokens.length) return undefined
   return projects.find((p) => {
     const title = tokenize(p.title)
@@ -101,7 +102,10 @@ function kindAnswer(kinds: ((d: Doc) => boolean)[]): Snippet[] {
 
 export function answer(asked: string): Answer {
   // The data only uses "go" as a verb ("tasks go in"), so "Does he know Go?" must not match it.
-  const question = asked.replace(/\bgo(lang)?\b/gi, 'golang')
+  // "This site" is the portfolio project, not NeverEnding's "website revamp".
+  const question = asked
+    .replace(/\bgo(lang)?\b/gi, 'golang')
+    .replace(/\b(this|your) (web ?site|site|web ?page|page)\b/gi, 'this portfolio')
   const raw = getIndex().search(question, 14)
   const terms = raw.terms
   const hits = leadWithSummary(question, rerank(question, raw.hits))

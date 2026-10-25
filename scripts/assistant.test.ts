@@ -122,6 +122,11 @@ const cases: [string, RegExp][] = [
   ['How can I reach him?', /^contact$/],
   ['How do I reach out to Sugi?', /^contact$/],
   ['How can I get in touch?', /^contact$/],
+  // "This site" is the portfolio project, not NeverEnding's "website revamp".
+  ['What is this website built with?', /^portfolio-summary$/],
+  ['Who built this site?', /^portfolio-summary$/],
+  ['How did he build this page?', /^portfolio-summary$/],
+  ['Tell me about your site', /^portfolio-summary$/],
 ]
 
 test('keeps "rule-based" apart from "where is he based"', () => {
