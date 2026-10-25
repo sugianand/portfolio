@@ -30,9 +30,12 @@ export function AssistantPanel({ turns, busy, onAsk: ask, onClose }: Props) {
 
   useEffect(() => inputRef.current?.focus(), [])
 
+  // Bring the newest question to the top so a long answer reads from its first line, not its sources.
   useEffect(() => {
     const el = logRef.current
-    if (el) el.scrollTop = el.scrollHeight
+    const last = el?.lastElementChild
+    if (!el || !last || !turns.length) return
+    el.scrollTop += last.getBoundingClientRect().top - el.getBoundingClientRect().top - parseFloat(getComputedStyle(el).paddingTop)
   }, [turns])
 
   const submit = (e: FormEvent) => {
