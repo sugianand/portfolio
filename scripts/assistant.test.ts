@@ -75,6 +75,9 @@ const cases: [string, RegExp][] = [
   ['What is his strongest project?', /^cinedna-summary$/],
   ["What's his most impressive project?", /^cinedna-summary$/],
   ['Which project is he proudest of?', /^cinedna-summary$/],
+  ['What is his biggest project?', /^cinedna-summary$/],
+  ['What are his top projects?', /^cinedna-summary$/],
+  ['What are his most notable projects?', /^cinedna-summary$/],
   ["What's his GitHub?", /^contact$/],
   // "APIs" skips the stemmer; it must find the APIs he built, not the "LLM APIs" skill.
   ['Has he built APIs?', /^(three-clues|home-cleaning|cinedna|11planner)-/],
