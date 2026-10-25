@@ -55,6 +55,10 @@ const cases: [string, RegExp][] = [
   ['Where is this site hosted?', /^portfolio-/],
   ['Can he start immediately?', /^looking$/],
   ['When can he start?', /^looking$/],
+  // "Full" and "part" must not match NeverEnding's "part of a full website revamp".
+  ['Is he full time or part time?', /^looking$/],
+  ['Is he looking for full-time work?', /^looking$/],
+  ['Would he take a part-time role?', /^looking$/],
   // "like AWS" must not match CineDNA's "like Interstellar", nor "services" its services/ai.py.
   ['Has he worked with cloud services like AWS?', /^skills-infra$/],
   ['What cloud platforms has he used?', /^skills-infra$/],
