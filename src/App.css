@@ -734,6 +734,10 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .commit-head .date { display: block; font-size: 12.5px; white-space: nowrap; }
   .commit-meta .refs { display: none; }
 }
+/* On phones the org gets its own line, so "@" never dangles at the end of a wrapped title. */
+@media screen and (max-width: 820px) {
+  .commit-main .at { display: block; }
+}
 .skillmap .skills { background: none; border: 0; gap: 10px; }
 .skillmap .skill-group { border: 1px solid var(--line); }
 .commit-body .diff li { font: 15px/1.55 var(--sans); color: var(--diff); }
