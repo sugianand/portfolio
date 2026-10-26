@@ -64,8 +64,10 @@ main:focus { outline: none; }
 .chip-ghost { border-style: dashed; color: var(--muted); background: transparent; backdrop-filter: none; }
 .chip-ghost:hover { transform: none; border-color: var(--line); }
 .hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
-.hero-intro { max-width: 480px; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.45; color: var(--muted); }
+.hero-intro { max-width: 480px; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.45; color: var(--muted); text-wrap: balance; }
 .hero-intro em { color: var(--cream); font-style: normal; }
+/* Never break inside a hyphenated compound like "real-|time". */
+.hero-intro .nowrap { white-space: nowrap; }
 .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* ---------- marquee ---------- */

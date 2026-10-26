@@ -39,7 +39,7 @@ export function Hero() {
         <div className="hero-copy">
           <p className="hero-role">{profile.headline}</p>
           <p className="hero-intro">
-            M.S. in AI at Wayne State. I build <em>ranking and retrieval systems</em>, <em>real-time backends</em>, and full-stack products.
+            M.S. in AI at Wayne State. I build <em>ranking and retrieval systems</em>, <em className="nowrap">real-time backends</em>, and <span className="nowrap">full-stack</span> products.
           </p>
         </div>
         <div className="hero-actions mono">
