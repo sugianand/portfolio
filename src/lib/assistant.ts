@@ -35,10 +35,11 @@ const INTENTS: [RegExp, (d: Doc) => boolean][] = [
   [/^(project|built|build|demonstrat|show)$/, (d) => d.source.kind === 'project'],
   [/^(experience|jobs?|role|work|worked|company)$/, isJob],
   [/^(skill|stack|language|know|framework)$/, (d) => d.id.startsWith('skills-')],
+  [/^architecture$/, (d) => d.id.endsWith('-arch')],
 ]
 
 // Words that say what kind of passage is wanted, not what it should be about.
-const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show', 'experience', 'intern', 'internship', 'job', 'jobs', 'role', 'work', 'worked', 'company', 'skill', 'stack', 'language', 'know', 'framework'])
+const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show', 'experience', 'intern', 'internship', 'job', 'jobs', 'role', 'work', 'worked', 'company', 'skill', 'stack', 'language', 'know', 'framework', 'architecture'])
 
 const KIND_VERBS = new Set(['build', 'demonstrat', 'show', 'know'])
 
@@ -70,6 +71,8 @@ function namedProject(question: string) {
 }
 
 function leadWithSummary(question: string, hits: Hit[]) {
+  // "What does the Three Clues architecture look like?" wants the diagram's passage, not the summary.
+  if (tokenize(question).includes('architecture')) return hits
   const project = namedProject(question)
   const i = project ? hits.findIndex((h) => h.doc.id === `${project.id}-summary`) : -1
   if (i <= 0) return hits

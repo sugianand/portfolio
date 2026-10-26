@@ -24,6 +24,8 @@ for (const w of 's strongest proudest proud impressive favorite favourite stando
 for (const w of 'give quick brief short'.split(' ')) STOP.add(w)
 // "What roles has he held?" names only a kind of passage, so it lists the jobs.
 STOP.add('held')
+// "Is he good at system design?" asks about the design; the data never says "good".
+STOP.add('good')
 
 // Query-side expansion: recruiter vocabulary mapped onto words that appear in the data.
 const EXPAND: Record<string, string[]> = {
@@ -91,6 +93,9 @@ const EXPAND: Record<string, string[]> = {
   summary: ['builder', 'engineer', 'software'],
   overview: ['builder', 'engineer', 'software'],
 }
+// Questions are stemmed before lookup, so the keys must be too: "distributed"
+// arrives as "distribut" and "devops" as "devop".
+const EXPANSIONS = new Map(Object.entries(EXPAND).map(([k, v]) => [stem(k), v]))
 
 export function stem(word: string) {
   if (word.length <= 4) return word
@@ -149,6 +154,10 @@ export function tokenize(text: string) {
     .replace(/\bembedded\b/g, 'embeddedsystem')
     .replace(/\bfine[\s-]?tun(e|ed|es|ing)\b/g, 'finetune')
     .replace(/\bcomputer vision\b/g, 'computervision')
+    // "System design" asks how he architects systems; "what does X look like" is
+    // not "looking for" a role.
+    .replace(/\b(systems? design|(software|system) architecture|design(ing)? systems|architect(ed|ing|s)?)\b/g, 'architecture')
+    .replace(/\blooks? like\b/g, ' ')
     // The data has no phone number, and "number" alone would match the stats.
     .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)
@@ -160,7 +169,7 @@ export function expand(tokens: string[]) {
   const out = new Map<string, number>()
   for (const t of tokens) {
     out.set(t, Math.max(out.get(t) ?? 0, 1))
-    for (const e of EXPAND[t] ?? []) {
+    for (const e of EXPANSIONS.get(t) ?? []) {
       const s = stem(e)
       out.set(s, Math.max(out.get(s) ?? 0, 0.45))
     }

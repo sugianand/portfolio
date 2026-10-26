@@ -131,6 +131,17 @@ const cases: [string, RegExp][] = [
   ['Who built this site?', /^portfolio-summary$/],
   ['How did he build this page?', /^portfolio-summary$/],
   ['Tell me about your site', /^portfolio-summary$/],
+  // Synonyms are keyed by stem: "distributed" and "devops" arrive stemmed.
+  ['Does he understand distributed systems?', /^(profile|three-clues-)/],
+  ['Has he built distributed systems?', /^three-clues-/],
+  ['Has he done DevOps?', /^(skills-infra|portfolio-arch|cinedna-)/],
+  // System design questions answer with the architecture passages, and a
+  // project's architecture is not its summary or "looking for" a role.
+  ['Is he good at system design?', /-arch$/],
+  ['Can he design systems?', /-arch$/],
+  ['Is he good at software architecture?', /-arch$/],
+  ['What does the Three Clues architecture look like?', /^three-clues-arch$/],
+  ['How is CineDNA architected?', /^cinedna-arch$/],
 ]
 
 test('keeps "rule-based" apart from "where is he based"', () => {
