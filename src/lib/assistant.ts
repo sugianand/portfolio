@@ -84,8 +84,16 @@ function leadWithSummary(question: string, hits: Hit[]) {
 // nowhere in the data, any passage about some other app is the wrong answer.
 const GENERIC = new Set(tokenize('app application deployment system platform website service model software'))
 
-const unknownModifier = (tokens: string[]) =>
-  tokens.some((t, i) => GENERIC.has(tokens[i + 1]) && ![...expand([t]).keys()].some((e) => getIndex().has(e)))
+const unknown = (t: string) => ![...expand([t]).keys()].some((e) => getIndex().has(e))
+
+const unknownModifier = (tokens: string[]) => tokens.some((t, i) => GENERIC.has(tokens[i + 1]) && unknown(t))
+
+// "Does he have AWS experience?" asks about AWS; when the data never mentions
+// it, "experience" alone would quote his first job as if it were the answer.
+const unknownSubject = (tokens: string[]) => {
+  const subject = tokens.filter((t) => !INTENT_WORDS.has(t))
+  return subject.length > 0 && subject.every(unknown)
+}
 
 /**
  * "What jobs has he had?" or "List his projects" names only a kind of passage,
@@ -121,7 +129,7 @@ export function answer(asked: string): Answer {
   const named = tokens.some((t) => getNames().has(t))
   // Relevance is judged before the rerank: it only reorders passages, so it
   // must not turn an on-topic question into a refusal.
-  if (!hits.length || unknownModifier(tokens) || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
+  if (!hits.length || unknownModifier(tokens) || unknownSubject(tokens) || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))

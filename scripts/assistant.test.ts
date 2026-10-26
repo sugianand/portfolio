@@ -193,6 +193,14 @@ test('refuses kinds of apps and deployments the data never mentions', () => {
   assert.equal(answer('Has he built a Next.js app?').snippets[0].doc.id, '11planner-summary')
 })
 
+test('refuses experience with tools the data never mentions instead of quoting a job', () => {
+  for (const q of ['Does he have AWS experience?', 'Any Rust experience?', 'Does he have Azure experience?', 'What GCP projects has he built?']) {
+    assert.equal(answer(q).snippets.length, 0, q)
+  }
+  assert.match(answer('Does he have Docker experience?').snippets[0].text, /Docker/)
+  assert.match(answer('Tell me about his work experience').snippets[0].doc.id, /^role-/)
+})
+
 test('refuses work authorization questions the data cannot answer', () => {
   assert.equal(answer('Does he need visa sponsorship?').snippets.length, 0)
 })
