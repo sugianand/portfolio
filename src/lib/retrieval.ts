@@ -158,6 +158,9 @@ export function tokenize(text: string) {
     // not "looking for" a role.
     .replace(/\b(systems? design|(software|system) architecture|design(ing)? systems|architect(ed|ing|s)?)\b/g, 'architecture')
     .replace(/\blooks? like\b/g, ' ')
+    // "Team player" or "worked on a team" asks about teamwork, not the game's team modes;
+    // the data shows it as 11Planner's contributors and Agile sprints.
+    .replace(/\bteam[\s-]?(player|work|mates?)\b|\b(work(ed|s)?|been) (on|in|with|as part of) (a |the )?teams?\b|\bcollaborat\w*/g, 'contributors agile')
     // The data has no phone number, and "number" alone would match the stats.
     .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)

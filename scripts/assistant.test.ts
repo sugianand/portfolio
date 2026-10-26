@@ -142,6 +142,13 @@ const cases: [string, RegExp][] = [
   ['Is he good at software architecture?', /-arch$/],
   ['What does the Three Clues architecture look like?', /^three-clues-arch$/],
   ['How is CineDNA architected?', /^cinedna-arch$/],
+  // Teamwork questions answer with 11Planner's team and the Agile sprints, not
+  // Three Clues' team modes or the HPC team's network maintenance.
+  ['Has he worked on a team?', /^(11planner-summary|role-7c3d2b8)$/],
+  ['Is he a team player?', /^(11planner-summary|role-7c3d2b8)$/],
+  ['Does he have teamwork experience?', /^(11planner-summary|role-7c3d2b8)$/],
+  ['Has he collaborated with other engineers?', /^(11planner-summary|role-7c3d2b8)$/],
+  ['What team modes does Three Clues have?', /^three-clues-/],
 ]
 
 test('keeps "rule-based" apart from "where is he based"', () => {
