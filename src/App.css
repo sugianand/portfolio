@@ -355,6 +355,8 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .gh-stats div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .detail-body { grid-template-columns: 1fr; }
   .detail-facts dl { position: static; grid-template-columns: 1fr 1fr; }
+  /* The stack gets the full row so its chips flow side by side instead of one per line. */
+  .detail-facts dl > div:last-child { grid-column: 1 / -1; }
   .detail-main p { font-size: 16px; }
   .nav-links { gap: 0; padding: 4px; max-width: calc(100vw - 24px); overflow-x: auto; scrollbar-width: none; }
   .nav-links a { padding: 8px 9px; font-size: 12.5px; letter-spacing: .04em; white-space: nowrap; }
