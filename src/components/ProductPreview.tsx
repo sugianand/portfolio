@@ -81,26 +81,27 @@ const TERM = [
   ['> Which project shows realtime work?', 'Movie in Three Clues: a server-owned clock and versioned writes… [2]'],
 ]
 
-// Character offset at which each command starts typing (each output line pauses 4 ticks).
-const STARTS = TERM.map((_, i) => TERM.slice(0, i).reduce((sum, [cmd]) => sum + cmd.length + 4, 0))
-
+// The first exchange is always on screen, so the card never opens on an empty
+// terminal; the second question types out, holds, and loops.
 function PortfolioPreview() {
   const [ref, tick] = useTicker(160)
-  const step = reduceMotion() ? 999 : tick % 70
+  const [[firstCmd, firstOut], [cmd, out]] = TERM
+  const step = reduceMotion() ? 999 : tick % 64
+  const typed = Math.min(cmd.length, step)
   return (
     <div ref={ref}>
       <Browser url="sugianand.vercel.app">
         <div className="pv-term mono">
-          {TERM.map(([cmd, out], i) => {
-            const typed = Math.max(0, Math.min(cmd.length, step - STARTS[i]))
-            if (typed === 0) return null
-            return (
-              <p key={cmd}>
-                <span className="pv-prompt">{cmd.slice(0, typed)}</span>
-                {typed === cmd.length && step - STARTS[i] > cmd.length + 1 && <span className="pv-out">{out}</span>}
-              </p>
-            )
-          })}
+          <p>
+            <span className="pv-prompt">{firstCmd}</span>
+            <span className="pv-out">{firstOut}</span>
+          </p>
+          {typed > 0 && (
+            <p>
+              <span className="pv-prompt">{cmd.slice(0, typed)}</span>
+              {typed === cmd.length && step > cmd.length + 1 && <span className="pv-out">{out}</span>}
+            </p>
+          )}
         </div>
       </Browser>
     </div>
