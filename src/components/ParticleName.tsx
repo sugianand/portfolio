@@ -120,9 +120,6 @@ export function ParticleName() {
       ctx.fillStyle = accent
       for (const p of particles) if (p.accent) ctx.fillRect(p.x, p.y, size, size)
     }
-        }
-      }
-    }
 
     // Physics runs in fixed 60 Hz steps so the name forms in the same wall-clock
     // time on slow devices; once the fly-in has had a second, stragglers are
