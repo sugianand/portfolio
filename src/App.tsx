@@ -74,7 +74,7 @@ function App() {
     <>
       <SkipLink />
       <ShaderBackdrop />
-      <FilmHud items={navItems} />
+      <FilmHud />
       <Nav items={navItems} extra={<><ThemeReset /><ThemeToggle /><AchievementButton onOpen={() => setDrawerOpen(true)} /></>} />
       <main id="main" tabIndex={-1}>
         <Hero />

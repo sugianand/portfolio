@@ -901,11 +901,5 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .film-rail { position: absolute; top: 0; right: 0; bottom: 0; width: 16px; border-left: 1px solid var(--line); background:
   radial-gradient(circle at 50% 50%, var(--ink) 0 2.5px, transparent 3px) 0 var(--roll, 0px) / 16px 14px repeat-y,
   linear-gradient(90deg, rgba(var(--accent-rgb), .08), rgba(var(--accent-rgb), .16)); opacity: .9; }
-.film-slate { position: absolute; left: 20px; bottom: 16px; display: flex; gap: 12px; align-items: center; padding: 6px 10px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #cfc9bd; background: rgba(10, 10, 9, .94); border: 1px solid rgba(255, 255, 255, .12); border-radius: 4px; backdrop-filter: blur(6px); }
-.film-rec { display: inline-flex; align-items: center; gap: 6px; color: #ff4b3a; }
-/* Only the dot blinks: the REC text stays solid so it never dips below AA mid-blink. */
-.film-rec::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.2s steps(1) infinite; }
-.film-tc { color: #fff; font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) { .film-hud { display: none; } }
-@media (prefers-reduced-motion: reduce) { .film-rec::before { animation: none; } }
 @media print { .film-hud { display: none; } }
