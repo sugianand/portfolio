@@ -84,7 +84,6 @@ function App() {
         <GitLog />
         <Deferred id="github"><GitHubActivity /></Deferred>
         <Deferred id="personal"><Personal /></Deferred>
-        <Marquee words={['Curious enough to ask why', 'Practical enough to ship']} reverse />
         <Contact />
       </main>
       <Footer />
