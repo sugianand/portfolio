@@ -56,7 +56,9 @@ export function ParticleName() {
       probe.font = '800 100px Syne, Arial Black, sans-serif'
       probe.letterSpacing = '-4px'
       const widest = Math.max(...LINES.map((l) => probe.measureText(l).width))
-      const fontSize = Math.min(220, (width * 0.88 * 100) / widest)
+      // Phones get the full width and touching dots, so the name reads as solid type at a glance.
+      const narrow = width < 640
+      const fontSize = Math.min(220, (width * (narrow ? 0.96 : 0.88) * 100) / widest)
       const lineHeight = fontSize * 0.86
       height = Math.ceil(lineHeight * LINES.length + fontSize * 0.12)
       wrap.style.height = `${height}px`
@@ -85,8 +87,8 @@ export function ParticleName() {
       const data = octx.getImageData(0, 0, width, height).data
       let filled = 0
       for (let i = 3; i < data.length; i += 16) if (data[i] > 128) filled += 4
-      const gap = Math.max(2, Math.ceil(Math.sqrt(filled / MAX_PARTICLES)))
-      size = Math.max(1.2, gap * 0.72)
+      const gap = Math.max(narrow ? 1 : 2, Math.ceil(Math.sqrt(filled / MAX_PARTICLES)))
+      size = Math.max(1.2, gap * (narrow ? 1 : 0.72))
 
       const next: Particle[] = []
       for (let y = 0; y < height; y += gap) {
