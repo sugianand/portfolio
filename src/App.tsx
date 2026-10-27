@@ -15,6 +15,7 @@ import { Contact, Footer, GitLog, Marquee } from './components/Sections'
 // shows. Each fallback keeps the section's id, so #section deep links and the nav still
 // have somewhere to land while the chunk arrives.
 const About = lazy(() => import('./components/About').then((m) => ({ default: m.About })))
+const Personal = lazy(() => import('./components/Personal').then((m) => ({ default: m.Personal })))
 const GitHubActivity = lazy(() => import('./components/GitHubActivity').then((m) => ({ default: m.GitHubActivity })))
 
 const Deferred = ({ id, children }: { id: string; children: ReactNode }) => (
@@ -26,6 +27,7 @@ const navItems: NavItem[] = [
   { id: 'projects', label: 'Projects', short: 'Work' },
   { id: 'log', label: 'Experience', short: 'Exp' },
   { id: 'github', label: 'GitHub', short: 'Git' },
+  { id: 'personal', label: 'B-Roll', short: 'B-Roll' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -81,6 +83,7 @@ function App() {
         <Projects />
         <GitLog />
         <Deferred id="github"><GitHubActivity /></Deferred>
+        <Deferred id="personal"><Personal /></Deferred>
         <Marquee words={['Curious enough to ask why', 'Practical enough to ship']} reverse />
         <Contact />
       </main>

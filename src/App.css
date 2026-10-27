@@ -213,6 +213,28 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .facts dl div:last-child { border-bottom: 0; }
 .facts dt { font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: var(--accent); padding-top: 3px; }
 .facts dd { margin: 0; font-size: 15px; line-height: 1.4; }
+
+/* ---------- personal (b-roll) ---------- */
+.personal-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+.hobbies { display: grid; border-top: 1px solid var(--line); }
+.hobby { display: grid; grid-template-columns: 48px 160px 1fr; gap: 16px; align-items: baseline; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.hobby span { font-size: 12px; color: var(--accent); }
+.hobby h3 { font-size: clamp(24px, 2.6vw, 36px); letter-spacing: -.04em; font-weight: 700; }
+.hobby p { color: var(--soft); font-family: var(--sans); font-size: 15.5px; line-height: 1.5; }
+.reel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: clamp(48px, 7vh, 80px); padding: 18px 14px; background: color-mix(in srgb, var(--ink-2) 80%, transparent); border-block: 10px dotted var(--line); }
+.frame { margin: 0; display: grid; gap: 10px; }
+.frame img, .frame-empty { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border: 1px solid var(--line); }
+.frame-empty { display: grid; place-items: center; font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: var(--dim); background: repeating-linear-gradient(135deg, transparent 0 10px, rgba(var(--accent-rgb), .06) 10px 20px); transition: border-color .25s; }
+.frame:hover .frame-empty { border-color: var(--accent); }
+.frame figcaption { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.frame figcaption span { color: var(--accent); }
+@media (max-width: 820px) {
+  .personal-grid { grid-template-columns: 1fr; }
+  .hobby { grid-template-columns: 36px 1fr; }
+  .hobby p { grid-column: 2; }
+  .reel { grid-template-columns: repeat(5, 70%); overflow-x: auto; scroll-snap-type: x mandatory; }
+  .frame { scroll-snap-align: start; }
+}
 .about .stats { margin-top: clamp(48px, 7vh, 80px); border: 1px solid var(--line); }
 .about .stat { padding: 28px 24px; }
 
