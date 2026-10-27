@@ -100,9 +100,29 @@ export function GitHubActivity() {
   const [hover, setHover] = useState<Day | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
+  // Open on the newest weeks, and stay there while the layout settles (fonts, reveal,
+  // resizes) until the visitor scrolls the calendar themselves.
   useEffect(() => {
     const el = scrollRef.current
-    if (el) el.scrollLeft = el.scrollWidth
+    if (!el) return
+    let pinned = true
+    const pin = () => { if (pinned) el.scrollLeft = el.scrollWidth }
+    const release = () => { pinned = false }
+    pin()
+    const ro = new ResizeObserver(pin)
+    ro.observe(el)
+    if (el.firstElementChild) ro.observe(el.firstElementChild)
+    el.addEventListener('wheel', release, { passive: true })
+    el.addEventListener('pointerdown', release)
+    el.addEventListener('keydown', release)
+    el.addEventListener('touchstart', release, { passive: true })
+    return () => {
+      ro.disconnect()
+      el.removeEventListener('wheel', release)
+      el.removeEventListener('pointerdown', release)
+      el.removeEventListener('keydown', release)
+      el.removeEventListener('touchstart', release)
+    }
   }, [data])
 
   const [sectionRef, near] = useInView<HTMLElement>(0)
