@@ -515,9 +515,10 @@ export const skillGroups: SkillGroup[] = [
 /** Flat view of skill names by group. */
 export const skills: Record<string, string[]> = Object.fromEntries(skillGroups.map((g) => [g.key, g.items.map((i) => i.name)]))
 
+// Project results first: each number is also stated in its project's case study above.
 export const stats = [
-  { value: 30, suffix: '+', label: 'Defects resolved at ATI' },
-  { value: 500, suffix: '+', label: 'Devices imaged at C&IT' },
-  { value: 6, suffix: '', label: 'Roles since 2023' },
+  { value: 14, suffix: '', label: 'Ranking dimensions in CineDNA' },
+  { value: 54, suffix: '', label: 'Countries Whereabout is tested on' },
+  { value: 800, suffix: ' ms', label: 'Room sync in Three Clues' },
   { value: 3.97, suffix: '', label: 'GPA', decimals: 2 },
 ]
