@@ -187,7 +187,8 @@ export function answer(asked: string): Answer {
   if (!snippets.length) {
     snippets = collect((h) => (kinds.some((m) => m(h.doc)) || titled(h.doc) ? extract(h.doc.text, terms, 2) || h.doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] : ''))
   }
-  // A kind-only question led by a passage of some other kind missed its point.
-  if (kindOnly && !(snippets.length && kinds.some((m) => m(snippets[0].doc)))) snippets = fallback
+  // A kind-only question led by a passage of some other kind missed its point, and
+  // one answered by a single source ("What has he built?") undersells the rest.
+  if (kindOnly && (!(snippets.length && kinds.some((m) => m(snippets[0].doc))) || (snippets.length === 1 && fallback.length > 1))) snippets = fallback
   return { snippets, hits, terms: trace }
 }
