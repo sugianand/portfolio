@@ -80,10 +80,15 @@ const skillDetail = ({ name, evidence }: { name: string; evidence?: string[] }) 
   return parts.length ? ` (${parts.join(', ')})` : ''
 }
 
+// Phones open the table on the most-used skills; the rest wait behind "Show all".
+const PHONE_TOP = 12
+
 /** The stack as a periodic table: one tile per skill, colored by family; dots count where it is used. */
 function SkillMap() {
   const [active, setActive] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState(false)
   const all = skillGroups.flatMap((g) => g.items.map((i) => ({ ...i, group: g.key })))
+  const top = new Set([...all].sort((a, b) => (b.evidence?.length ?? 0) - (a.evidence?.length ?? 0)).slice(0, PHONE_TOP).map((i) => i.name))
   const item = all.find((i) => i.name === active)
 
   return (
@@ -91,12 +96,12 @@ function SkillMap() {
       <ul className="ptable-legend mono" aria-label="Skill families">
         {skillGroups.map((g) => <li key={g.key} className={`fam-${g.key}`}><i />{g.label}</li>)}
       </ul>
-      <div className="ptable">
+      <div className={`ptable ${expanded ? 'ptable-all' : ''}`}>
         {all.map((i, n) => (
           <button
             key={i.name}
             type="button"
-            className={`el fam-${i.group} ${i.evidence ? '' : 'el-noev'} ${active === i.name ? 'active' : ''}`}
+            className={`el fam-${i.group} ${i.evidence ? '' : 'el-noev'} ${top.has(i.name) ? '' : 'el-more'} ${active === i.name ? 'active' : ''}`}
             onPointerEnter={() => setActive(i.name)}
             onFocus={() => setActive(i.name)}
             onClick={() => setActive(i.name)}
@@ -112,6 +117,9 @@ function SkillMap() {
           </button>
         ))}
       </div>
+      <button type="button" className="ptable-toggle mono" aria-expanded={expanded} onClick={() => setExpanded((e) => !e)}>
+        {expanded ? 'Show fewer' : `Show all ${all.length} skills`}
+      </button>
       <p className="skill-evidence" aria-live="polite">
         {item
           ? item.evidence

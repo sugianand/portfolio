@@ -861,6 +861,12 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .ptable-legend i { width: 10px; height: 10px; background: var(--fam); border-radius: 2px; }
 .ptable { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
 .el { position: relative; aspect-ratio: 1; display: grid; place-content: center; justify-items: center; gap: 2px; padding: 8px 4px; text-align: center; border: 1px solid color-mix(in srgb, var(--fam) 45%, transparent); background: color-mix(in srgb, var(--fam) 10%, var(--ink)); transition: transform .2s var(--ease), background .2s, border-color .2s; }
+.ptable-toggle { display: none; }
+@media screen and (max-width: 720px) {
+  .ptable:not(.ptable-all) .el-more { display: none; }
+  .ptable-toggle { display: block; margin: 14px auto 0; padding: 12px 22px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--cream); }
+  .ptable-toggle:hover, .ptable-toggle:focus-visible { border-color: var(--accent); color: var(--accent); }
+}
 .el-logo { width: 30px; height: 30px; fill: var(--fam); margin-bottom: 6px; transition: transform .2s var(--ease); }
 .el:hover .el-logo, .el.active .el-logo { transform: scale(1.1); }
 .el b { font: 700 26px var(--display); letter-spacing: -.03em; color: var(--fam); line-height: 1; }
