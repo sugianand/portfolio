@@ -429,7 +429,12 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .section-head { gap: 6pt; margin-bottom: 12pt; }
   .section-note { display: none; }
   h2, .detail-hero h2 { font-size: 26pt; line-height: 1; letter-spacing: -.03em; }
-  h2, h3, .commit, .pcard, .stats, .skill-group, .facts dl div { break-inside: avoid; }
+  h2, h3, .commit, .pcard, .stats, .skill-group, .facts dl div, .hobby { break-inside: avoid; }
+  /* Keep each heading on the same page as what it introduces. */
+  .section-head, h3 { break-after: avoid; }
+  /* Breaks only carry between block siblings, so the B-Roll stack prints as blocks. */
+  .personal-grid, .hobbies { display: block; }
+  .facts { margin-top: 18pt; }
   .kicker { font-size: 9pt; }
 
   .hero { display: block; min-height: 0; padding: 0 0 18pt; }
