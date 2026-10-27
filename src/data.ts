@@ -221,6 +221,52 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'whereabout',
+    title: 'Whereabout',
+    year: '2026',
+    kind: 'AI / Computer Vision',
+    categories: ['AI', 'Games', 'Full Stack'],
+    tagline: 'Can you beat the AI at guessing where a photo was taken?',
+    body: 'A geography game against Atlas, a zero-shot CLIP geolocation model.',
+    stack: ['Python', 'PyTorch', 'CLIP', 'Next.js', 'TypeScript', 'FastAPI', 'transformers.js', 'MapLibre'],
+    links: [
+      { label: 'Live', href: 'https://playwhereabout.netlify.app' },
+      { label: 'Source', href: 'https://github.com/sugianand/whereabout' },
+    ],
+    tone: 'blue',
+    role: 'Solo',
+    status: 'Live at playwhereabout.netlify.app',
+    problem: 'Geolocation models are usually a black box: a pin with no sense of how sure the model was or why.',
+    overview: 'You and Atlas each pin a photo on a 3D globe, then arcs draw to the true location. Atlas picks a country by prompt-ensembled CLIP, then a city within it, and shows where it looked.',
+    why: 'I wanted an ML project people would actually play, with an evaluation honest enough to show where the model fails.',
+    metrics: [
+      { value: '88', label: 'photos from 54 countries' },
+      { value: '949 km', label: 'median error, ViT-L/14' },
+      { value: '43%', label: 'within 750 km' },
+    ],
+    architecture: {
+      nodes: [
+        { id: 'web', label: 'Next.js game', tech: 'static export', tier: 0, detail: 'A pure reducer drives the game over a MapLibre globe, with interchangeable static and API backends.' },
+        { id: 'pocket', label: 'Pocket Atlas', tech: 'transformers.js', tier: 0, detail: 'Runs CLIP in the browser against an int8 text index, so your own photo never leaves your device.' },
+        { id: 'api', label: 'FastAPI', tech: 'Python', tier: 1, detail: 'Deals rounds, keeps answers server-side until you guess, and scores both you and Atlas.' },
+        { id: 'atlas', label: 'Atlas v0', tech: 'CLIP + GeoNames', tier: 2, detail: 'Hierarchical zero-shot geolocation: P(city) = P(country) × P(city | country), plus occlusion saliency maps checked by a deletion test.' },
+        { id: 'ci', label: 'Cold-path inference', tech: 'GitHub Actions', tier: 3, detail: 'The model runs once over the catalog in CI and commits its guesses and evaluation, so no visit waits on a model.' },
+      ],
+      edges: [['web', 'api'], ['api', 'atlas'], ['atlas', 'ci', 'atlas.json'], ['ci', 'web', 'guesses'], ['ci', 'pocket', 'int8 index']],
+    },
+    features: [
+      'Hierarchical zero-shot CLIP geolocation, country then city',
+      'Occlusion saliency ("where Atlas looked") validated by a deletion test',
+      'Private in-browser inference with transformers.js and int8 embeddings',
+      "Daily Five, difficulty tiers from the model's own errors, and Country Streak",
+      'Fully keyboard-playable, with an end-to-end test that does exactly that',
+    ],
+    challenges: [
+      "Keeping the browser model honest: a real-Chromium test checks its embeddings against PyTorch's before the index ships.",
+      'Evaluating on a small set: bootstrap confidence intervals and paired tests instead of single numbers.',
+    ],
+  },
+  {
     id: '11planner',
     title: '11Planner',
     year: '2026',
@@ -411,8 +457,8 @@ export type SkillGroup = { key: string; label: string; items: { name: string; ev
 // this site or roles on the resume. Skills without public evidence carry none.
 export const skillGroups: SkillGroup[] = [
   { key: 'languages', label: 'Languages', items: [
-    { name: 'Python', evidence: ['cinedna', '11planner', 'neverending'] },
-    { name: 'TypeScript', evidence: ['three-clues', 'portfolio'] },
+    { name: 'Python', evidence: ['whereabout', 'cinedna', '11planner', 'neverending'] },
+    { name: 'TypeScript', evidence: ['whereabout', 'three-clues', 'portfolio'] },
     { name: 'JavaScript', evidence: ['home-cleaning', 'frantic-run', 'rocket'] },
     { name: 'Java', evidence: ['neverending'] },
     { name: 'C#', evidence: ['cit'] },
@@ -420,17 +466,18 @@ export const skillGroups: SkillGroup[] = [
     { name: 'SQL', evidence: ['home-cleaning', 'three-clues', '11planner'] },
   ] },
   { key: 'ai_ml', label: 'AI / ML', items: [
+    { name: 'Computer vision (CLIP)', evidence: ['whereabout'] },
     { name: 'Recommendation & ranking', evidence: ['cinedna'] },
     { name: 'Rule-based NLU', evidence: ['cinedna'] },
     { name: 'Information retrieval (BM25)', evidence: ['portfolio'] },
     { name: 'LLM APIs', evidence: ['11planner'] },
-    { name: 'PyTorch' },
+    { name: 'PyTorch', evidence: ['whereabout'] },
     { name: 'TensorFlow' },
     { name: 'NumPy' },
     { name: 'MATLAB', evidence: ['chatui'] },
   ] },
   { key: 'backend', label: 'Backend', items: [
-    { name: 'FastAPI', evidence: ['cinedna', '11planner'] },
+    { name: 'FastAPI', evidence: ['whereabout', 'cinedna', '11planner'] },
     { name: 'Django / DRF', evidence: ['neverending'] },
     { name: 'Express', evidence: ['home-cleaning'] },
     { name: 'Cloudflare Workers', evidence: ['three-clues'] },
@@ -438,7 +485,7 @@ export const skillGroups: SkillGroup[] = [
   ] },
   { key: 'frontend', label: 'Frontend', items: [
     { name: 'React', evidence: ['cinedna', 'three-clues', 'portfolio', 'neverending'] },
-    { name: 'Next.js', evidence: ['11planner'] },
+    { name: 'Next.js', evidence: ['whereabout', '11planner'] },
     { name: 'Blazor', evidence: ['cit'] },
     { name: 'WebGL / GLSL', evidence: ['portfolio'] },
     { name: 'Canvas', evidence: ['portfolio', 'frantic-run'] },
@@ -459,7 +506,7 @@ export const skillGroups: SkillGroup[] = [
   ] },
   { key: 'testing', label: 'Testing & QA', items: [
     { name: 'Regression & root-cause analysis', evidence: ['ati'] },
-    { name: 'Unit & integration tests', evidence: ['three-clues', 'cinedna', 'portfolio'] },
+    { name: 'Unit & integration tests', evidence: ['whereabout', 'three-clues', 'cinedna', 'portfolio'] },
     { name: 'Miniflare', evidence: ['three-clues'] },
   ] },
 ]

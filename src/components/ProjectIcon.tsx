@@ -28,6 +28,14 @@ const ICONS: Record<string, ReactNode> = {
       <ellipse cx="12.8" cy="11.6" rx="2.6" ry="1.6" transform="rotate(-20 12 12)" />
     </>
   ),
+  // A globe with a map pin: guessing where a photo was taken.
+  whereabout: (
+    <>
+      <circle cx="11" cy="13" r="8" />
+      <path d="M3 13h16M11 5c-2.6 2.6-2.6 13.4 0 16M11 5c2.6 2.6 2.6 13.4 0 16" />
+      <path d="M18 2.5a3 3 0 0 1 3 3c0 2.2-3 5-3 5s-3-2.8-3-5a3 3 0 0 1 3-3z" />
+    </>
+  ),
   // A calendar page marked 11.
   '11planner': (
     <>
