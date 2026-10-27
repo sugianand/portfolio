@@ -13,7 +13,8 @@ const favorites = [
   ['Current food spot', "Dave's Hot Chicken"],
 ]
 
-// Placeholder frames until the real photos are in. Swap `src` in for each one.
+// Add a photo by setting `src` (e.g. '/broll/court.jpg' in public/). Frames without one stay
+// hidden, and the whole reel waits until at least one photo is in, so nothing looks unfinished.
 const frames: { caption: string; src?: string }[] = [
   { caption: 'On the court' },
   { caption: 'The crew' },
@@ -21,6 +22,8 @@ const frames: { caption: string; src?: string }[] = [
   { caption: 'Out with friends' },
   { caption: 'Mid-jumper' },
 ]
+
+const shots = frames.filter((f): f is { caption: string; src: string } => Boolean(f.src))
 
 export function Personal() {
   return (
@@ -48,16 +51,16 @@ export function Personal() {
         </Reveal>
       </div>
 
-      <Reveal className="reel">
-        {frames.map((f, n) => (
-          <figure key={f.caption} className="frame">
-            {f.src
-              ? <img src={f.src} alt={f.caption} loading="lazy" />
-              : <div className="frame-empty mono" aria-hidden="true">Photo soon</div>}
-            <figcaption className="mono"><span>{String(n + 1).padStart(2, '0')}</span> {f.caption}</figcaption>
-          </figure>
-        ))}
-      </Reveal>
+      {shots.length > 0 && (
+        <Reveal className="reel">
+          {shots.map((f, n) => (
+            <figure key={f.caption} className="frame">
+              <img src={f.src} alt={f.caption} loading="lazy" />
+              <figcaption className="mono"><span>{String(n + 1).padStart(2, '0')}</span> {f.caption}</figcaption>
+            </figure>
+          ))}
+        </Reveal>
+      )}
     </section>
   )
 }
