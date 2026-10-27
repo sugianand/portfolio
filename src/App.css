@@ -859,6 +859,8 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .ptable-legend i { width: 10px; height: 10px; background: var(--fam); border-radius: 2px; }
 .ptable { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
 .el { position: relative; aspect-ratio: 1; display: grid; place-content: center; justify-items: center; gap: 2px; padding: 8px 4px; text-align: center; border: 1px solid color-mix(in srgb, var(--fam) 45%, transparent); background: color-mix(in srgb, var(--fam) 10%, var(--ink)); transition: transform .2s var(--ease), background .2s, border-color .2s; }
+.el-logo { width: 30px; height: 30px; fill: var(--fam); margin-bottom: 6px; transition: transform .2s var(--ease); }
+.el:hover .el-logo, .el.active .el-logo { transform: scale(1.1); }
 .el b { font: 700 26px var(--display); letter-spacing: -.03em; color: var(--fam); line-height: 1; }
 .el-name { font-size: 12px; color: var(--text-hi); line-height: 1.15; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .el-n { position: absolute; top: 5px; left: 7px; font-size: 12px; color: var(--muted); }
@@ -867,7 +869,7 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .el:hover, .el.active { transform: translateY(-3px); border-color: var(--fam); background: color-mix(in srgb, var(--fam) 22%, var(--ink)); }
 .el-noev { background: var(--ink); border-style: dashed; }
 .el-noev b { opacity: .75; }
-@media (max-width: 480px) { .ptable { grid-template-columns: repeat(4, 1fr); gap: 5px; } .el b { font-size: 21px; } .el-n { display: none; } }
+@media (max-width: 480px) { .ptable { grid-template-columns: repeat(4, 1fr); gap: 5px; } .el b { font-size: 21px; } .el-logo { width: 24px; height: 24px; } .el-n { display: none; } }
 
 /* ---------- problem → solution ---------- */
 .ps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

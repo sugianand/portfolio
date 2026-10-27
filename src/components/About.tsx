@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { evidenceLabels, profile, projects, skillGroups, stats } from '../data'
+import { LOGOS } from '../lib/logos'
 import { CountUp, Reveal } from './effects'
 import { SectionHead } from './Sections'
 
@@ -53,7 +54,7 @@ export function About() {
 
 const evidenceName = (key: string) => projects.find((p) => p.id === key)?.title ?? evidenceLabels[key] ?? key
 
-// Two-letter symbols for the periodic-table view of the stack.
+// Two-letter symbols for skills without a brand logo (concepts, and marks Simple Icons doesn't carry).
 const SYMBOLS: Record<string, string> = {
   Python: 'Py', TypeScript: 'Ts', JavaScript: 'Js', Java: 'Ja', 'C#': 'C#', 'C++': 'C+', SQL: 'Sq',
   'Recommendation & ranking': 'Rk', 'Rule-based NLU': 'Nl', 'Information retrieval (BM25)': 'Ir', 'LLM APIs': 'Ll',
@@ -102,7 +103,9 @@ function SkillMap() {
             aria-pressed={active === i.name}
           >
             <span className="el-n mono" aria-hidden="true">{n + 1}</span>
-            <b aria-hidden="true">{SYMBOLS[i.name] ?? i.name.slice(0, 2)}</b>
+            {LOGOS[i.name]
+              ? <svg className="el-logo" viewBox="0 0 24 24" aria-hidden="true"><path d={LOGOS[i.name]} /></svg>
+              : <b aria-hidden="true">{SYMBOLS[i.name] ?? i.name.slice(0, 2)}</b>}
             <span className="el-name">{SHORT[i.name] ?? i.name}</span>
             <span className="sr-only">{skillDetail(i)}</span>
             <span className="el-dots" aria-hidden="true">{(i.evidence ?? []).map((e) => <i key={e} />)}</span>
