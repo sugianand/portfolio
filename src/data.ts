@@ -11,7 +11,8 @@ export const profile = {
   source: 'https://github.com/sugianand/portfolio',
   headline: 'Software Engineer + AI Builder',
   targets: ['AI Engineer', 'ML Engineer', 'Software Engineer', 'Backend', 'Full-Stack'],
-  availability: 'New grad roles, internships, and co-ops',
+  // The M.S. date is from the resume (expected May 2027).
+  availability: 'Graduating May 2027. Looking for Summer 2027 internships and co-ops, and full-time roles after.',
   education: [
     { degree: 'M.S. Artificial Intelligence', school: 'Wayne State University', when: 'In progress' },
     { degree: 'B.S. Computer Science, minor in Mathematics', school: 'Wayne State University', when: 'Completed' },

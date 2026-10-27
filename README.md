@@ -6,7 +6,7 @@ Personal site for Suganeshwara "Sugi" Anand: Software Engineer + AI Builder, M.S
 
 ## Two layers
 
-**For someone with 60 seconds:** the hero states the role, what I build, and the roles I'm targeting. The **Quick summary** (hero button, nav, `R`, or [`#recruiter`](https://sugianand.vercel.app/#recruiter)) puts education, top projects, recent experience, core stack, and contact links on one screen.
+**For someone with 60 seconds:** the hero states the role, what I build, and the roles I'm targeting. The **Quick summary** (Contact section, command palette, `R`, or [`#recruiter`](https://sugianand.vercel.app/#recruiter)) puts education, top projects, recent experience, core stack, and contact links on one screen.
 
 **For engineers who want depth:**
 

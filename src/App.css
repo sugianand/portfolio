@@ -339,11 +339,14 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .contact-email span { font-size: 12.5px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); font-weight: 400; }
 .contact-email:hover { color: var(--accent); }
 .contact-links { display: flex; gap: 14px; flex-wrap: wrap; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
-.contact-links a { color: var(--cream); padding: 16px 28px; border: 2px solid rgba(var(--accent-rgb), .6); border-radius: 999px; background: rgba(var(--accent-rgb), .08); transition: color .2s, border-color .2s, background .2s, transform .2s; }
-.contact-links a:hover, .contact-links a:focus-visible { color: var(--accent); border-color: var(--accent); background: rgba(var(--accent-rgb), .16); transform: translateY(-2px); }
-.contact-links a:last-child { color: var(--ink); background: var(--accent); border-color: var(--accent); }
-.contact-links a:last-child:hover, .contact-links a:last-child:focus-visible { color: var(--ink); background: var(--cream); border-color: var(--cream); }
-@media (max-width: 640px) { .contact-links { font-size: 16px; } .contact-links a { padding: 14px 22px; } }
+.contact-availability .dot { flex: none; margin-top: .6em; }
+.contact-availability { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 clamp(28px, 4vw, 48px); font-size: clamp(17px, 1.6vw, 21px); color: var(--soft); }
+.contact-links button { text-transform: inherit; letter-spacing: inherit; }
+.contact-links a, .contact-links button { color: var(--cream); padding: 16px 28px; border: 2px solid rgba(var(--accent-rgb), .6); border-radius: 999px; background: rgba(var(--accent-rgb), .08); transition: color .2s, border-color .2s, background .2s, transform .2s; }
+.contact-links a:hover, .contact-links a:focus-visible, .contact-links button:hover, .contact-links button:focus-visible { color: var(--accent); border-color: var(--accent); background: rgba(var(--accent-rgb), .16); transform: translateY(-2px); }
+.contact-links a:last-of-type { color: var(--ink); background: var(--accent); border-color: var(--accent); }
+.contact-links a:last-of-type:hover, .contact-links a:last-of-type:focus-visible { color: var(--ink); background: var(--cream); border-color: var(--cream); }
+@media (max-width: 640px) { .contact-links { font-size: 16px; } .contact-links a, .contact-links button { padding: 14px 22px; } }
 
 .footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 22px var(--gutter) 84px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--dim); text-transform: uppercase; letter-spacing: .08em; position: relative; z-index: 2; background: var(--ink); }
 .footer a:hover { color: var(--accent); }
@@ -476,7 +479,8 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .contact-title { font-size: 26pt; }
   .contact-email { font-size: 14pt; border-bottom: 0; }
   .contact-links { display: grid; gap: 4pt; color: #111; }
-  .contact-links a, .contact-links a:last-child { color: #111; padding: 0; border: 0; background: none; }
+  .contact-links button { display: none; }
+  .contact-links a, .contact-links a:last-of-type { color: #111; padding: 0; border: 0; background: none; }
   /* The address is already printed above; the relative resume link gets its public URL. */
   .contact-links a[href^="mailto"] { display: none; }
   .contact-links a::after { content: ' ' attr(href); text-transform: none; letter-spacing: 0; color: var(--muted); }
@@ -773,11 +777,10 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .hero-copy .hero-intro { max-width: 640px; }
   .hero-actions { justify-content: center; }
 }
-/* Phones: the primary action gets its own row and the other two pair up, instead of orphaning Resume. */
+/* Phones: the two actions pair up as equal halves. */
 @media screen and (max-width: 520px) {
   .hero-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; max-width: 360px; }
   .hero-actions .chip { justify-content: center; gap: 8px; padding-inline: 10px; letter-spacing: .06em; white-space: nowrap; }
-  .hero-actions .chip-solid { grid-column: 1 / -1; }
 }
 @media screen and (max-width: 820px) {
   .hero { padding-top: 132px; padding-bottom: 104px; gap: 22px; }

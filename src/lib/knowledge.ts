@@ -18,7 +18,7 @@ export function buildKnowledge(): Doc[] {
   docs.push({
     id: 'looking',
     title: 'Roles Sugi is looking for',
-    text: `Sugi is looking for ${profile.targets.join(', ')} roles: ${profile.availability.toLowerCase()}. The projects that best show AI work are CineDNA (natural-language recommendation and ranking) and this portfolio's retrieval assistant; Movie in Three Clues shows real-time backend engineering.`,
+    text: `Sugi is looking for ${profile.targets.join(', ')} roles. ${profile.availability} The projects that best show AI work are CineDNA (natural-language recommendation and ranking) and this portfolio's retrieval assistant; Movie in Three Clues shows real-time backend engineering.`,
     source: { kind: 'section', id: 'contact' },
   })
   docs.push({

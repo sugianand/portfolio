@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { profile } from '../data'
-import { emit, scrollToId } from '../lib/store'
+import { scrollToId } from '../lib/store'
 import { useInView } from '../lib/useInView'
 import { Clock, Scramble } from './effects'
 import { ParticleName } from './ParticleName'
@@ -43,8 +43,7 @@ export function Hero() {
           </p>
         </div>
         <div className="hero-actions mono">
-          <button type="button" className="chip chip-solid" onClick={() => emit('recruiter')}>Quick summary</button>
-          <button type="button" className="chip" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
+          <button type="button" className="chip chip-solid" onClick={() => scrollToId('projects')} data-cursor="go">View projects ↓</button>
           <a className="chip" href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
         </div>
       </div>

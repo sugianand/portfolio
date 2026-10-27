@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { profile, roles } from '../data'
-import { copyEmail, unlock } from '../lib/store'
+import { copyEmail, emit, unlock } from '../lib/store'
 import { useInView } from '../lib/useInView'
 import { Clock, Reveal, Scramble } from './effects'
 
@@ -83,10 +83,11 @@ export function GitLog() {
 export function Contact() {
   return (
     <section className="section contact" id="contact">
-      <p className="kicker mono"><span>05</span> Contact</p>
+      <p className="kicker mono"><span>06</span> Contact</p>
       <h2 className="contact-title">
         <Scramble text="Let's build" /><br /><em><Scramble text="something real." /></em>
       </h2>
+      <p className="contact-availability"><i className="dot" /> {profile.availability}</p>
       <div className="contact-row">
         <button type="button" className="contact-email" onClick={() => copyEmail(profile.email)} data-cursor="copy">
           {profile.email}<span className="mono">click to copy</span>
@@ -96,6 +97,7 @@ export function Contact() {
           <a href={profile.github} target="_blank" rel="noreferrer">GitHub ↗</a>
           <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
           <a href={profile.resume} target="_blank" rel="noreferrer">Resume ↗</a>
+          <button type="button" onClick={() => emit('recruiter')}>Quick summary</button>
         </div>
       </div>
     </section>
