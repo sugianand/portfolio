@@ -197,15 +197,7 @@ export function hexToRgb(hex: string): [number, number, number] {
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]
 }
 
-let booted = false
-export const isBooted = () => booted
-export const markBooted = () => {
-  if (booted) return
-  booted = true
-  emit('boot-done')
-}
-
-type BusEvent = 'confetti' | 'palette' | 'shortcuts' | 'recruiter' | 'assistant' | 'scatter' | 'boot-done'
+type BusEvent = 'confetti' | 'palette' | 'shortcuts' | 'recruiter' | 'assistant' | 'scatter'
 const bus = new EventTarget()
 export const emit = (event: BusEvent) => bus.dispatchEvent(new Event(event))
 export const on = (event: BusEvent, handler: () => void) => {

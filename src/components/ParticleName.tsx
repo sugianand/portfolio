@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { emit, isBooted, on, unlock, useStore } from '../lib/store'
+import { emit, unlock, useStore } from '../lib/store'
 
 type Particle = { x: number; y: number; tx: number; ty: number; vx: number; vy: number; accent: boolean }
 
@@ -38,7 +38,6 @@ export function ParticleName() {
     let raf = 0
     let visible = true
     let released = 0
-    let assembled = isBooted()
     let disposed = false
 
     const cssColor = (name: string, fallback: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
@@ -128,7 +127,7 @@ export function ParticleName() {
     let pending = 0
 
     const step = (now: number) => {
-      const springy = assembled && now > released
+      const springy = now > released
       const settle = springy && now > released + 1000
       const radius = Math.max(70, width * 0.07)
       for (const p of particles) {
@@ -144,8 +143,6 @@ export function ParticleName() {
         if (springy) {
           p.vx += (p.tx - p.x) * 0.06
           p.vy += (p.ty - p.y) * 0.06
-        } else if (!assembled) {
-          p.vy += 0.02
         }
         p.vx *= 0.8
         p.vy *= 0.8
@@ -206,10 +203,6 @@ export function ParticleName() {
 
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
     io.observe(wrap)
-    const offBoot = on('boot-done', () => {
-      assembled = true
-      released = performance.now() + 150
-    })
 
     build()
     if (reduce) redrawRef.current = draw
@@ -227,7 +220,6 @@ export function ParticleName() {
       disposed = true
       cancelAnimationFrame(raf)
       io.disconnect()
-      offBoot()
       canvas.removeEventListener('pointermove', onMove)
       canvas.removeEventListener('pointerleave', onLeave)
       canvas.removeEventListener('pointerdown', onDown)

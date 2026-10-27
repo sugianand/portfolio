@@ -17,9 +17,6 @@ const build = {
   date: new Date().toISOString(),
 }
 
-// The title card is still in testing: it's on in dev and Vercel previews, off in production
-// builds (GitHub Pages runs on Actions; Vercel sets VERCEL_ENV). `?intro` plays it anywhere.
-const intro = process.env.VERCEL_ENV !== 'production' && process.env.GITHUB_ACTIONS !== 'true'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -28,6 +25,5 @@ export default defineConfig({
   plugins: [react()],
   define: {
     __BUILD__: JSON.stringify(build),
-    __INTRO__: JSON.stringify(intro),
   },
 })
