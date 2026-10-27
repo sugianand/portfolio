@@ -180,6 +180,20 @@ test('lists only the internships when asked about internships', () => {
   assert.deepEqual(ids.sort(), ['role-6f1a8e9', 'role-7c3d2b8'])
 })
 
+test('answers about the project or employer a question names', () => {
+  // "build" favors projects and "stack" favors skills, but the named source still leads.
+  const neverEnding = answer('What did he build at NeverEnding?').snippets[0]
+  assert.equal(neverEnding.doc.id, 'role-6f1a8e9')
+  assert.match(neverEnding.text, /Django and DRF/)
+  const cineDNA = answer('What is the tech stack of CineDNA?').snippets[0]
+  assert.equal(cineDNA.doc.id, 'cinedna-summary')
+  assert.match(cineDNA.text, /Stack: Python, FastAPI/)
+  assert.equal(answer('What skills did he use at Accurate Technologies?').snippets[0].doc.id, 'role-7c3d2b8')
+  assert.equal(answer('What is the stack of Movie in Three Clues?').snippets[0].doc.id, 'three-clues-summary')
+  // One word of a longer name is not the name: "run" is not The Frantic Run.
+  assert.notEqual(answer('What projects run in CI?').snippets[0]?.doc.id, 'frantic-run-summary')
+})
+
 test('reads "good at" as strengths only when nothing follows it', () => {
   assert.notEqual(answer('Is he good at Python?').snippets[0].doc.id, 'looking')
 })

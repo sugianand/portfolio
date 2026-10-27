@@ -88,7 +88,7 @@ const EXPAND: Record<string, string[]> = {
   skill: ['skills', 'stack'],
   framework: ['react', 'next', 'fastapi', 'django', 'express', 'blazor'],
   project: ['projects', 'built'],
-  build: ['builder', 'builds'],
+  build: ['builder', 'builds', 'built'],
   summarize: ['builder', 'engineer', 'software'],
   summary: ['builder', 'engineer', 'software'],
   overview: ['builder', 'engineer', 'software'],

@@ -1,4 +1,4 @@
-import { profile, projects, skillGroups } from '../data.ts'
+import { profile, projects, roles, skillGroups } from '../data.ts'
 import { buildKnowledge } from './knowledge.ts'
 import { expand, extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
 
@@ -48,11 +48,35 @@ const wantedKinds = (question: string) => {
   return INTENTS.filter(([re]) => tokens.some((t) => re.test(t))).map(([, match]) => match)
 }
 
+// A project or employer the question names. "What did he build at NeverEnding?"
+// or "What is CineDNA's tech stack?" asks about that one source: a job has no
+// project passages and a project no skill passages, so the kind word ("build",
+// "stack") means that source's own, and its passages must lead.
+let sources: { tokens: string[]; match: (d: Doc) => boolean }[] | null = null
+const getSources = () =>
+  (sources ??= [
+    ...projects.map((p) => ({ name: p.title, match: (d: Doc) => d.source.kind === 'project' && d.source.id === p.id })),
+    ...roles.map((r) => ({ name: r.org, match: (d: Doc) => d.id === `role-${r.hash}` })),
+  ].map(({ name, match }) => ({ tokens: tokenize(name).filter((t) => !GENERIC.has(t) && !INTENT_WORDS.has(t)), match })))
+
+// More than half of the name, so "run" alone is not The Frantic Run, nor "movie" Movie in Three Clues.
+// When the source has passages of the wanted kind ("CineDNA's architecture"), the kind still decides.
+function namedSource(question: string) {
+  const tokens = tokenize(question)
+  const wanted = wantedKinds(question)
+  const named = getSources().filter((s) => s.tokens.length && s.tokens.filter((t) => tokens.includes(t)).length * 2 > s.tokens.length)
+  if (!wanted.length || !named.length) return undefined
+  const match = (d: Doc) => named.some((s) => s.match(d))
+  return getDocs().some((d) => match(d) && wanted.some((m) => m(d))) ? undefined : match
+}
+
 function rerank(question: string, hits: Hit[]) {
   const wanted = wantedKinds(question)
   if (!wanted.length) return hits
-  const others = INTENTS.map(([, match]) => match).filter((m) => !wanted.includes(m))
-  const weight = (d: Doc) => (wanted.some((m) => m(d)) ? 1.6 : others.some((m) => m(d)) ? 0.6 : 1)
+  const named = namedSource(question)
+  const kinds = INTENTS.map(([, match]) => match)
+  const others = named ? kinds : kinds.filter((m) => !wanted.includes(m))
+  const weight = (d: Doc) => ((named ? named(d) : wanted.some((m) => m(d))) ? 1.6 : others.some((m) => m(d)) ? 0.6 : 1)
   return hits.map((h) => ({ ...h, score: h.score * weight(h.doc) })).sort((a, b) => b.score - a.score)
 }
 
@@ -157,7 +181,9 @@ export function answer(asked: string): Answer {
   // lets passages of that kind answer on their own, along with passages whose
   // title names the topic ("hardest problem") even if their text never does.
   const titled = (d: Doc) => tokenize(d.title).some((t) => topical.has(t))
-  let snippets = collect((h) => extract(h.doc.text, topical, 2))
+  // Within a named source the kind words are the topic: "CineDNA's stack" quotes its stack.
+  const source = namedSource(question)
+  let snippets = collect((h) => extract(h.doc.text, source?.(h.doc) ? terms : topical, 2))
   if (!snippets.length) {
     snippets = collect((h) => (kinds.some((m) => m(h.doc)) || titled(h.doc) ? extract(h.doc.text, terms, 2) || h.doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] : ''))
   }
