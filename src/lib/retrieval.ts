@@ -149,6 +149,8 @@ export function tokenize(text: string) {
     // which the data answers with what he builds and the roles he wants.
     // So does "his strongest skill" or "what is he best at", which no skill list can rank.
     .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?(good|best) at\W*$|\bexcels? at\W*$|\bdo(es)? best\W*$|\b(strongest|best|greatest) (technical )?(skill|area)s?\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b/g, 'fit')
+    // "His best work" or "show me his work" asks for projects, not where he works.
+    .replace(/\b(best|strongest|finest|top|greatest|proudest|favou?rite|impressive|notable) work\b|\bshow me (his|sugi'?s) work\b|\bwork (is )?(he|sugi)('?s| is)? (most )?proud(est)? of\b/g, 'project')
     // ML terms must not collide with look-alike words: "embeddings" and "embedded"
     // stem alike, "fine-tuned" is not the game's "tuning", and "computer vision"
     // is not "Computer Science".

@@ -156,6 +156,14 @@ const cases: [string, RegExp][] = [
   ['What team modes does Three Clues have?', /^three-clues-/],
 ]
 
+test('reads "his best work" as his projects, not where he works', () => {
+  for (const q of ['Show me his best work', "What's his most impressive work?", 'What work is he proudest of?', 'Show me his work']) {
+    assert.equal(answer(q).snippets[0]?.doc.id, 'cinedna-summary', q)
+  }
+  assert.match(answer('Where does he work?').snippets[0].doc.id, /^role-/)
+  assert.equal(answer('What is his best work at NeverEnding?').snippets[0].doc.id, 'role-6f1a8e9')
+})
+
 test('keeps "rule-based" apart from "where is he based"', () => {
   assert.equal(answer('Has he built a rule-based parser?').snippets[0]?.doc.id.startsWith('cinedna-'), true)
 })
