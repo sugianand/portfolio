@@ -16,6 +16,14 @@ const HIDDEN = new Set(['sugianand', 'sugianand.github.io', 'portfolio'])
 const PINNED = { name: '11planner', slot: 2 }
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+const json = (url: string) =>
+  fetch(url).then((r) => (r.ok && r.headers.get('content-type')?.includes('json') ? r.json() : null)).catch(() => null)
+
+// The same-origin proxy (api/contributions.ts) survives blockers that stop the
+// third-party API; local dev has no functions, so it falls back to the API itself.
+const contributions = async () =>
+  (await json('/api/contributions')) ?? json(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`)
+
 async function load(): Promise<Data> {
   try {
     const cached = JSON.parse(sessionStorage.getItem(CACHE) ?? 'null') as Data | null
@@ -25,7 +33,7 @@ async function load(): Promise<Data> {
   }
   const [contrib, user, repos] = await Promise.all([
     // Unofficial third-party API: its outage shouldn't hide what GitHub itself returned.
-    fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    contributions(),
     fetch(`https://api.github.com/users/${USER}`).then((r) => (r.ok ? r.json() : null)).catch(() => null),
     fetch(`https://api.github.com/users/${USER}/repos?sort=pushed&per_page=12`).then((r) => (r.ok ? r.json() : [])).catch(() => []),
   ])
