@@ -37,7 +37,9 @@ export function ParticleName() {
     let height = 0
     let raf = 0
     let visible = true
-    let released = 0
+    let released = performance.now() + 150
+    // After a click the name floats apart in slow motion until this time.
+    let drifting = 0
     let disposed = false
 
     const cssColor = (name: string, fallback: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
@@ -118,6 +120,9 @@ export function ParticleName() {
       ctx.fillStyle = accent
       for (const p of particles) if (p.accent) ctx.fillRect(p.x, p.y, size, size)
     }
+        }
+      }
+    }
 
     // Physics runs in fixed 60 Hz steps so the name forms in the same wall-clock
     // time on slow devices; once the fly-in has had a second, stragglers are
@@ -127,8 +132,14 @@ export function ParticleName() {
     let pending = 0
 
     const step = (now: number) => {
+      if (drifting && now > drifting + 3000) drifting = 0
       const springy = now > released
-      const settle = springy && now > released + 1000
+      const settle = springy && now > released + (drifting ? 3500 : 1000)
+      const slow = now < released
+      // After a scatter the name drifts apart freely, then glides home on a soft,
+      // heavily damped pull so the letters settle without bouncing.
+      const pull = drifting ? 0.006 + 0.01 * Math.min(1, Math.max(0, now - released) / 2000) : 0.06
+      const friction = slow ? 0.965 : drifting ? 0.74 : 0.8
       const radius = Math.max(70, width * 0.07)
       for (const p of particles) {
         const dx = p.x - pointer.x
@@ -141,11 +152,11 @@ export function ParticleName() {
           p.vy += (dy / dist) * force
         }
         if (springy) {
-          p.vx += (p.tx - p.x) * 0.06
-          p.vy += (p.ty - p.y) * 0.06
+          p.vx += (p.tx - p.x) * pull
+          p.vy += (p.ty - p.y) * pull
         }
-        p.vx *= 0.8
-        p.vy *= 0.8
+        p.vx *= friction
+        p.vy *= friction
         p.x += p.vx
         p.y += p.vy
         if (settle && dist2 > radius * radius) {
@@ -183,11 +194,12 @@ export function ParticleName() {
       pointer.down = true
       for (const p of particles) {
         const angle = Math.atan2(p.y - pointer.y, p.x - pointer.x) + (Math.random() - 0.5)
-        const power = 18 + Math.random() * 40
+        const power = 3 + Math.random() * 7
         p.vx += Math.cos(angle) * power
         p.vy += Math.sin(angle) * power
       }
-      released = performance.now() + 650
+      released = performance.now() + 1400
+      drifting = released + 2600
       emit('scatter')
       unlock('scatter')
     }
