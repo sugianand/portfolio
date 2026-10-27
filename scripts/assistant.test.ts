@@ -110,6 +110,11 @@ const cases: [string, RegExp][] = [
   ['What makes him stand out?', /^looking$/],
   ['What sets him apart?', /^looking$/],
   ["What's he good at?", /^looking$/],
+  // "Strongest skill" asks for a judgment no skill list makes; it quoted the databases row.
+  ['What is his strongest skill?', /^looking$/],
+  ['What is he best at?', /^looking$/],
+  ['What does he excel at?', /^looking$/],
+  ['What are his top skills?', /^skills-/],
   // Plurals like "games" and "roles" keep their e, so they meet "game" and "role".
   ['Has he built games?', /^(three-clues|frantic-run)-/],
   ['What games has he made?', /^(three-clues|frantic-run)-summary$/],
@@ -196,6 +201,7 @@ test('answers about the project or employer a question names', () => {
 
 test('reads "good at" as strengths only when nothing follows it', () => {
   assert.notEqual(answer('Is he good at Python?').snippets[0].doc.id, 'looking')
+  assert.notEqual(answer('Is he best at Python?').snippets[0]?.doc.id, 'looking')
 })
 
 test('keeps ML terms apart from look-alike words', () => {

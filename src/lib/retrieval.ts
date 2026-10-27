@@ -147,7 +147,8 @@ export function tokenize(text: string) {
     .replace(/\b(his|sugi'?s) (source )?code\b|\bsource code\b|\bopen[\s-]?source\b|\b(code )?repo(s|sitory|sitories)?\b/g, 'github')
     // "What are his strengths?" or "what makes him stand out?" asks why he fits,
     // which the data answers with what he builds and the roles he wants.
-    .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?good at\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b/g, 'fit')
+    // So does "his strongest skill" or "what is he best at", which no skill list can rank.
+    .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?(good|best) at\W*$|\bexcels? at\W*$|\bdo(es)? best\W*$|\b(strongest|best|greatest) (technical )?(skill|area)s?\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b/g, 'fit')
     // ML terms must not collide with look-alike words: "embeddings" and "embedded"
     // stem alike, "fine-tuned" is not the game's "tuning", and "computer vision"
     // is not "Computer Science".
