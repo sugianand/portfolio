@@ -283,6 +283,7 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .detail-nav button:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
 .detail-kind { font-size: 12.5px; text-transform: uppercase; letter-spacing: .12em; opacity: .9; margin-top: clamp(20px, 5vh, 56px); }
 .detail-hero h2 { font-size: clamp(44px, 7vw, 104px); }
+@media (max-width: 480px) { .detail-hero h2 { font-size: clamp(26px, 8.5vw, 44px); } }
 .detail-tagline { font-size: clamp(18px, 1.8vw, 24px); opacity: .8; letter-spacing: -.01em; }
 .detail-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .detail-links a { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; padding: 10px 14px; border: 1px solid currentColor; transition: background .2s, color .2s; }
