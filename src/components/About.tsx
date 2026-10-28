@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { evidenceLabels, profile, projects, skillGroups, stats } from '../data'
 import { LOGOS } from '../lib/logos'
+import { SHORT, tileName, tileSymbol } from '../lib/skillTiles'
 import { CountUp, Reveal } from './effects'
 import { SectionHead } from './Sections'
 
@@ -54,25 +55,6 @@ export function About() {
 
 const evidenceName = (key: string) => projects.find((p) => p.id === key)?.title ?? evidenceLabels[key] ?? key
 
-// Two-letter symbols for skills without a brand logo (concepts, and marks Simple Icons doesn't carry).
-const SYMBOLS: Record<string, string> = {
-  Python: 'Py', TypeScript: 'Ts', JavaScript: 'Js', Java: 'Ja', 'C#': 'C#', 'C++': 'C+', SQL: 'Sq',
-  'Recommendation & ranking': 'Rk', 'Rule-based NLU': 'Nl', 'Information retrieval (BM25)': 'Ir', 'LLM APIs': 'Ll',
-  PyTorch: 'Pt', TensorFlow: 'Tf', NumPy: 'Np', MATLAB: 'Ml',
-  FastAPI: 'Fa', 'Django / DRF': 'Dj', Express: 'Ex', 'Cloudflare Workers': 'Cf', 'REST API design': 'Ra',
-  React: 'Re', 'Next.js': 'Nx', Blazor: 'Bz', 'WebGL / GLSL': 'Gl', Canvas: 'Cv',
-  'PostgreSQL (Supabase)': 'Pg', MySQL: 'My', 'SQLite (D1)': 'Sl',
-  Docker: 'Dk', 'GitHub Actions': 'Ga', Vercel: 'Vc', Render: 'Rn', Git: 'Gt', Linux: 'Lx', Jira: 'Ji',
-  'Regression & root-cause analysis': 'Rc', 'Unit & integration tests': 'Ut', Miniflare: 'Mf',
-}
-
-const SHORT: Record<string, string> = {
-  'Recommendation & ranking': 'Ranking', 'Information retrieval (BM25)': 'Retrieval', 'Rule-based NLU': 'NLU',
-  'REST API design': 'REST APIs', 'PostgreSQL (Supabase)': 'Postgres', 'SQLite (D1)': 'SQLite',
-  'Regression & root-cause analysis': 'Root cause', 'Unit & integration tests': 'Testing', 'Cloudflare Workers': 'Workers',
-  'GitHub Actions': 'Actions', 'WebGL / GLSL': 'WebGL', 'Django / DRF': 'Django',
-}
-
 // Screen-reader detail after the visible tile name. Keeping the name as real text rather than an
 // aria-label means what voice users see is what they say (WCAG 2.5.3).
 const skillDetail = ({ name, evidence }: { name: string; evidence?: string[] }) => {
@@ -110,8 +92,8 @@ function SkillMap() {
             <span className="el-n mono" aria-hidden="true">{n + 1}</span>
             {LOGOS[i.name]
               ? <svg className="el-logo" viewBox="0 0 24 24" aria-hidden="true"><path d={LOGOS[i.name]} /></svg>
-              : <b aria-hidden="true">{SYMBOLS[i.name] ?? i.name.slice(0, 2)}</b>}
-            <span className="el-name">{SHORT[i.name] ?? i.name}</span>
+              : <b aria-hidden="true">{tileSymbol(i.name)}</b>}
+            <span className="el-name">{tileName(i.name)}</span>
             <span className="sr-only">{skillDetail(i)}</span>
             <span className="el-dots" aria-hidden="true">{(i.evidence ?? []).map((e) => <i key={e} />)}</span>
           </button>
