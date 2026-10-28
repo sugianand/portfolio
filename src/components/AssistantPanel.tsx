@@ -16,7 +16,7 @@ export type Turn = { q: string; a: Answer }
 
 function sourceLabel(src: Source, title: string) {
   if (src.kind === 'project') return `${title.split(':')[0].replace(/ (problem|hardest|architecture|numbers|features).*$/i, '')} case study`
-  if (src.kind === 'section') return { about: 'About', log: 'Experience', contact: 'Contact', projects: 'Projects' }[src.id] ?? src.id
+  if (src.kind === 'section') return { about: 'About', log: 'Experience', contact: 'Contact', projects: 'Projects', personal: 'B-Roll' }[src.id] ?? src.id
   return 'Link'
 }
 

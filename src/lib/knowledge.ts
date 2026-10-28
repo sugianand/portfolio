@@ -1,6 +1,6 @@
 // Builds the assistant's knowledge base from the same data the site renders,
 // so it can only ever say what the site itself says.
-import { evidenceLabels, profile, projects, roles, skillGroups, stats } from '../data.ts'
+import { evidenceLabels, favorites, hobbies, profile, projects, roles, skillGroups, stats } from '../data.ts'
 import type { Doc } from './retrieval.ts'
 
 const projectName = (key: string) => projects.find((p) => p.id === key)?.title ?? evidenceLabels[key] ?? key
@@ -38,6 +38,13 @@ export function buildKnowledge(): Doc[] {
     title: 'Numbers',
     text: stats.map((s) => `${s.decimals ? s.value.toFixed(s.decimals) : s.value}${s.suffix} ${s.label.toLowerCase()}`).join('. ') + '.',
     source: about,
+  })
+
+  docs.push({
+    id: 'hobbies',
+    title: 'Hobbies and interests: what Sugi does for fun outside work',
+    text: `Hobbies: ${hobbies.map(([name]) => name.toLowerCase()).join(', ')}. ${hobbies.map(([name, text]) => `${name}: ${text}`).join(' ')} ${favorites.map(([k, v]) => `${k}: ${v}.`).join(' ')}`,
+    source: { kind: 'section', id: 'personal' },
   })
 
   for (const r of roles) {

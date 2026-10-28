@@ -164,6 +164,10 @@ export function tokenize(text: string) {
     // "Team player" or "worked on a team" asks about teamwork, not the game's team modes;
     // the data shows it as 11Planner's contributors and Agile sprints.
     .replace(/\bteam[\s-]?(player|work|mates?)\b|\b(work(ed|s)?|been) (on|in|with|as part of) (a |the )?teams?\b|\bcollaborat\w*/g, 'contributors agile')
+    // "What does he do for fun?" or "outside of work" asks about the B-Roll, not his jobs.
+    // "His favorite movie" is one of those favorites, not Movie in Three Clues.
+    .replace(/\b(outside (of )?work|off the clock|free time|spare time|for fun|(?<!(research|technical|academic) )interests|hobby)\b/g, 'hobbies')
+    .replace(/\bfavou?rite (movies?|films?|sports?|foods?|restaurants?|spots?)\b/g, 'hobbies $1')
     // The data has no phone number, and "number" alone would match the stats.
     .replace(/\b(phone|cell|mobile) (number|no)\b/g, 'phone')
     .split(/[^a-z0-9+#]+/)

@@ -1,17 +1,6 @@
+import { favorites, hobbies } from '../data'
 import { Reveal } from './effects'
 import { SectionHead } from './Sections'
-
-const hobbies = [
-  ['Sports', 'Pickup games whenever I can get them. Basketball first, everything else after.'],
-  ['Movies', 'Watching everything from the big releases to the deep cuts, then arguing about them.'],
-  ['Food', 'Always trying somewhere new, and I review every spot I go to.'],
-]
-
-const favorites = [
-  ['All-time movie', 'Avengers: Infinity War'],
-  ['Sport', 'Basketball'],
-  ['Current food spot', "Dave's Hot Chicken"],
-]
 
 // Add a photo by setting `src` (e.g. '/broll/court.jpg' in public/). Frames without one stay
 // hidden, and the whole reel waits until at least one photo is in, so nothing looks unfinished.

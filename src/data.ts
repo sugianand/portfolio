@@ -522,3 +522,16 @@ export const stats = [
   { value: 800, suffix: ' ms', label: 'Room sync in Three Clues' },
   { value: 3.97, suffix: '', label: 'GPA', decimals: 2 },
 ]
+
+// B-Roll: life off the clock. The section renders these, and the assistant answers from them.
+export const hobbies: [string, string][] = [
+  ['Sports', 'Pickup games whenever I can get them. Basketball first, everything else after.'],
+  ['Movies', 'Watching everything from the big releases to the deep cuts, then arguing about them.'],
+  ['Food', 'Always trying somewhere new, and I review every spot I go to.'],
+]
+
+export const favorites: [string, string][] = [
+  ['All-time movie', 'Avengers: Infinity War'],
+  ['Sport', 'Basketball'],
+  ['Current food spot', "Dave's Hot Chicken"],
+]

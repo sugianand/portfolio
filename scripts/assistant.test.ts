@@ -236,6 +236,17 @@ test('refuses experience with tools the data never mentions instead of quoting a
   assert.match(answer('Tell me about his work experience').snippets[0].doc.id, /^role-/)
 })
 
+test('answers life off the clock from the B-Roll', () => {
+  for (const q of ['What does he do for fun?', 'What are his hobbies?', 'What does he do outside of work?', 'What does he do in his free time?', 'Does he play sports?']) {
+    assert.equal(answer(q).snippets[0]?.doc.id, 'hobbies', q)
+  }
+  assert.match(answer("What's his favorite movie?").snippets[0].text, /Infinity War/)
+  assert.match(answer('Does he like basketball?').snippets[0].text, /Basketball/)
+  // Movie questions about his work still go to the work.
+  assert.equal(answer('How does CineDNA rank movies?').snippets[0].doc.id, 'cinedna-summary')
+  assert.notEqual(answer('What are his research interests?').snippets[0]?.doc.id, 'hobbies')
+})
+
 test('refuses work authorization questions the data cannot answer', () => {
   assert.equal(answer('Does he need visa sponsorship?').snippets.length, 0)
 })
