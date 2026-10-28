@@ -135,6 +135,19 @@ function kindAnswer(kinds: ((d: Doc) => boolean)[]): Snippet[] {
   return out
 }
 
+// A skill group is one long sentence. "Does he know Java?" asks about one item
+// in it, so quote the group's label and only the items the question names.
+const SKILLS_PREFIX = 'Skills and technologies, '
+
+function narrowSkills(text: string, asked: Set<string>) {
+  if (!text.startsWith(SKILLS_PREFIX)) return text
+  const body = text.slice(SKILLS_PREFIX.length, -1)
+  const colon = body.indexOf(': ')
+  const items = body.slice(colon + 2).split('; ')
+  const picked = items.filter((item) => tokenize(item.split(' (used in ')[0]).some((t) => asked.has(t)))
+  return picked.length && picked.length < items.length ? `${body.slice(0, colon)}: ${picked.join('; ')}.` : text
+}
+
 export function answer(asked: string): Answer {
   // The data only uses "go" as a verb ("tasks go in"), so "Does he know Go?" must not match it.
   // "This site" is the portfolio project, not NeverEnding's "website revamp".
@@ -157,6 +170,7 @@ export function answer(asked: string): Answer {
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))
+  const subject = new Set(tokens.filter((t) => !INTENT_WORDS.has(t)))
   const cutoff = hits[0].score * 0.45
   const candidates = hits.filter((h) => h.score >= cutoff)
 
@@ -168,7 +182,7 @@ export function answer(asked: string): Answer {
       const key = hit.doc.source.kind === 'project' ? hit.doc.source.id : hit.doc.id
       const used = perSource.get(key) ?? 0
       if (used >= 2) continue
-      const text = pick(hit)
+      const text = narrowSkills(pick(hit), subject)
       if (!text) continue
       perSource.set(key, used + 1)
       out.push({ text, doc: hit.doc, score: hit.score })

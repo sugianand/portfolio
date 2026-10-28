@@ -188,6 +188,18 @@ test('says what a project does, not just its name', () => {
   assert.match(answer('What does 11Planner do?').snippets[0].text, /study planner/)
 })
 
+test('quotes only the skills a question names from a skill group', () => {
+  const lead = (q: string) => answer(q).snippets[0]
+  assert.equal(lead('Does he know Java?').text, 'Languages: Java (used in NeverEnding (internship)).')
+  assert.equal(lead('Does he know C++?').text, 'Languages: C++ (used in Simple Chat UI (resume project)).')
+  assert.equal(lead('Does he know Django?').text, 'Backend: Django / DRF (used in NeverEnding (internship)).')
+  assert.match(lead('Has he used React and Next.js?').text, /^Frontend: React \(.*\); Next\.js \([^;]*\)\.$/)
+  // A question that names no single item keeps the whole group.
+  assert.match(lead('What languages does he know?').text, /Python.*Java.*SQL/)
+  assert.match(lead('What frameworks does he use?').text, /React.*Next\.js.*Blazor/)
+  assert.match(answer('Has he done machine learning?').snippets[0].text, /CLIP.*PyTorch/)
+})
+
 test('lists only the internships when asked about internships', () => {
   const ids = answer('Has he done any internships?').snippets.map((s) => s.doc.id)
   assert.deepEqual(ids.sort(), ['role-6f1a8e9', 'role-7c3d2b8'])
