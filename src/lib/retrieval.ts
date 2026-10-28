@@ -24,6 +24,10 @@ for (const w of 's strongest proudest proud impressive favorite favourite stando
 for (const w of 'give quick brief short'.split(' ')) STOP.add(w)
 // "What roles has he held?" names only a kind of passage, so it lists the jobs.
 STOP.add('held')
+// "His last job" or "most recent internship" asks which job; the job passages list the
+// newest first and carry their dates, so recency words would only match "the latest
+// server snapshot" or nothing at all.
+for (const w of 'last latest recent recently previous previously prior past newest'.split(' ')) STOP.add(w)
 // "Is he good at system design?" asks about the design; the data never says "good".
 STOP.add('good')
 

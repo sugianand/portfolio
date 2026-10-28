@@ -72,6 +72,13 @@ const cases: [string, RegExp][] = [
   // Questions that name only a kind of passage list that kind.
   ['What jobs has he had?', /^role-/],
   ['Where has he worked?', /^role-/],
+  // Recency words ask which job, so the newest job leads, not "the latest server snapshot".
+  ['What was his most recent job?', /^role-7c3d2b8$/],
+  ['What was his previous job?', /^role-7c3d2b8$/],
+  ['Tell me about his latest internship', /^role-7c3d2b8$/],
+  ['Where did he work most recently?', /^role-7c3d2b8$/],
+  ['What did he build at his last job?', /^role-7c3d2b8$/],
+  ['What did he do in his previous role at NeverEnding?', /^role-6f1a8e9$/],
   ['List his projects', /^cinedna-summary$/],
   ['Show me his projects', /^cinedna-summary$/],
   ['What has he built?', /^cinedna-summary$/],
