@@ -61,19 +61,26 @@ const getSources = () =>
 
 // More than half of the name, so "run" alone is not The Frantic Run, nor "movie" Movie in Three Clues.
 // When the source has passages of the wanted kind ("CineDNA's architecture"), the kind still decides.
+// With no kind word a named project alone decides (see rerank): "How accurate is
+// Whereabout?" is about Whereabout, though "accurate" is a third of an employer's name.
 function namedSource(question: string) {
   const tokens = tokenize(question)
   const wanted = wantedKinds(question)
   const named = getSources().filter((s) => s.tokens.length && s.tokens.filter((t) => tokens.includes(t)).length * 2 > s.tokens.length)
-  if (!wanted.length || !named.length) return undefined
+  if (!named.length) return undefined
   const match = (d: Doc) => named.some((s) => s.match(d))
+  if (!wanted.length) return match
   return getDocs().some((d) => match(d) && wanted.some((m) => m(d))) ? undefined : match
 }
 
 function rerank(question: string, hits: Hit[]) {
   const wanted = wantedKinds(question)
-  if (!wanted.length) return hits
   const named = namedSource(question)
+  if (!wanted.length) {
+    // Only a project: "Wayne State" names jobs, but the education passage answers too.
+    const own = named ? hits.filter((h) => h.doc.source.kind === 'project' && named(h.doc)) : []
+    return own.length ? own : hits
+  }
   const kinds = INTENTS.map(([, match]) => match)
   const others = named ? kinds : kinds.filter((m) => !wanted.includes(m))
   const weight = (d: Doc) => ((named ? named(d) : wanted.some((m) => m(d))) ? 1.6 : others.some((m) => m(d)) ? 0.6 : 1)

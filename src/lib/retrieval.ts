@@ -58,6 +58,8 @@ const EXPAND: Record<string, string[]> = {
   qa: ['test', 'regression', 'defect', 'accurate'],
   ati: ['accurate', 'technologies', 'qa'],
   accurate: ['qa', 'ecu', 'automotive', 'defect'],
+  // A model's accuracy is stated as its error ("949 km median error").
+  accuracy: ['error', 'median'],
   intern: ['internship', 'experience'],
   experience: ['intern', 'role', 'worked'],
   job: ['role', 'experience'],

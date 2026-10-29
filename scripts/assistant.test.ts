@@ -161,6 +161,13 @@ const cases: [string, RegExp][] = [
   ['Does he have teamwork experience?', /^(11planner-summary|role-7c3d2b8)$/],
   ['Has he collaborated with other engineers?', /^(11planner-summary|role-7c3d2b8)$/],
   ['What team modes does Three Clues have?', /^three-clues-/],
+  // "Accurate" is also an employer's name; a question about a named project's
+  // accuracy is about that project and its error metric, not the QA internship.
+  ['How accurate is Whereabout?', /^whereabout-metrics$/],
+  ["What is Whereabout's accuracy?", /^whereabout-metrics$/],
+  ['How accurate is CineDNA?', /^cinedna-/],
+  ['What did he do at Accurate?', /^role-7c3d2b8$/],
+  ['Where did he study at Wayne State?', /^education$/],
 ]
 
 test('reads "his best work" as his projects, not where he works', () => {
