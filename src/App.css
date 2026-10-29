@@ -519,8 +519,10 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .tone-cream.fcard { background: var(--cream); color: var(--ink); }
 .tone-ink.fcard { background: var(--ink-3); color: var(--cream); }
 .more-label { margin: clamp(40px, 6vh, 64px) 0 16px; font-size: 13px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
-/* At most three columns, so the three compact cards span the row on wide screens. */
+/* At most three columns, so three compact cards span the row on wide screens. Four go
+   two by two instead of leaving the last card alone on its row. */
 .cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, max(320px, calc((100% - 28px) / 3))), 1fr)); gap: 14px; }
+.cgrid:has(> :nth-child(4):last-child) { grid-template-columns: repeat(auto-fill, minmax(min(100%, max(320px, calc((100% - 14px) / 2))), 1fr)); }
 .ccard { position: relative; padding: 22px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--line); background: color-mix(in srgb, var(--ink-2) 85%, transparent); backdrop-filter: blur(10px); transition: border-color .25s, transform .3s var(--ease); }
 .ccard:hover { border-color: var(--accent); transform: translateY(-3px); }
 .ccard a { position: relative; z-index: 2; }
