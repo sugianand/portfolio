@@ -8,13 +8,13 @@ import { CommandPalette, Confetti, Konami, Shortcuts } from './components/Overla
 import { Assistant } from './components/Assistant'
 import { RecruiterView } from './components/RecruiterView'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
-import { Projects } from './components/Projects'
 import { Contact, Footer, GitLog, Marquee } from './components/Sections'
 
 // Below-the-fold sections load as separate chunks so the first paint only parses what it
 // shows. Each fallback keeps the section's id, so #section deep links and the nav still
 // have somewhere to land while the chunk arrives.
 const About = lazy(() => import('./components/About').then((m) => ({ default: m.About })))
+const Projects = lazy(() => import('./components/Projects').then((m) => ({ default: m.Projects })))
 const Personal = lazy(() => import('./components/Personal').then((m) => ({ default: m.Personal })))
 const GitHubActivity = lazy(() => import('./components/GitHubActivity').then((m) => ({ default: m.GitHubActivity })))
 
@@ -80,7 +80,7 @@ function App() {
         <Hero />
         <Marquee words={['Dependable systems', 'Intelligent tools', 'Build / Debug / Ship', 'Software + AI', 'Detroit, MI']} />
         <Deferred id="about"><About /></Deferred>
-        <Projects />
+        <Deferred id="projects"><Projects /></Deferred>
         <GitLog />
         <Deferred id="github"><GitHubActivity /></Deferred>
         <Deferred id="personal"><Personal /></Deferred>
