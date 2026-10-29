@@ -122,6 +122,8 @@ export function tokenize(text: string) {
     .replace(/\b(machine|deep)[\s-]?learning\b/g, 'ml')
     .replace(/\bhow many years of experience\b/g, 'experience')
     .replace(/\blocated\b/g, 'location')
+    // "Led" is too short for the stemmer, so "has he led a project?" must become "lead".
+    .replace(/\bled\b/g, 'lead')
     // "Where is he based?" asks for his location; "rule-based" in the data must not match it.
     .replace(/^(\s*where\b.*)\bbased\b|\bbased (in|out of)\b/, '$1location')
     // "How can I reach him?" or "get in touch" asks for contact details.
@@ -167,6 +169,9 @@ export function tokenize(text: string) {
     .replace(/\blooks? like\b/g, ' ')
     // "Team player" or "worked on a team" asks about teamwork, not the game's team modes;
     // the data shows it as 11Planner's contributors and Agile sprints.
+    // "How big was the team?" asks for its size, which the data gives as contributors;
+    // "big" alone would quote the Movies hobby's "big releases".
+    .replace(/\bhow (big|large)\b(.*)\bteams?\b|\bteams? size\b|\bhow many (people|developers|engineers|members|teammates)\b/g, '$2 contributors')
     .replace(/\bteam[\s-]?(player|work|mates?)\b|\b(work(ed|s)?|been) (on|in|with|as part of) (a |the )?teams?\b|\bcollaborat\w*/g, 'contributors agile')
     // "What does he do for fun?" or "outside of work" asks about the B-Roll, not his jobs.
     // "His favorite movie" is one of those favorites, not Movie in Three Clues.

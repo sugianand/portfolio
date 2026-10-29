@@ -283,3 +283,17 @@ test('refuses questions outside the data', () => {
     assert.equal(answer(q).snippets.length, 0, q)
   }
 })
+
+test('reads "led" as leadership', () => {
+  for (const q of ['Has he led a project?', 'Has he ever led anyone?']) {
+    assert.match(answer(q).snippets[0]?.doc.id ?? '', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)$/, q)
+  }
+})
+
+test('answers team size with the contributor count, not the Movies hobby', () => {
+  for (const q of ['How big was the 11Planner team?', 'How many people worked on 11Planner?', 'What was the team size?']) {
+    const lead = answer(q).snippets[0]
+    assert.equal(lead?.doc.id, '11planner-summary', q)
+    assert.match(lead.text, /three contributors/, q)
+  }
+})
