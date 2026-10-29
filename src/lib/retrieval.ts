@@ -138,6 +138,9 @@ export function tokenize(text: string) {
     .replace(/\bapis\b/g, 'api')
     // "Cloud services" asks about cloud, not about a file like services/ai.py.
     .replace(/\bcloud (services?|platforms?|providers?|computing)\b/g, 'cloud')
+    // "CI/CD" splits into a bare "ci", which only the QA role's "supporting CI" outweighs;
+    // the evidence is the GitHub Actions pipelines that test and deploy his projects.
+    .replace(/\b(ci\s*\/\s*cd|devops)( pipelines?| experience)?\b|\bcontinuous (integration|deployment|delivery)\b/g, 'ci cd github actions deploy')
     // "Where is it hosted?" asks about deployment, not Three Clues' game host.
     .replace(/\b(hosted|hosting)\b/g, 'deploy')
     // "Experience with RAG" asks about RAG, not about jobs; "how does X work"

@@ -28,6 +28,11 @@ const cases: [string, RegExp][] = [
   ['Tell me about 11Planner', /^11planner-/],
   ['Does he know React?', /^skills-frontend/],
   ['Has he used Docker?', /^skills-infra/],
+  // "CI/CD" must find his GitHub Actions pipelines, not the QA role's "supporting CI".
+  ['Does he have CI/CD experience?', /^(portfolio-arch|skills-infra)$/],
+  ['Has he set up CI/CD pipelines?', /^(portfolio-arch|skills-infra)$/],
+  ['Does he know continuous integration?', /^(portfolio-arch|skills-infra)$/],
+  ['Does he have DevOps experience?', /^(portfolio-arch|skills-infra)$/],
   ['What is his current job?', /^role-(4e8b1d0|9b2f6a4)/],
   ['What is his current role?', /^role-(4e8b1d0|9b2f6a4)/],
   ['Where does he currently work?', /^role-(4e8b1d0|9b2f6a4)/],
