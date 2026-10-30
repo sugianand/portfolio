@@ -135,6 +135,14 @@ const cases: [string, RegExp][] = [
   ['Is he open to full-time roles?', /^looking$/],
   ['Which roles is he seeking?', /^looking$/],
   ['What roles has he held?', /^role-/],
+  // Other ways recruiters ask what he wants next; these were refused.
+  ['What kind of roles does he want?', /^looking$/],
+  ['What positions is he interested in?', /^looking$/],
+  ['What position is he applying for?', /^looking$/],
+  ['Is he open to opportunities?', /^looking$/],
+  ['Is he job hunting?', /^looking$/],
+  ['What is his availability?', /^looking$/],
+  ['What jobs has he had?', /^role-/],
   ['Why should we hire him?', /^looking$/],
   // Everyday phrasings of "where is he?" and "how do I contact him?".
   ['Where is he based?', /^profile$/],

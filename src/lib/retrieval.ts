@@ -150,8 +150,10 @@ export function tokenize(text: string) {
     .replace(/\b(when can (he|sugi) start|start (immediately|soon|right away)|start date)\b/g, 'available')
     // "Full time or part time?" asks what kind of role he wants, not about "full website revamp".
     .replace(/\b(full|part)[\s-]?time\b/g, 'available')
-    // "Roles he's targeting" or "open to full-time roles" asks what he wants next, not his past jobs.
-    .replace(/\broles?\b(?=.*\b(targets?|targeting|seeking|open to|looking for)\b)|(?<=\b(targets?|targeting|seeking|open to|looking for)\b.*)\broles?\b/g, 'available')
+    // "Roles he's targeting", "open to full-time roles", or "positions he wants" asks what
+    // he wants next, not his past jobs. "His availability" stems apart from "available".
+    .replace(/\b(roles?|positions?|jobs?|opportunit(y|ies))\b(?=.*\b(targets?|targeting|seeking|open to|looking for|wants?|interested in|applying (for|to))\b)|(?<=\b(targets?|targeting|seeking|open to|looking for|wants?|interested in|applying (for|to))\b.*)\b(roles?|positions?|jobs?|opportunit(y|ies))\b/g, 'available')
+    .replace(/\bavailability\b|\bjob[\s-]?(hunting|searching|search)\b/g, 'available')
     // "Who is Sugi?" asks for the one-line summary; its other words are all stop words.
     .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
     // "Where can I see his code?" asks for his GitHub, not the "Code-split" bullet.
