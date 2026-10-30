@@ -113,7 +113,7 @@ function leadWithSummary(question: string, hits: Hit[]) {
 // Nouns so common in the data that they match on their own. "Has he built an
 // iOS app?" asks about a kind of app, so when the word before one of these is
 // nowhere in the data, any passage about some other app is the wrong answer.
-const GENERIC = new Set(tokenize('app application deployment system platform website service model software'))
+const GENERIC = new Set(tokenize('app application deployment development system platform website service model software'))
 
 const unknown = (t: string) => ![...expand([t]).keys()].some((e) => getIndex().has(e))
 
@@ -163,6 +163,8 @@ export function answer(asked: string): Answer {
     .replace(/\bgo(lang)?\b/gi, 'golang')
     .replace(/\b(code|pull requests?|prs?) reviews?\b|\breview(s|ed|ing)? (\w+ )?(code|pull requests?|prs?)\b/gi, 'codereview')
     .replace(/\b(this|your) (web ?site|site|web ?page|page)\b/gi, 'this portfolio')
+    // The profile says "time zone"; "timezone" alone would match nothing.
+    .replace(/\btime-?zones?\b/gi, 'time zone')
   const raw = getIndex().search(question, 14)
   const terms = raw.terms
   const hits = leadWithSummary(question, rerank(question, raw.hits))

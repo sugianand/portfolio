@@ -255,6 +255,11 @@ test('refuses kinds of apps and deployments the data never mentions', () => {
   for (const q of ['Has he built a mobile app?', 'Has he built an iOS app?', 'Has he built a blockchain app?', 'Has he built a desktop application?', 'Does he have experience with Kubernetes deployments?']) {
     assert.equal(answer(q).snippets.length, 0, q)
   }
+  // "Development" is generic too: "web development" from the mentor role is not mobile work.
+  for (const q of ['Has he done mobile development?', 'Does he do iOS development?', 'Has he done Android development?']) {
+    assert.equal(answer(q).snippets.length, 0, q)
+  }
+  assert.equal(answer('Has he done game development?').snippets[0].doc.id, 'frantic-run-summary')
   assert.equal(answer('Has he built a realtime system?').snippets[0].doc.id, 'three-clues-summary')
   assert.equal(answer('Has he built a Next.js app?').snippets[0].doc.id, '11planner-summary')
 })
@@ -276,6 +281,15 @@ test('answers life off the clock from the B-Roll', () => {
   // Movie questions about his work still go to the work.
   assert.equal(answer('How does CineDNA rank movies?').snippets[0].doc.id, 'cinedna-summary')
   assert.notEqual(answer('What are his research interests?').snippets[0]?.doc.id, 'hobbies')
+})
+
+// "Time" alone matched 11Planner's "LLM time estimates".
+test('answers time zone questions with his location', () => {
+  for (const q of ['What is his time zone?', 'What timezone is he in?', 'Which time-zone does he work in?']) {
+    const lead = answer(q).snippets[0]
+    assert.equal(lead?.doc.id, 'profile', q)
+    assert.match(lead.text, /America\/Detroit/, q)
+  }
 })
 
 test('refuses work authorization questions the data cannot answer', () => {
