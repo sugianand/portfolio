@@ -73,8 +73,9 @@ test('edges between stacked tiers run down even when the target sits to the righ
   assert.equal(runsAcross(box(0, 0), box(0, 80), true, true), false)
 })
 
-test('softBreaks wraps tech labels after slashes and before extensions only', () => {
-  assert.deepEqual(softBreaks('services/scoring.py'), ['services/', 'scoring', '.py'])
+test('softBreaks wraps tech labels after slashes and before long file extensions only', () => {
+  assert.deepEqual(softBreaks('services/scoring.py'), ['services/', 'scoring.py'])
+  assert.deepEqual(softBreaks('services/ai.py'), ['services/', 'ai.py'])
   assert.deepEqual(softBreaks('transformers.js'), ['transformers', '.js'])
   assert.deepEqual(softBreaks('POST /api/search'), ['POST /', 'api/', 'search'])
   assert.deepEqual(softBreaks('D1 (SQLite)'), ['D1 (SQLite)'])

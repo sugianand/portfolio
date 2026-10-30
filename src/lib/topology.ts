@@ -5,10 +5,11 @@ export type MiniNode = { id: string; x: number; y: number; tier: number }
 export type MiniEdge = { key: string; x1: number; y1: number; x2: number; y2: number }
 
 /**
- * Splits a node's tech label where a narrow box may wrap it: after a slash and before a
- * file extension, so services/scoring.py and transformers.js never spill out on phones.
+ * Splits a node's tech label where a narrow box may wrap it: after a slash, and before the
+ * extension of a long file name, so transformers.js never spills out on phones while short
+ * names like ai.py stay whole instead of wrapping as "ai" / ".py".
  */
-export const softBreaks = (text: string) => text.replace(/\/|\w(?=\.\w)/g, (m) => `${m}\n`).split('\n')
+export const softBreaks = (text: string) => text.replace(/\/|(?<=\w{8})(?=\.\w)/g, (m) => `${m}\n`).split('\n')
 
 /**
  * Lays an architecture out as a tiny glyph: one column per tier, nodes spread
