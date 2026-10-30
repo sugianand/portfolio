@@ -158,8 +158,10 @@ function narrowSkills(text: string, asked: Set<string>) {
 export function answer(asked: string): Answer {
   // The data only uses "go" as a verb ("tasks go in"), so "Does he know Go?" must not match it.
   // "This site" is the portfolio project, not NeverEnding's "website revamp".
+  // "Review" in the data is only the food hobby, so a code review question must not match it.
   const question = asked
     .replace(/\bgo(lang)?\b/gi, 'golang')
+    .replace(/\b(code|pull requests?|prs?) reviews?\b|\breview(s|ed|ing)? (\w+ )?(code|pull requests?|prs?)\b/gi, 'codereview')
     .replace(/\b(this|your) (web ?site|site|web ?page|page)\b/gi, 'this portfolio')
   const raw = getIndex().search(question, 14)
   const terms = raw.terms

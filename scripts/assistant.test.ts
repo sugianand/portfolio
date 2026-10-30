@@ -296,6 +296,14 @@ test('refuses questions outside the data', () => {
   }
 })
 
+// "I review every spot I go to" is about food; no passage covers reviewing code.
+test('does not answer code review questions with the food hobby', () => {
+  for (const q of ['Does he do code reviews?', 'Has he done code review?', 'Does he review pull requests?', 'Has he reviewed PRs?']) {
+    assert.ok(answer(q).snippets.every((s) => s.doc.id !== 'hobbies'), q)
+  }
+  assert.equal(answer('Does he review restaurants?').snippets[0]?.doc.id, 'hobbies')
+})
+
 test('reads "led" as leadership', () => {
   for (const q of ['Has he led a project?', 'Has he ever led anyone?']) {
     assert.match(answer(q).snippets[0]?.doc.id ?? '', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)$/, q)
