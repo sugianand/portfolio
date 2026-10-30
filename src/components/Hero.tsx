@@ -29,7 +29,7 @@ export function Hero() {
     <section className="hero" id="top">
       <div className="hero-meta mono">
         <span><i className="dot" /> Open to AI, backend &amp; full-stack roles</span>
-        <span>{profile.location} · <Clock timeZone={profile.timezone} /></span>
+        <span>{profile.location}<span className="hero-clock"> · <Clock timeZone={profile.timezone} /></span></span>
       </div>
 
       <ParticleName />
