@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { projects } from '../src/data.ts'
-import { gutterRoute, miniTopology, roundedPath, runsAcross, type Box } from '../src/lib/topology.ts'
+import { gutterRoute, miniTopology, roundedPath, runsAcross, softBreaks, type Box } from '../src/lib/topology.ts'
 
 const W = 112
 const H = 36
@@ -71,4 +71,18 @@ test('edges between stacked tiers run down even when the target sits to the righ
   assert.equal(runsAcross(react, renderLayer, true, false), true)
   assert.equal(runsAcross(box(0, 0), box(140, 120), false, true), true)
   assert.equal(runsAcross(box(0, 0), box(0, 80), true, true), false)
+})
+
+test('softBreaks wraps tech labels after slashes and before extensions only', () => {
+  assert.deepEqual(softBreaks('services/scoring.py'), ['services/', 'scoring', '.py'])
+  assert.deepEqual(softBreaks('transformers.js'), ['transformers', '.js'])
+  assert.deepEqual(softBreaks('POST /api/search'), ['POST /', 'api/', 'search'])
+  assert.deepEqual(softBreaks('D1 (SQLite)'), ['D1 (SQLite)'])
+  assert.deepEqual(softBreaks('JavaScript · Vercel'), ['JavaScript · Vercel'])
+})
+
+test('every architecture tech label survives softBreaks unchanged', () => {
+  for (const p of projects) {
+    for (const n of p.architecture?.nodes ?? []) assert.equal(softBreaks(n.tech).join(''), n.tech)
+  }
 })

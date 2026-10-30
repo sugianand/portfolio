@@ -5,6 +5,12 @@ export type MiniNode = { id: string; x: number; y: number; tier: number }
 export type MiniEdge = { key: string; x1: number; y1: number; x2: number; y2: number }
 
 /**
+ * Splits a node's tech label where a narrow box may wrap it: after a slash and before a
+ * file extension, so services/scoring.py and transformers.js never spill out on phones.
+ */
+export const softBreaks = (text: string) => text.replace(/\/|\w(?=\.\w)/g, (m) => `${m}\n`).split('\n')
+
+/**
  * Lays an architecture out as a tiny glyph: one column per tier, nodes spread
  * evenly down each column, edges as straight lines between node centres.
  */

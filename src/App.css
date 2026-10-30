@@ -639,7 +639,8 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   /* Same-tier nodes share a row so siblings never read as a chain. */
   .arch-tier { flex-direction: row; gap: 10px; }
   .arch-node { flex: 1 1 0; min-width: 0; padding: 10px 11px; align-content: start; }
-  .arch-node b, .arch-node span { overflow-wrap: break-word; }
+  /* anywhere, not break-word: only it lets a long word shrink the node's min-content width. */
+  .arch-node b, .arch-node span { overflow-wrap: anywhere; }
   .pv-results li { grid-template-columns: 96px 1fr 28px; font-size: 13px; }
   /* Phones: keep the case study bar on one line, give its buttons thumb-sized
      targets, and tile the metrics two-up instead of one tall column. */

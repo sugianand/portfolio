@@ -1,14 +1,14 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
 import { unlock } from '../lib/store'
-import { gutterRoute, runsAcross } from '../lib/topology'
+import { gutterRoute, runsAcross, softBreaks } from '../lib/topology'
 
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
 
-/** Lets narrow nodes wrap paths like services/scoring.py at the slash. */
-const breakAfterSlash = (text: string) =>
-  text.split('/').flatMap((part, i) => (i === 0 ? [part] : ['/', <wbr key={i} />, part]))
+/** Lets narrow nodes wrap paths like services/scoring.py at the slash and the dot. */
+const withSoftBreaks = (text: string) =>
+  softBreaks(text).flatMap((part, i) => (i === 0 ? [part] : [<wbr key={i} />, part]))
 
 /**
  * A data-driven system diagram. Nodes sit in tiers (columns on wide screens,
@@ -103,7 +103,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
                 aria-pressed={n.id === active}
               >
                 <b>{n.label}</b>
-                <span className="mono">{breakAfterSlash(n.tech)}</span>
+                <span className="mono">{withSoftBreaks(n.tech)}</span>
               </button>
             ))}
           </div>
