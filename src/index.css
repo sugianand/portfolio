@@ -71,6 +71,11 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: auto; }
+/* Keep keyboard focus clear of the fixed Ask launcher (and, on phones, the bottom nav pill)
+   when the browser scrolls a tabbed-to element into view. Top padding stays 0 so #section
+   links still land where they did. */
+html { scroll-padding-bottom: 96px; }
+@media (max-width: 960px) { html { scroll-padding-bottom: 150px; } }
 body { margin: 0; min-width: 320px; background: var(--ink); overflow-x: hidden; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
