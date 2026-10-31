@@ -451,6 +451,8 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .about-lead { font-size: 14pt; }
   .about .stats { margin-top: 12pt; }
   .stats { grid-template-columns: repeat(4, 1fr); }
+  /* Paper is narrow enough to match the phone layout, which drops this divider for its 2×2 grid. */
+  .stat:nth-child(2) { border-right: 1px solid var(--line); }
   .about .stat { padding: 8pt 10pt; border-bottom: 0; }
   .stat strong { font-size: 22pt; }
   .skills { margin-top: 12pt; }
