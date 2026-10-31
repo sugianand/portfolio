@@ -162,6 +162,31 @@ function kindAnswer(kinds: ((d: Doc) => boolean)[]): Snippet[] {
   return out
 }
 
+// Verbs that only say a project exists: "made", "created", "shipped".
+const MADE = new Set(tokenize('made create created shipped'))
+const projectKind = INTENTS[1][1]
+const categories = [...new Set(projects.flatMap((p) => p.categories))]
+
+/**
+ * "What AI projects has he built?" names a project filter from the Projects
+ * section, so answer with the same projects that filter shows, in the same
+ * order, instead of whichever passages repeat "AI" most. Any other topic word
+ * ("Which AI project uses CLIP?") is left to retrieval.
+ */
+function categoryAnswer(question: string): Snippet[] {
+  if (!wantedKinds(question).includes(projectKind)) return []
+  const tokens = tokenize(question)
+  const category = categories.find((c) => tokens.includes(tokenize(c)[0]))
+  if (!category || !tokens.every((t) => INTENT_WORDS.has(t) || MADE.has(t) || t === tokenize(category)[0])) return []
+  return projects
+    .filter((p) => p.categories.includes(category))
+    .slice(0, 4)
+    .flatMap((p) => {
+      const doc = getDocs().find((d) => d.id === `${p.id}-summary`)
+      return doc ? [{ text: doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0], doc, score: 0 }] : []
+    })
+}
+
 // A skill group is one long sentence. "Does he know Java?" asks about one item
 // in it, so quote the group's label and only the items the question names.
 const SKILLS_PREFIX = 'Skills and technologies, '
@@ -194,6 +219,8 @@ export function answer(asked: string): Answer {
   const tokens = tokenize(question)
   const kindOnly = kinds.length > 0 && tokens.every((t) => INTENT_WORDS.has(t)) && !tokens.every((t) => KIND_VERBS.has(t))
   const fallback = kindOnly ? kindAnswer(kinds) : []
+  const filtered = categoryAnswer(question)
+  if (filtered.length) return { snippets: filtered, hits, terms: trace }
   const named = tokens.some((t) => getNames().has(t))
   // Relevance is judged before the rerank: it only reorders passages, so it
   // must not turn an on-topic question into a refusal.

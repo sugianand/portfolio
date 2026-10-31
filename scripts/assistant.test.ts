@@ -6,7 +6,7 @@ import { answer } from '../src/lib/assistant.ts'
 import { stem } from '../src/lib/retrieval.ts'
 
 const cases: [string, RegExp][] = [
-  ['What AI projects has Sugi built?', /^(cinedna|portfolio|looking|11planner)/],
+  ['What AI projects has Sugi built?', /^cinedna-summary$/],
   ['What backend experience does he have?', /^(role-6f1a8e9|skills-backend|cinedna|three-clues|home-cleaning)/],
   ['What technologies does he know?', /^skills-/],
   ['Which project best demonstrates distributed or realtime engineering?', /^three-clues/],
@@ -213,6 +213,17 @@ test('strips -es only after a hissing sound', () => {
 test('lists both games when asked about games', () => {
   const ids = answer('Has he built games?').snippets.map((s) => s.doc.source.kind === 'project' && s.doc.source.id)
   assert.ok(ids.includes('three-clues') && ids.includes('frantic-run'), String(ids))
+})
+
+test('lists the projects a category filter shows for "<category> projects"', () => {
+  const ids = (q: string) => answer(q).snippets.map((s) => s.doc.id).join(' ')
+  for (const q of ['What AI projects has Sugi built?', 'Has he made any AI projects?', 'Show me his AI projects']) {
+    assert.equal(ids(q), 'cinedna-summary portfolio-summary whereabout-summary 11planner-summary', q)
+  }
+  assert.equal(ids('What backend projects has he built?'), 'cinedna-summary three-clues-summary home-cleaning-summary')
+  assert.equal(ids('What realtime projects has he shipped?'), 'three-clues-summary')
+  // Another topic word still goes to retrieval.
+  assert.match(ids('Which AI project uses CLIP?'), /^whereabout-/)
 })
 
 test('quotes abbreviations like M.S. whole', () => {
