@@ -263,6 +263,8 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .pcard-cta { font-weight: 500; }
 .pcard:hover .pcard-cta { text-decoration: underline; text-underline-offset: 4px; }
 .pcard-links { display: flex; gap: 14px; }
+/* Taller hit areas (WCAG 2.5.8) without moving anything: padding grows the target, the negative margin cancels it. */
+.pcard-links a { display: inline-block; padding-block: 4px; margin-block: -4px; }
 .pcard-links a:hover { opacity: .6; }
 .tone-orange.pcard, .tone-orange.detail-hero { background: var(--accent); color: var(--ink); }
 .tone-cream.pcard, .tone-cream.detail-hero { background: var(--cream); color: var(--ink); }
@@ -304,7 +306,7 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .detail-list li::before { content: '→'; position: absolute; left: 14px; top: 12px; color: var(--accent); font-family: var(--mono); }
 .detail-list-alt li::before { content: '!'; color: var(--green); left: 17px; }
 .detail-foot { display: flex; justify-content: space-between; gap: 12px; padding: 18px clamp(20px, 3vw, 36px); border-top: 1px solid var(--line); }
-.detail-foot button { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.detail-foot button { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding-block: 12px; margin-block: -12px; }
 .detail-foot button:hover { color: var(--accent); }
 
 /* ---------- github ---------- */
