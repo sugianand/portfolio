@@ -28,6 +28,14 @@ const cases: [string, RegExp][] = [
   ['Tell me about 11Planner', /^11planner-/],
   ['Does he know React?', /^skills-frontend/],
   ['Has he used Docker?', /^skills-infra/],
+  // A named skill's passage lists every project and job that used it, so it leads
+  // over one project's stack line or a job that "worked" matched without the skill.
+  ['Has he worked with Python?', /^skills-languages$/],
+  ['Has he used Python?', /^skills-languages$/],
+  ['Has he used TypeScript?', /^skills-languages$/],
+  ['Has he used PyTorch?', /^skills-ai_ml$/],
+  ['Has he worked with C#?', /^skills-languages$/],
+  ['Which project uses Python?', /^(cinedna|whereabout|11planner)-/],
   // "CI/CD" must find his GitHub Actions pipelines, not the QA role's "supporting CI".
   ['Does he have CI/CD experience?', /^(portfolio-arch|skills-infra)$/],
   ['Has he set up CI/CD pipelines?', /^(portfolio-arch|skills-infra)$/],

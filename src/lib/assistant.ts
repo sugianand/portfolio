@@ -27,6 +27,7 @@ const getNames = () =>
 // The timeline lists the degree in progress next to the jobs; it is not a job.
 const degrees = profile.education.map((e) => e.degree)
 const isJob = (d: Doc) => d.id.startsWith('role-') && !degrees.some((deg) => d.title.startsWith(deg))
+const isSkill = (d: Doc) => d.id.startsWith('skills-')
 
 // Retrieve-then-rerank: what the question asks for (projects, roles, skills)
 // decides which kind of passage should lead.
@@ -34,7 +35,7 @@ const INTENTS: [RegExp, (d: Doc) => boolean][] = [
   [/^(intern|internship)$/, (d) => isJob(d) && /\bIntern\b/.test(d.title)],
   [/^(project|built|build|demonstrat|show)$/, (d) => d.source.kind === 'project'],
   [/^(experience|jobs?|role|work|worked|company)$/, isJob],
-  [/^(skill|stack|language|know|framework)$/, (d) => d.id.startsWith('skills-')],
+  [/^(skill|stack|language|know|framework)$/, isSkill],
   [/^architecture$/, (d) => d.id.endsWith('-arch')],
 ]
 
@@ -110,6 +111,25 @@ function leadWithSummary(question: string, hits: Hit[]) {
   return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
 }
 
+/**
+ * "Has he worked with Python?" names one skill. Its skills passage says where he
+ * used it, across projects and jobs, so it should lead over a single project's
+ * stack line or a job that "worked" matched but that never mentions the skill.
+ */
+function leadWithSkill(question: string, hits: Hit[]) {
+  const tokens = tokenize(question)
+  const wanted = wantedKinds(question)
+  // "Which project uses Python?" or "CineDNA's stack" asks about something else.
+  if (namedSource(question) || namedProject(question) || wanted.some((m) => m !== isJob && m !== isSkill)) return hits
+  const group = skillGroups.find((g) => g.items.some((i) => {
+    const name = tokenize(i.name)
+    return name.length === 1 && tokens.includes(name[0])
+  }))
+  const i = group ? hits.findIndex((h) => h.doc.id === `skills-${group.key}`) : -1
+  if (i <= 0) return hits
+  return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
+}
+
 // Nouns so common in the data that they match on their own. "Has he built an
 // iOS app?" asks about a kind of app, so when the word before one of these is
 // nowhere in the data, any passage about some other app is the wrong answer.
@@ -167,7 +187,7 @@ export function answer(asked: string): Answer {
     .replace(/\btime-?zones?\b/gi, 'time zone')
   const raw = getIndex().search(question, 14)
   const terms = raw.terms
-  const hits = leadWithSummary(question, rerank(question, raw.hits))
+  const hits = leadWithSkill(question, leadWithSummary(question, rerank(question, raw.hits)))
   const trace = [...terms.entries()]
   const kinds = wantedKinds(question)
   // "What does he build?" asks what he does, so verbs alone don't make a kind-only question.
