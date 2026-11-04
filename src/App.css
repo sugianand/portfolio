@@ -730,8 +730,10 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .rv-actions { gap: 4pt 16pt; }
   .rv-actions .chip { padding: 0; border: 0; background: none; font-size: 10pt; color: #111; }
   .rv-actions a.chip[href^="http"]::after { content: ' ' attr(href); color: var(--muted); }
-  .rv-grid { grid-template-columns: 1fr 1fr; }
-  .rv-grid section { background: #fff; padding: 8pt 10pt; gap: 4pt; break-inside: avoid; }
+  /* The on-screen dividers are the grid's background showing through 1px gaps, and backgrounds
+     don't print, so paper draws them as borders: top/left on the grid, right/bottom per section. */
+  .rv-grid { grid-template-columns: 1fr 1fr; gap: 0; background: none; border-width: 1px 0 0 1px; }
+  .rv-grid section { background: #fff; padding: 8pt 10pt; gap: 4pt; break-inside: avoid; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .rv-grid h3 { font-size: 9pt; }
   .rv-grid p, .rv-roles b, .rv-stack dd { font-size: 10pt; color: #111; }
   .rv-strong { font-size: 11pt !important; color: #111 !important; }
