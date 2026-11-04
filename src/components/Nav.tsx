@@ -40,9 +40,10 @@ export function Nav({ items, extra }: { items: NavItem[]; extra?: ReactNode }) {
             key={item.id}
             href={`#${item.id}`}
             className={active === item.id ? 'active' : ''}
+            aria-current={active === item.id ? 'location' : undefined}
             onClick={(e) => { e.preventDefault(); scrollToId(item.id) }}
           >
-            <span>0{i + 1}</span><b className="nav-full">{item.label}</b><b className="nav-short">{item.short ?? item.label}</b>
+            <span aria-hidden="true">0{i + 1}</span><b className="nav-full">{item.label}</b><b className="nav-short">{item.short ?? item.label}</b>
           </a>
         ))}
       </nav>
