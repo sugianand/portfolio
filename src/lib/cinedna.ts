@@ -216,7 +216,14 @@ export function scoreMovie(movie: Movie, intent: Intent) {
   return Math.round(Math.max(0, Math.min(1, score)) * 1000) / 10
 }
 
-export function matchReason(movie: Movie, intent: Intent) {
+// Targets at or below this come from "without X" / "not too much X" (10) or a
+// reference film that barely has X, so "low X" is what the fit actually means.
+const LOW_TARGET = 20
+
+// `readable` is for the demo UI: the default wording matches the Python
+// original exactly (the parity test checks it), but there "strong fit for
+// romance" can follow "without romance". Readable mode says "low romance".
+export function matchReason(movie: Movie, intent: Intent, readable = false) {
   const reasons: string[] = []
   const own = new Set([...movie.themes, ...movie.genres].map((x) => x.toLowerCase()))
   const themes = intent.includeThemes.filter((t) => own.has(t.toLowerCase()))
@@ -224,7 +231,7 @@ export function matchReason(movie: Movie, intent: Intent) {
   const dims = Object.keys(intent.target) as Dimension[]
   if (dims.length) {
     const closest = [...dims].sort((a, b) => Math.abs(movie.dimensions[a] - intent.target[a]!) - Math.abs(movie.dimensions[b] - intent.target[b]!)).slice(0, 2)
-    reasons.push(`strong fit for ${closest.map((n) => n.replace(/_/g, ' ')).join(' and ')}`)
+    reasons.push(`strong fit for ${closest.map((n) => `${readable && intent.target[n]! <= LOW_TARGET ? 'low ' : ''}${n.replace(/_/g, ' ')}`).join(' and ')}`)
   }
   if (intent.preferredCountries.includes(movie.country)) reasons.push(`fits your ${movie.country} preference`)
   return reasons.join('; ') || 'overall Movie DNA similarity'

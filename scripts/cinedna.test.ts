@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
-import { search } from '../src/lib/cinedna.ts'
+import { matchReason, search } from '../src/lib/cinedna.ts'
 
 type Fixture = {
   query: string
@@ -29,3 +29,15 @@ for (const f of fixtures) {
     })
   })
 }
+
+test('readable reasons say "low" for negated dimensions, never "strong fit for romance" after "without romance"', () => {
+  const { intent, results } = search('slow burn dark mystery without romance')
+  const reasons = results.map((r) => matchReason(r.movie, intent, true))
+  assert.equal(reasons[1], 'matches mystery; strong fit for low romance and darkness')
+  for (const why of reasons) assert.doesNotMatch(why, /(?<!low )romance/)
+  const action = search('mind-bending sci-fi, not too much action')
+  for (const r of action.results) assert.match(matchReason(r.movie, action.intent, true), /low action/)
+  // Dimensions the user asked for stay unprefixed.
+  const twisty = search('not slow, very twisty thriller')
+  assert.equal(matchReason(twisty.results[0].movie, twisty.intent, true), twisty.results[0].why)
+})

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { search, type Dimension } from '../lib/cinedna'
+import { matchReason, search, type Dimension } from '../lib/cinedna'
 import { unlock } from '../lib/store'
 
 const EXAMPLES = [
@@ -55,7 +55,7 @@ export function CineDNADemo() {
               <span className="demo-rank mono">{i + 1}</span>
               <div>
                 <strong>{r.movie.title} <small>{r.movie.year} · {r.movie.country}</small></strong>
-                <span>{r.why}</span>
+                <span>{matchReason(r.movie, intent, true)}</span>
               </div>
               <em className="mono">{r.score.toFixed(1)}</em>
             </li>
