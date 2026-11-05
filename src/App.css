@@ -652,6 +652,10 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .pv-results li { grid-template-columns: 96px 1fr 28px; font-size: 13px; }
   /* Phones: keep the case study bar on one line, give its buttons thumb-sized
      targets, and tile the metrics two-up instead of one tall column. */
+  /* Phones: the case study fills the screen instead of floating in dimmed gutters,
+     so the diagram and copy get the full width. */
+  .detail { padding: 0; }
+  .detail-sheet { min-height: 100%; border: 0; }
   .detail-bar { gap: 10px; letter-spacing: .04em; }
   .detail-count { white-space: nowrap; }
   .detail-nav button { min-width: 36px; min-height: 36px; padding: 6px; }
