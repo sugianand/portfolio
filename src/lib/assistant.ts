@@ -210,6 +210,8 @@ export function answer(asked: string): Answer {
     .replace(/\b(this|your) (web ?site|site|web ?page|page)\b/gi, 'this portfolio')
     // The profile says "time zone"; "timezone" alone would match nothing.
     .replace(/\btime-?zones?\b/gi, 'time zone')
+    // "The assistant" or "this chatbot" is the site's BM25 assistant, not his Student Assistant job.
+    .replace(/\b(?:(?:the|this|your|that|site'?s|portfolio'?s?|retrieval|rag|bm25|ai)\s+(?:ai\s+)?(?:assistant|chat ?bot|bot)|chat ?bot|ask about sugi(?:\s+(?:assistant|chat ?bot|bot))?)\b/gi, 'BM25 browser assistant')
   const raw = getIndex().search(question, 14)
   const terms = raw.terms
   const hits = leadWithSkill(question, leadWithSummary(question, rerank(question, raw.hits)))

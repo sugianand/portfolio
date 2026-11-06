@@ -345,6 +345,18 @@ test('does not answer code review questions with the food hobby', () => {
   assert.equal(answer('Does he review restaurants?').snippets[0]?.doc.id, 'hobbies')
 })
 
+// "The assistant" is this site's BM25 assistant; his "Student Assistant" job title must not win.
+test('answers questions about the site assistant from its architecture', () => {
+  for (const q of ['How does the assistant work?', 'Tell me about the assistant', 'How does the chatbot work?', 'What is the Ask about Sugi assistant?', 'What does the AI assistant run on?']) {
+    const lead = answer(q).snippets[0]
+    assert.equal(lead?.doc.id, 'portfolio-arch', q)
+    assert.match(lead.text, /BM25 in the browser/, q)
+  }
+  for (const q of ['Was he a student assistant?', 'What did he do as a student assistant?', 'Has he worked as an assistant?']) {
+    assert.equal(answer(q).snippets[0]?.doc.id, 'role-9b2f6a4', q)
+  }
+})
+
 test('reads "led" as leadership', () => {
   for (const q of ['Has he led a project?', 'Has he ever led anyone?']) {
     assert.match(answer(q).snippets[0]?.doc.id ?? '', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)$/, q)
