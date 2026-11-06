@@ -188,6 +188,12 @@ const cases: [string, RegExp][] = [
   ["What is Whereabout's accuracy?", /^whereabout-metrics$/],
   ['How accurate is CineDNA?', /^cinedna-/],
   ['What did he do at Accurate?', /^role-7c3d2b8$/],
+  // A question that names one employer is about that job, whatever the verb; "test"
+  // used to put the generic testing-skills passage first.
+  ['What did he test at Accurate Technologies?', /^role-7c3d2b8$/],
+  ['What did he automate at Accurate Technologies?', /^role-7c3d2b8$/],
+  ['What did he teach at Rocket Companies?', /^role-2d7e5c1$/],
+  ['What tools did he use at NeverEnding?', /^role-6f1a8e9$/],
   ['Where did he study at Wayne State?', /^education$/],
 ]
 

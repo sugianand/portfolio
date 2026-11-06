@@ -80,7 +80,13 @@ function rerank(question: string, hits: Hit[]) {
   if (!wanted.length) {
     // Only a project: "Wayne State" names jobs, but the education passage answers too.
     const own = named ? hits.filter((h) => h.doc.source.kind === 'project' && named(h.doc)) : []
-    return own.length ? own : hits
+    if (own.length) return own
+    // One employer: "What did he test at Accurate Technologies?" is about that job, not
+    // every testing passage. A name shared by several jobs (Wayne State) leaves the order.
+    const jobs = named ? getDocs().filter((d) => isJob(d) && named(d)) : []
+    const i = jobs.length === 1 ? hits.findIndex((h) => h.doc === jobs[0]) : -1
+    if (i <= 0) return hits
+    return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
   }
   const kinds = INTENTS.map(([, match]) => match)
   const others = named ? kinds : kinds.filter((m) => !wanted.includes(m))
