@@ -136,6 +136,8 @@ export function tokenize(text: string) {
     // and "LLM APIs" ask about LLMs, not about building APIs.
     .replace(/\bllms? apis?\b/g, 'llms')
     .replace(/\bapis\b/g, 'api')
+    // "Node.js" is never named in the data; his Node work is the Express API he built.
+    .replace(/\bnode(\.?\s?js)?\b/g, 'node express')
     // "Cloud services" asks about cloud, not about a file like services/ai.py.
     .replace(/\bcloud (services?|platforms?|providers?|computing)\b/g, 'cloud')
     // "CI/CD" splits into a bare "ci", which only the QA role's "supporting CI" outweighs;

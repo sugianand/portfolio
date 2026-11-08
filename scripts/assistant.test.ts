@@ -36,6 +36,11 @@ const cases: [string, RegExp][] = [
   ['Has he used PyTorch?', /^skills-ai_ml$/],
   ['Has he worked with C#?', /^skills-languages$/],
   ['Which project uses Python?', /^(cinedna|whereabout|11planner)-/],
+  // The data never says "Node.js"; his Node work is the Express API on Home Cleaning.
+  ['Has he used Node.js?', /^skills-backend$/],
+  ['Does he know Node?', /^skills-backend$/],
+  ['Does he have NodeJS experience?', /^skills-backend$/],
+  ['Has he built a Node backend?', /^home-cleaning-/],
   // "CI/CD" must find his GitHub Actions pipelines, not the QA role's "supporting CI".
   ['Does he have CI/CD experience?', /^(portfolio-arch|skills-infra)$/],
   ['Has he set up CI/CD pipelines?', /^(portfolio-arch|skills-infra)$/],
