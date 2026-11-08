@@ -12,6 +12,20 @@ export type MiniEdge = { key: string; x1: number; y1: number; x2: number; y2: nu
 export const softBreaks = (text: string) => text.replace(/\/|(?<=\w{8})(?=\.\w)/g, (m) => `${m}\n`).split('\n')
 
 /**
+ * Tiers that hold an edge between two of their own nodes. Those siblings need a
+ * wider gap, or the arrowhead covers the whole line and the step disappears.
+ */
+export function chainedTiers(arch: Arch) {
+  const tierOf = new Map(arch.nodes.map((n) => [n.id, n.tier]))
+  const tiers = new Set<number>()
+  for (const [from, to] of arch.edges) {
+    const t = tierOf.get(from)
+    if (t !== undefined && t === tierOf.get(to)) tiers.add(t)
+  }
+  return tiers
+}
+
+/**
  * Lays an architecture out as a tiny glyph: one column per tier, nodes spread
  * evenly down each column, edges as straight lines between node centres.
  */

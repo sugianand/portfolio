@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { projects } from '../src/data.ts'
-import { gutterRoute, miniTopology, roundedPath, runsAcross, softBreaks, type Box } from '../src/lib/topology.ts'
+import { chainedTiers, gutterRoute, miniTopology, roundedPath, runsAcross, softBreaks, type Box } from '../src/lib/topology.ts'
 
 const W = 112
 const H = 36
@@ -86,4 +86,15 @@ test('every architecture tech label survives softBreaks unchanged', () => {
   for (const p of projects) {
     for (const n of p.architecture?.nodes ?? []) assert.equal(softBreaks(n.tech).join(''), n.tech)
   }
+})
+
+test('chainedTiers finds only tiers with an edge between their own nodes', () => {
+  const node = (id: string, tier: number) => ({ id, label: id, tech: '', detail: '', tier })
+  const arch = { nodes: [node('a', 0), node('b', 1), node('c', 1), node('d', 2), node('e', 2)], edges: [['a', 'b'], ['b', 'c'], ['c', 'd'], ['c', 'e'], ['d', 'missing']] as [string, string][] }
+  assert.deepEqual([...chainedTiers(arch)], [1])
+})
+
+test('CineDNA widens the tier where the intent parser feeds the ranking engine', () => {
+  const cine = projects.find((p) => p.id === 'cinedna')!.architecture!
+  assert.deepEqual([...chainedTiers(cine)], [2])
 })

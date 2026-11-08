@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
 import { unlock } from '../lib/store'
-import { gutterRoute, runsAcross, softBreaks } from '../lib/topology'
+import { chainedTiers, gutterRoute, runsAcross, softBreaks } from '../lib/topology'
 
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
@@ -24,6 +24,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
 
   const tiers = Math.max(...arch.nodes.map((n) => n.tier)) + 1
   const columns = Array.from({ length: tiers }, (_, t) => arch.nodes.filter((n) => n.tier === t))
+  const chained = chainedTiers(arch)
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current
@@ -90,7 +91,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
           })}
         </svg>
         {columns.map((col, t) => (
-          <div className="arch-tier" key={t}>
+          <div className={`arch-tier${chained.has(t) ? ' chained' : ''}`} key={t}>
             {col.map((n) => (
               <button
                 key={n.id}
