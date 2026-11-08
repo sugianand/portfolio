@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { on, unlock } from '../lib/store'
+import { typeAhead } from '../lib/typeAhead'
 import type { Turn } from './AssistantPanel'
 
 // The retrieval engine and knowledge base load only when the panel opens.
@@ -21,6 +22,9 @@ export function Assistant() {
   const close = useCallback(() => setOpen(false), [])
   const launchRef = useRef<HTMLButtonElement>(null)
   const wasOpen = useRef(false)
+  // What someone types before the panel's chunk arrives; the panel starts with it in its input.
+  const draft = useRef('')
+  const takeDraft = useCallback(() => draft.current, [])
 
   useEffect(() => on('assistant', () => setOpen(true)), [])
 
@@ -34,8 +38,22 @@ export function Assistant() {
     if (!open) return
     prefetch()
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    // Capture phase, so keys typed while the panel loads reach the draft, not the one-key shortcuts.
+    const onType = (e: KeyboardEvent) => {
+      if (document.getElementById('ask-input')) return
+      const next = typeAhead(draft.current, e)
+      if (next === null) return
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      draft.current = next
+    }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onType, true)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('keydown', onType, true)
+      draft.current = ''
+    }
   }, [open])
 
   const ask = async (q: string) => {
@@ -53,7 +71,7 @@ export function Assistant() {
       <button ref={launchRef} type="button" className={`ask-launch ${open ? 'hidden-launch' : ''}`} onClick={() => setOpen(true)} onPointerEnter={prefetch} onFocus={prefetch} aria-expanded={open} aria-controls="ask-panel">
         <span aria-hidden="true">✦</span> <b>Ask about Sugi</b>
       </button>
-      {open && <Suspense fallback={null}><AssistantPanel turns={turns} busy={busy} onAsk={ask} onClose={close} /></Suspense>}
+      {open && <Suspense fallback={null}><AssistantPanel draft={takeDraft} turns={turns} busy={busy} onAsk={ask} onClose={close} /></Suspense>}
     </>
   )
 }

@@ -20,11 +20,11 @@ function sourceLabel(src: Source, title: string) {
   return 'Link'
 }
 
-type Props = { turns: Turn[]; busy: boolean; onAsk: (q: string) => void; onClose: () => void }
+type Props = { draft: () => string; turns: Turn[]; busy: boolean; onAsk: (q: string) => void; onClose: () => void }
 
 /** The open assistant. Mounted only while open, so it loads as its own chunk on first use. */
-export function AssistantPanel({ turns, busy, onAsk: ask, onClose }: Props) {
-  const [input, setInput] = useState('')
+export function AssistantPanel({ draft, turns, busy, onAsk: ask, onClose }: Props) {
+  const [input, setInput] = useState(draft)
   const inputRef = useRef<HTMLInputElement>(null)
   const logRef = useRef<HTMLDivElement>(null)
 
