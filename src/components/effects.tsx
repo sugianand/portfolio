@@ -78,7 +78,8 @@ export function CountUp({ value, decimals = 0, suffix = '' }: { value: number; d
   return (
     <span ref={ref} className="count">
       <span className="sr-only">{value.toFixed(decimals)}{suffix}</span>
-      <span aria-hidden="true">{current.toFixed(decimals)}{suffix}</span>
+      {/* The unit sits smaller beside the number so a value like "800 ms" stays on one line. */}
+      <span aria-hidden="true">{current.toFixed(decimals)}{suffix.trim() && <small className="count-unit">{suffix.trim()}</small>}</span>
     </span>
   )
 }

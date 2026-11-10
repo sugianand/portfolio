@@ -81,6 +81,8 @@ main:focus { outline: none; }
 .stat { padding: 40px var(--gutter); border-right: 1px solid var(--line); display: grid; gap: 10px; }
 .stat:last-child { border-right: 0; }
 .stat strong { font-size: clamp(40px, 5vw, 76px); font-weight: 700; letter-spacing: -.06em; line-height: 1; }
+.stat .count { white-space: nowrap; }
+.count-unit { font-size: .42em; font-weight: 600; letter-spacing: 0; margin-left: .2em; }
 .stat > span { font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
 
 /* ---------- project art ---------- */
