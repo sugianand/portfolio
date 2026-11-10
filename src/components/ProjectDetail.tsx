@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, type ReactNode } from 'react'
 import { projects, type Project } from '../data'
 import { ArchDiagram } from './ArchDiagram'
 import { CineDNADemo } from './CineDNADemo'
@@ -35,20 +35,36 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
   const index = projects.indexOf(project)
   const sheetRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
+  // A layout effect, so the opener is captured before the refocus below runs.
+  useLayoutEffect(() => {
     unlock('casestudy')
     const previous = document.activeElement as HTMLElement | null
     sheetRef.current?.focus({ preventScroll: true })
     return () => previous?.focus({ preventScroll: true })
   }, [])
 
+  // The sheet remounts per project, which would drop focus to <body>. Keep it on the
+  // header arrow that was used, or else put it on the new sheet.
+  const navFrom = useRef<string | null>(null)
+  const go = useCallback((dir: 1 | -1) => {
+    navFrom.current = (document.activeElement as HTMLElement | null)?.dataset.nav ?? null
+    onNav(dir)
+  }, [onNav])
+  useLayoutEffect(() => {
+    const sheet = sheetRef.current
+    if (!sheet || sheet.contains(document.activeElement)) return
+    const target = navFrom.current ? sheet.querySelector<HTMLElement>(`[data-nav="${navFrom.current}"]`) : null
+    navFrom.current = null
+    ;(target ?? sheet).focus({ preventScroll: true })
+  }, [project.id])
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       trapTab(e, sheetRef.current)
       if ((e.target as HTMLElement).closest('input, textarea')) return
       if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowRight') onNav(1)
-      if (e.key === 'ArrowLeft') onNav(-1)
+      if (e.key === 'ArrowRight') go(1)
+      if (e.key === 'ArrowLeft') go(-1)
     }
     window.addEventListener('keydown', onKey)
     document.documentElement.style.overflow = 'hidden'
@@ -56,7 +72,7 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
       window.removeEventListener('keydown', onKey)
       document.documentElement.style.overflow = ''
     }
-  }, [onClose, onNav])
+  }, [onClose, go])
 
   return (
     <div className="detail" role="dialog" aria-modal="true" aria-label={`${project.title} case study`} onClick={onClose}>
@@ -65,8 +81,8 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
           <div className="detail-bar mono">
             <span>Case study <span className="detail-count">{String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span></span>
             <span className="detail-nav">
-              <button type="button" onClick={() => onNav(-1)} aria-label="Previous project">←</button>
-              <button type="button" onClick={() => onNav(1)} aria-label="Next project">→</button>
+              <button type="button" onClick={() => go(-1)} aria-label="Previous project" data-nav="prev">←</button>
+              <button type="button" onClick={() => go(1)} aria-label="Next project" data-nav="next">→</button>
               <button type="button" onClick={onClose} aria-label="Esc, close case study"><span className="detail-esc">esc </span>✕</button>
             </span>
           </div>
@@ -101,8 +117,8 @@ export function ProjectDetail({ project, onClose, onNav }: { project: Project; o
         </div>
 
         <footer className="detail-foot">
-          <button type="button" onClick={() => onNav(-1)} className="mono">← {projects[(index - 1 + projects.length) % projects.length].title}</button>
-          <button type="button" onClick={() => onNav(1)} className="mono">{projects[(index + 1) % projects.length].title} →</button>
+          <button type="button" onClick={() => go(-1)} className="mono">← {projects[(index - 1 + projects.length) % projects.length].title}</button>
+          <button type="button" onClick={() => go(1)} className="mono">{projects[(index + 1) % projects.length].title} →</button>
         </footer>
       </article>
     </div>
