@@ -257,11 +257,13 @@ export class Index {
  * Picks the sentences of a passage that share the most terms with the query.
  * Returns an empty string when no sentence matches, so callers can drop it.
  */
+// Split only at a period followed by a capital, so "Next.js" or "data.ts" stay intact.
+// Abbreviations like "M.S." or "B.S." do not end a sentence either.
+export const sentences = (text: string) =>
+  text.split(/(?<=[.!?])(?<!\b[A-Z]\.[A-Z]\.)\s+(?=[A-Z0-9"(])/).map((s) => s.trim()).filter(Boolean)
+
 export function extract(text: string, terms: Map<string, number>, max = 2) {
-  // Split only at a period followed by a capital, so "Next.js" or "data.ts" stay intact.
-  // Abbreviations like "M.S." or "B.S." do not end a sentence either.
-  const sentences = text.split(/(?<=[.!?])(?<!\b[A-Z]\.[A-Z]\.)\s+(?=[A-Z0-9"(])/).map((s) => s.trim()).filter(Boolean)
-  const scored = sentences.map((s, i) => {
+  const scored = sentences(text).map((s, i) => {
     const toks = new Set(tokenize(s))
     let score = 0
     terms.forEach((w, t) => { if (toks.has(t)) score += w })

@@ -392,3 +392,25 @@ test('answers team size with the contributor count, not the Movies hobby', () =>
     assert.match(lead.text, /three contributors/, q)
   }
 })
+
+// Only the title line repeats the employer's name, so a question that names one
+// employer and nothing else must still quote what he did there.
+test('answers "what did he do at" one employer with the work, not just the title', () => {
+  const asked: [string, string, RegExp][] = [
+    ['What did he do at NeverEnding?', 'role-6f1a8e9', /Django and DRF backends/],
+    ['What was his role at NeverEnding?', 'role-6f1a8e9', /Django and DRF backends/],
+    ['Tell me about his NeverEnding internship', 'role-6f1a8e9', /Django and DRF backends/],
+    ['What did he do at Mathnasium?', 'role-0c4b7f2', /algebra, calculus, and geometry/],
+    ['What did he do at Rocket Companies?', 'role-2d7e5c1', /platformer game/],
+  ]
+  for (const [q, id, work] of asked) {
+    const lead = answer(q).snippets[0]
+    assert.equal(lead?.doc.id, id, q)
+    assert.match(lead.text, /^\S.* at .*\(.*\)\. /, q)
+    assert.match(lead.text, work, q)
+  }
+  // A topic beyond the name still quotes only the matching lines.
+  const java = answer('Did he use Java at NeverEnding?').snippets[0]
+  assert.equal(java?.doc.id, 'role-6f1a8e9')
+  assert.doesNotMatch(java.text, /Django/)
+})

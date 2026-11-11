@@ -1,6 +1,6 @@
 import { profile, projects, roles, skillGroups } from '../data.ts'
 import { buildKnowledge } from './knowledge.ts'
-import { expand, extract, Index, tokenize, type Doc, type Hit } from './retrieval.ts'
+import { expand, extract, Index, sentences, tokenize, type Doc, type Hit } from './retrieval.ts'
 
 export type Snippet = { text: string; doc: Doc; score: number }
 export type Answer = { snippets: Snippet[]; hits: Hit[]; terms: [string, number][] }
@@ -198,6 +198,22 @@ function categoryAnswer(question: string): Snippet[] {
     })
 }
 
+/**
+ * "What did he do at NeverEnding?" names one employer and nothing else. Only the
+ * job's title line repeats the name, so quoting matches alone would drop what he
+ * did there; the job is the whole answer.
+ */
+function wholeJob(tokens: string[]) {
+  const subject = tokens.filter((t) => !INTENT_WORDS.has(t))
+  if (!subject.length) return undefined
+  const jobs = roles.filter((r) => {
+    const name = tokenize(r.org).filter((t) => !GENERIC.has(t) && !INTENT_WORDS.has(t))
+    return subject.every((t) => name.includes(t)) && subject.length * 2 > name.length
+  })
+  const docs = jobs.flatMap((r) => getDocs().filter((d) => d.id === `role-${r.hash}` && isJob(d)))
+  return docs.length === 1 ? docs[0] : undefined
+}
+
 // A skill group is one long sentence. "Does he know Java?" asks about one item
 // in it, so quote the group's label and only the items the question names.
 const SKILLS_PREFIX = 'Skills and technologies, '
@@ -273,7 +289,9 @@ export function answer(asked: string): Answer {
   const titled = (d: Doc) => tokenize(d.title).some((t) => topical.has(t))
   // Within a named source the kind words are the topic: "CineDNA's stack" quotes its stack.
   const source = namedSource(question)
-  let snippets = collect((h) => extract(h.doc.text, source?.(h.doc) ? terms : topical, 2))
+  const job = wholeJob(tokens)
+  // The title line, then the first two things he did there.
+  let snippets = collect((h) => (h.doc === job ? sentences(h.doc.text).slice(0, 3).join(' ') : extract(h.doc.text, source?.(h.doc) ? terms : topical, 2)))
   if (!snippets.length) {
     snippets = collect((h) => (kinds.some((m) => m(h.doc)) || titled(h.doc) ? extract(h.doc.text, terms, 2) || h.doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] : ''))
   }
