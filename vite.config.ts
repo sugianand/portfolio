@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { execSync } from 'node:child_process'
 import { defineConfig } from 'vite'
+import { commitCount } from './src/lib/build.ts'
 
 const git = (command: string, fallback: string) => {
   try {
@@ -12,7 +13,7 @@ const git = (command: string, fallback: string) => {
 
 const build = {
   hash: git('rev-parse --short HEAD', 'dev'),
-  count: Number(git('rev-list --count HEAD', '0')),
+  count: commitCount(git('rev-list --count HEAD', '0'), git('rev-parse --is-shallow-repository', 'true')),
   message: git('log -1 --format=%s', 'local build'),
   date: new Date().toISOString(),
 }

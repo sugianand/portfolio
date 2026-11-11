@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { profile, roles } from '../data'
 import { copyEmail, emit, unlock } from '../lib/store'
 import { useInView } from '../lib/useInView'
+import { buildLabel } from '../lib/build'
 import { Clock, Reveal, Scramble } from './effects'
 
 export function Marquee({ words, reverse = false }: { words: string[]; reverse?: boolean }) {
@@ -115,7 +116,7 @@ export function Footer() {
       <span>© 2026 {profile.name}</span>
       <span>Detroit <Clock timeZone={profile.timezone} /></span>
       <a href={`${profile.source}/commit/${__BUILD__.hash}`} target="_blank" rel="noreferrer" title={__BUILD__.message}>
-        build {__BUILD__.hash} · commit #{__BUILD__.count} · {built.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        {buildLabel(__BUILD__, built.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }))}
       </a>
       <a href={profile.source} target="_blank" rel="noreferrer">View source ↗</a>
     </footer>
