@@ -9,6 +9,8 @@ h2 em, h1 em, h3 em { font-style: normal; color: var(--accent); }
 .section-note { max-width: 440px; color: var(--soft); font-size: 17px; line-height: 1.55; font-family: var(--sans); }
 .reveal { opacity: 0; transform: translateY(32px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
 .reveal.is-in { opacity: 1; transform: none; }
+/* Tab can land in a section that is still fading in; show it at once so focus is never on invisible content. */
+.reveal:focus-within { opacity: 1; transform: none; transition: none; }
 .scramble { white-space: pre-wrap; }
 .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); animation: blink 1.6s infinite; }
 @keyframes blink { 50% { opacity: .3; } }
