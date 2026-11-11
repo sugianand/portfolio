@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { search } from '../lib/cinedna'
+import { PREVIEW_QUESTIONS, retrievalTrace } from '../lib/retrievalTrace'
 import { useInView } from '../lib/useInView'
 
 const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -76,33 +77,30 @@ function CluesPreview() {
   )
 }
 
-const TERM = [
-  ['> What AI projects has Sugi built?', 'CineDNA ranks films across 14 weighted DNA dimensions… [1]'],
-  ['> Which project shows realtime work?', 'Movie in Three Clues: a server-owned clock and versioned writes… [2]'],
-]
-
-// The first exchange is always on screen, so the card never opens on an empty
-// terminal; the second question types out, holds, and loops.
+// The site's own assistant, run live: a question types out, then its real BM25
+// query terms and top three sources appear, as in the assistant's retrieval trace.
 function PortfolioPreview() {
-  const [ref, tick] = useTicker(160)
-  const [[firstCmd, firstOut], [cmd, out]] = TERM
-  const step = reduceMotion() ? 999 : tick % 64
-  const typed = Math.min(cmd.length, step)
+  const [ref, tick] = useTicker(140)
+  const cycle = 46
+  const query = PREVIEW_QUESTIONS[Math.floor(tick / cycle) % PREVIEW_QUESTIONS.length]
+  const step = tick % cycle
+  const typed = reduceMotion() ? query : query.slice(0, Math.min(query.length, step * 2))
+  const done = typed.length === query.length
+  const { terms, rows } = useMemo(() => retrievalTrace(query), [query])
   return (
     <div ref={ref}>
-      <Browser url="sugianand.vercel.app">
-        <div className="pv-term mono">
-          <p>
-            <span className="pv-prompt">{firstCmd}</span>
-            <span className="pv-out">{firstOut}</span>
-          </p>
-          {typed > 0 && (
-            <p>
-              <span className="pv-prompt">{cmd.slice(0, typed)}</span>
-              {typed === cmd.length && step > cmd.length + 1 && <span className="pv-out">{out}</span>}
-            </p>
-          )}
-        </div>
+      <Browser url="sugianand.vercel.app · ask">
+        <div className="pv-search mono">{typed}<i className={done ? '' : 'caret'} /></div>
+        <div className={`pv-terms mono ${done ? 'in' : ''}`}>{terms.map((t) => <span key={t}>{t}</span>)}</div>
+        <ul className="pv-results pv-sources">
+          {rows.map((r, i) => (
+            <li key={r.label} className={done ? 'in' : ''} style={{ transitionDelay: `${i * 90}ms` }}>
+              <b>{r.label}</b>
+              <i><em style={{ width: `${r.width}%` }} /></i>
+              <span className="mono">{r.score.toFixed(1)}</span>
+            </li>
+          ))}
+        </ul>
       </Browser>
     </div>
   )

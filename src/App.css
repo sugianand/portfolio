@@ -576,10 +576,11 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .pv-clues p.in { opacity: 1; }
 .pv-answer { font-size: 14px; letter-spacing: .1em; color: var(--muted); padding-top: 4px; }
 .pv-answer.solved { color: var(--green); letter-spacing: 0; }
-.pv-term { font-size: 13.5px; line-height: 1.7; display: grid; gap: 8px; }
-.pv-term p { display: grid; }
-.pv-prompt { color: var(--green); }
-.pv-out { color: #d8d3c8; }
+.pv-terms { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; min-height: 26px; opacity: .22; transition: opacity .4s; }
+.pv-terms.in { opacity: 1; }
+.pv-terms span { font-size: 12px; color: var(--green); border: 1px solid #2f3a30; border-radius: 4px; padding: 3px 7px; }
+.pv-sources li { grid-template-columns: minmax(0, 1.3fr) 1fr 36px; }
+.pv-sources b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ---------- architecture diagram ---------- */
 .arch { border: 1px solid var(--line); background: var(--ink); }
@@ -657,6 +658,7 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   /* anywhere, not break-word: only it lets a long word shrink the node's min-content width. */
   .arch-node b, .arch-node span { overflow-wrap: anywhere; }
   .pv-results li { grid-template-columns: 96px 1fr 28px; font-size: 13px; }
+  .pv-sources li { grid-template-columns: minmax(0, 2fr) 1fr 32px; }
   /* Phones: keep the case study bar on one line, give its buttons thumb-sized
      targets, and tile the metrics two-up instead of one tall column. */
   /* Phones: the case study fills the screen instead of floating in dimmed gutters,
