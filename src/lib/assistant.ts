@@ -214,6 +214,11 @@ export function answer(asked: string): Answer {
     .replace(/\bgo(lang)?\b/gi, 'golang')
     .replace(/\b(code|pull requests?|prs?) reviews?\b|\breview(s|ed|ing)? (\w+ )?(code|pull requests?|prs?)\b/gi, 'codereview')
     .replace(/\b(this|your) (web ?site|site|web ?page|page)\b/gi, 'this portfolio')
+    // "Has he worked with RAG?" asks whether he used it, like "has he used RAG?": a bare
+    // "work" ranks his jobs, and RAG's "assistant" his Student Assistant job. Teams keep
+    // their own rewrite, and "what projects has he worked on?" asks for the projects.
+    .replace(/\bwork(ed|s|ing)? (with|on|using) (?!(a |the )?teams?\b)(?=[a-z0-9#])/gi, 'used ')
+    .replace(/\b(projects?\b.*)\bwork(ed|s|ing)? on\W*$/i, '$1')
     // The profile says "time zone"; "timezone" alone would match nothing.
     .replace(/\btime-?zones?\b/gi, 'time zone')
     // "The assistant" or "this chatbot" is the site's BM25 assistant, not his Student Assistant job.

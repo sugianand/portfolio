@@ -66,6 +66,12 @@ const cases: [string, RegExp][] = [
   ['Does he know machine learning?', /^skills-ai_ml/],
   ['How many years of experience does he have?', /^role-/],
   ['What is his experience with RAG?', /^portfolio-/],
+  // "Worked with X" asks if he used X: a bare "work" must not rank his jobs, and
+  // RAG's "assistant" expansion must not reach his Student Assistant job.
+  ['Has he worked with RAG?', /^portfolio-/],
+  ['Has he worked with embeddings?', /^whereabout-/],
+  ['Has he worked on recommendation systems?', /^(profile|skills-ai_ml|cinedna)/],
+  ['What projects has he worked on?', /^cinedna-summary$/],
   ['How does the portfolio assistant work?', /^portfolio-/],
   ['Has he deployed anything to production?', /^(home-cleaning|11planner|portfolio|cinedna)-/],
   // "Hosted" asks about deployment, not Three Clues' game host.
