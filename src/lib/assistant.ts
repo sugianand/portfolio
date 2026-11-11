@@ -44,6 +44,8 @@ const INTENT_WORDS = new Set(['project', 'built', 'build', 'demonstrat', 'show',
 
 const KIND_VERBS = new Set(['build', 'demonstrat', 'show', 'know'])
 
+const internKind = INTENTS[0][1]
+
 const wantedKinds = (question: string) => {
   const tokens = tokenize(question)
   return INTENTS.filter(([re]) => tokens.some((t) => re.test(t))).map(([, match]) => match)
@@ -156,7 +158,10 @@ const unknownSubject = (tokens: string[]) => {
  * "What jobs has he had?" or "List his projects" names only a kind of passage,
  * so no text scores well; answer with the first passage of each such source.
  */
-function kindAnswer(kinds: ((d: Doc) => boolean)[]): Snippet[] {
+function kindAnswer(kinds: ((d: Doc) => boolean)[], tokens: string[]): Snippet[] {
+  // Internships are jobs, so "his role at his internship" asks for the internships
+  // only; "jobs and internships" still names both.
+  if (kinds.includes(internKind) && !tokens.some((t) => /^jobs?$/.test(t))) kinds = [internKind]
   const seen = new Set<string>()
   const out: Snippet[] = []
   for (const doc of getDocs()) {
@@ -231,7 +236,7 @@ export function answer(asked: string): Answer {
   // "What does he build?" asks what he does, so verbs alone don't make a kind-only question.
   const tokens = tokenize(question)
   const kindOnly = kinds.length > 0 && tokens.every((t) => INTENT_WORDS.has(t)) && !tokens.every((t) => KIND_VERBS.has(t))
-  const fallback = kindOnly ? kindAnswer(kinds) : []
+  const fallback = kindOnly ? kindAnswer(kinds, tokens) : []
   const filtered = categoryAnswer(question)
   if (filtered.length) return { snippets: filtered, hits, terms: trace }
   const named = tokens.some((t) => getNames().has(t))

@@ -264,8 +264,13 @@ test('quotes only the skills a question names from a skill group', () => {
 })
 
 test('lists only the internships when asked about internships', () => {
-  const ids = answer('Has he done any internships?').snippets.map((s) => s.doc.id)
-  assert.deepEqual(ids.sort(), ['role-6f1a8e9', 'role-7c3d2b8'])
+  const ids = (q: string) => answer(q).snippets.map((s) => s.doc.id).sort()
+  assert.deepEqual(ids('Has he done any internships?'), ['role-6f1a8e9', 'role-7c3d2b8'])
+  // "Role" names jobs too, but the internship is the kind asked about: no mentor job.
+  assert.deepEqual(ids('What was his role at his internship?'), ['role-6f1a8e9', 'role-7c3d2b8'])
+  assert.deepEqual(ids('What role did he have in his internships?'), ['role-6f1a8e9', 'role-7c3d2b8'])
+  // Naming jobs as well keeps the other jobs.
+  assert.ok(ids('What jobs and internships has he had?').some((id) => !['role-6f1a8e9', 'role-7c3d2b8'].includes(id)))
 })
 
 test('answers about the project or employer a question names', () => {
