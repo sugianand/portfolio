@@ -443,6 +443,12 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   /* Breaks only carry between block siblings, so the B-Roll stack prints as blocks. */
   .personal-grid, .hobbies { display: block; }
   .facts { margin-top: 18pt; }
+  /* Screen-sized B-Roll rows pushed Contact onto a page of its own. */
+  .hobby { padding: 5pt 0; gap: 4pt 10pt; }
+  .hobby h3 { font-size: 13pt; }
+  .hobby p { font-size: 10pt; }
+  .facts { margin-top: 10pt; }
+  .facts dl div { padding: 5pt 8pt; font-size: 10pt; }
   .kicker { font-size: 9pt; }
 
   .hero { display: block; min-height: 0; padding: 0 0 18pt; }
@@ -495,7 +501,9 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .contact { min-height: 0; gap: 8pt; padding-bottom: 0; break-inside: avoid; }
   .contact-title { font-size: 26pt; }
   .contact-email { font-size: 14pt; border-bottom: 0; }
-  .contact-links { display: grid; gap: 4pt; color: #111; }
+  .contact-row { gap: 8pt; }
+  .contact-availability { margin-bottom: 8pt; font-size: 11pt; }
+  .contact-links { display: grid; gap: 4pt; color: #111; font-size: 10pt; }
   .contact-links button { display: none; }
   .contact-links a, .contact-links a:last-of-type { color: #111; padding: 0; border: 0; background: none; }
   /* The address is already printed above; the relative resume link gets its public URL. */

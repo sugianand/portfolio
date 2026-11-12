@@ -38,3 +38,12 @@ test('the printed recruiter view draws its section dividers as borders', () => {
   assert.match(section, /border-right: 1px solid var\(--line\)/)
   assert.match(section, /border-bottom: 1px solid var\(--line\)/)
 })
+
+test('paper shrinks the B-Roll rows and contact row so Contact shares a page', () => {
+  const print = printRules(css)
+  assert.match(rule(print, '.hobby'), /padding: 5pt 0/)
+  assert.match(rule(print, '.hobby h3'), /font-size: 13pt/)
+  assert.match(rule(print, '.contact-row'), /gap: 8pt/)
+  // Nothing printed under 12px (9pt).
+  for (const m of print.matchAll(/font-size: ([\d.]+)pt/g)) assert.ok(Number(m[1]) >= 9, `${m[1]}pt is under 12px`)
+})
