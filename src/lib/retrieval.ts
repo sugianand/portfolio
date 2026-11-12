@@ -149,7 +149,8 @@ export function tokenize(text: string) {
     // asks how X works, not where he works; "when can he start" asks for availability.
     .replace(/\bexperience (with|in|using)\b/g, ' ')
     .replace(/^(\s*how\b.*)\bworks?\b/, '$1')
-    .replace(/\b(when can (he|sugi) start|start (immediately|soon|right away)|start date)\b/g, 'available')
+    // "Can he start in January?" names a date the data lacks; the answer is still when he is available.
+    .replace(/\b((when|how soon) )?can (he|sugi) start\b|\bstart (immediately|soon|right away)\b|\b(earliest )?start date\b/g, 'available')
     // "Full time or part time?" asks what kind of role he wants, not about "full website revamp".
     .replace(/\b(full|part)[\s-]?time\b/g, 'available')
     // "Roles he's targeting", "open to full-time roles", or "positions he wants" asks what
@@ -158,12 +159,14 @@ export function tokenize(text: string) {
     .replace(/\bavailability\b|\bjob[\s-]?(hunting|searching|search)\b/g, 'available')
     // "Who is Sugi?" asks for the one-line summary; its other words are all stop words.
     .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
+    // "Show me his GitHub" asks for the link, not for a project to show.
+    .replace(/\bshow me (?=(his|sugi'?s) (github|linkedin|resume|cv|email)\b)/g, '')
     // "Where can I see his code?" asks for his GitHub, not the "Code-split" bullet.
     .replace(/\b(his|sugi'?s) (source )?code\b|\bsource code\b|\bopen[\s-]?source\b|\b(code )?repo(s|sitory|sitories)?\b/g, 'github')
     // "What are his strengths?" or "what makes him stand out?" asks why he fits,
     // which the data answers with what he builds and the roles he wants.
     // So does "his strongest skill" or "what is he best at", which no skill list can rank.
-    .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?(good|best) at\W*$|\bexcels? at\W*$|\bdo(es)? best\W*$|\b(strongest|best|greatest) (technical )?(skill|area)s?\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b/g, 'fit')
+    .replace(/\b((key|main|biggest|core) )?strengths?\b|\b(he|sugi)('?s| is)? (really )?(good|best) at\W*$|\bexcels? at\W*$|\bdo(es)? best\W*$|\b(strongest|best|greatest) (technical )?(skill|area)s?\W*$|\bstands? out\b|\bsets? (him|sugi) apart\b|\bmakes? (him|sugi) (different|unique|special)\b|\b(better )?(from|over|than) (the )?other (candidates|applicants)\b/g, 'fit')
     // "His best work" or "show me his work" asks for projects, not where he works.
     .replace(/\b(best|strongest|finest|top|greatest|proudest|favou?rite|impressive|notable) work\b|\bshow me (his|sugi'?s) work\b|\bwork (is )?(he|sugi)('?s| is)? (most )?proud(est)? of\b/g, 'project')
     // ML terms must not collide with look-alike words: "embeddings" and "embedded"

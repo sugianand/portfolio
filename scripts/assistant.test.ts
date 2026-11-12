@@ -80,6 +80,9 @@ const cases: [string, RegExp][] = [
   ['Where is this site hosted?', /^portfolio-/],
   ['Can he start immediately?', /^looking$/],
   ['When can he start?', /^looking$/],
+  // A start date the data never names still asks when he is available.
+  ['Can he start in January?', /^looking$/],
+  ['How soon can he start?', /^looking$/],
   // "Full" and "part" must not match NeverEnding's "part of a full website revamp".
   ['Is he full time or part time?', /^looking$/],
   ['Is he looking for full-time work?', /^looking$/],
@@ -123,6 +126,9 @@ const cases: [string, RegExp][] = [
   ['What are his top projects?', /^cinedna-summary$/],
   ['What are his most notable projects?', /^cinedna-summary$/],
   ["What's his GitHub?", /^contact$/],
+  // "Show me" asks for the link here, not for a project to show.
+  ['Show me his GitHub', /^contact$/],
+  ['Show me his LinkedIn', /^contact$/],
   // "APIs" skips the stemmer; it must find the APIs he built, not the "LLM APIs" skill.
   ['Has he built APIs?', /^(three-clues|home-cleaning|cinedna|11planner)-/],
   ['Has he built REST APIs?', /^(home-cleaning|cinedna|skills-backend)/],
@@ -149,6 +155,10 @@ const cases: [string, RegExp][] = [
   ['What are his key strengths?', /^looking$/],
   ['What makes him stand out?', /^looking$/],
   ['What sets him apart?', /^looking$/],
+  // "Other candidates" must not match Three Clues' "other players".
+  ['What makes him different from other candidates?', /^looking$/],
+  ['Why him over other candidates?', /^looking$/],
+  ['Why is he better than other applicants?', /^looking$/],
   ["What's he good at?", /^looking$/],
   // "Strongest skill" asks for a judgment no skill list makes; it quoted the databases row.
   ['What is his strongest skill?', /^looking$/],
