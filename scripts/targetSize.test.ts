@@ -2,8 +2,8 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 
-// Target size (WCAG 2.5.8): the case-study pager and the card source/live links are
-// 19–20px tall as text, so they pad their hit areas up to at least 24px without
+// Target size (WCAG 2.5.8): the case-study pager, the card source/live links, the
+// assistant and side-quest close buttons, and the GitHub/footer links are 18–20px tall as text, so they pad their hit areas up to at least 24px without
 // shifting layout (the matching negative margin cancels the padding).
 const css = readFileSync(new URL('../src/App.css', import.meta.url), 'utf8')
 
@@ -14,7 +14,14 @@ const padded = (selector: string) => {
   return { pad, margin }
 }
 
-for (const [selector, textHeight] of [['.detail-foot button', 20], ['.pcard-links a', 19]] as const) {
+for (const [selector, textHeight] of [
+  ['.detail-foot button', 20],
+  ['.pcard-links a', 19],
+  ['.ask-close', 18],
+  ['.drawer-close, .drawer-reset', 19],
+  ['.frame-bar a', 19],
+  ['.footer a', 19],
+] as const) {
   test(`${selector} has a 24px+ target that does not shift layout`, () => {
     const { pad, margin } = padded(selector)
     assert.ok(textHeight + 2 * pad >= 24, `${selector}: ${textHeight + 2 * pad}px`)
