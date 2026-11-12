@@ -105,7 +105,7 @@ export function AssistantPanel({ draft, turns, busy, onAsk: ask, onClose }: Prop
 
       <form className="ask-form" onSubmit={submit}>
         <label className="sr-only" htmlFor="ask-input">Your question</label>
-        <input id="ask-input" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="e.g. What did Sugi build with FastAPI?" maxLength={200} autoComplete="off" />
+        <input id="ask-input" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="e.g. FastAPI projects?" maxLength={200} autoComplete="off" />
         <button type="submit" disabled={!input.trim() || busy}>Ask</button>
       </form>
     </section>

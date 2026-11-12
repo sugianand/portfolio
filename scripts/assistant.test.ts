@@ -1,6 +1,7 @@
 // The assistant must retrieve the right evidence for the questions recruiters
 // actually ask, and refuse questions the site's data cannot answer.
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { answer } from '../src/lib/assistant.ts'
 import { stem } from '../src/lib/retrieval.ts'
@@ -421,4 +422,15 @@ test('answers "what did he do at" one employer with the work, not just the title
   const java = answer('Did he use Java at NeverEnding?').snippets[0]
   assert.equal(java?.doc.id, 'role-6f1a8e9')
   assert.doesNotMatch(java.text, /Django/)
+})
+
+test('the input hint fits a phone-width field and is a question it answers', () => {
+  const panel = readFileSync(new URL('../src/components/AssistantPanel.tsx', import.meta.url), 'utf8')
+  const hint = panel.match(/id="ask-input"[^\n]*?placeholder="([^"]+)"/)?.[1]
+  assert.ok(hint, 'ask-input has a placeholder')
+  // The field is ~209px of 15px Geist at a 360px viewport: about 26 characters before it clips.
+  assert.ok(hint.length <= 26, `"${hint}" is clipped on phones`)
+  const lead = answer(hint.replace(/^e\.g\.\s*/, '')).snippets[0]
+  assert.match(lead?.doc.id ?? '', /^(cinedna|11planner)-/, hint)
+  assert.match(lead.text + lead.doc.text, /FastAPI/, hint)
 })
