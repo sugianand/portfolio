@@ -106,6 +106,14 @@ const cases: [string, RegExp][] = [
   ['List his projects', /^cinedna-summary$/],
   ['Show me his projects', /^cinedna-summary$/],
   ['What has he built?', /^cinedna-summary$/],
+  // "Shipped", "made", and "created" only say a project exists; the NeverEnding job's
+  // "Shipped scalable Java backend features" must not answer for every project.
+  ['What has he shipped?', /^cinedna-summary$/],
+  ['What projects has he shipped?', /^cinedna-summary$/],
+  ['What did he ship?', /^cinedna-summary$/],
+  ['What has he created?', /^cinedna-summary$/],
+  ['What projects has he made?', /^cinedna-summary$/],
+  ['What did he ship at NeverEnding?', /^role-6f1a8e9$/],
   // Superlatives and "what's" add nothing to rank by, so these list the projects too.
   ['What is his strongest project?', /^cinedna-summary$/],
   ["What's his most impressive project?", /^cinedna-summary$/],

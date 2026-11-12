@@ -174,7 +174,7 @@ function kindAnswer(kinds: ((d: Doc) => boolean)[], tokens: string[]): Snippet[]
 }
 
 // Verbs that only say a project exists: "made", "created", "shipped".
-const MADE = new Set(tokenize('made create created shipped'))
+const MADE = new Set(tokenize('made create created shipped ship'))
 const projectKind = INTENTS[1][1]
 const categories = [...new Set(projects.flatMap((p) => p.categories))]
 
@@ -251,7 +251,11 @@ export function answer(asked: string): Answer {
   const kinds = wantedKinds(question)
   // "What does he build?" asks what he does, so verbs alone don't make a kind-only question.
   const tokens = tokenize(question)
-  const kindOnly = kinds.length > 0 && tokens.every((t) => INTENT_WORDS.has(t)) && !tokens.every((t) => KIND_VERBS.has(t))
+  const kindWord = (t: string) => INTENT_WORDS.has(t) || MADE.has(t)
+  // "What has he shipped?" asks for his projects, not the job line that says "Shipped".
+  // With a topic ("Has he shipped Java backend features?") retrieval still decides.
+  if (tokens.some((t) => MADE.has(t)) && tokens.every(kindWord) && !kinds.includes(projectKind)) kinds.push(projectKind)
+  const kindOnly = kinds.length > 0 && tokens.every(kindWord) && !tokens.every((t) => KIND_VERBS.has(t))
   const fallback = kindOnly ? kindAnswer(kinds, tokens) : []
   const filtered = categoryAnswer(question)
   if (filtered.length) return { snippets: filtered, hits, terms: trace }
