@@ -67,6 +67,12 @@ const EXPAND: Record<string, string[]> = {
   school: ['education', 'university', 'wayne'],
   education: ['degree', 'university', 'gpa'],
   gpa: ['education'],
+  // His courses are his degrees; 11Planner's "courses" and "classes" are app data.
+  course: ['education', 'degree', 'gpa'],
+  courses: ['education', 'degree', 'gpa'],
+  coursework: ['education', 'degree', 'gpa'],
+  class: ['education', 'degree', 'gpa'],
+  classes: ['education', 'degree', 'gpa'],
   graduate: ['education', 'degree', 'progress'],
   graduation: ['education', 'degree', 'progress'],
   undergrad: ['education', 'completed'],

@@ -20,6 +20,11 @@ const cases: [string, RegExp][] = [
   ['Where is he located?', /^profile/],
   ['When does he graduate?', /^education/],
   ['Where did he do his undergrad?', /^education/],
+  // His courses are his degrees; 11Planner's courses and classes are the app's data.
+  ['What courses has he taken?', /^education$/],
+  ['What classes did he take?', /^education$/],
+  ['Relevant coursework?', /^education$/],
+  ['What does 11Planner do with courses?', /^11planner-/],
   ['Does he have leadership experience?', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)/],
   ['Has he worked with LLMs?', /^(11planner|skills-ai_ml)/],
   ['What databases has he used?', /^skills-data/],
