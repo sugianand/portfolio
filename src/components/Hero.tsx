@@ -17,8 +17,9 @@ function Aliases() {
     return () => window.clearInterval(id)
   }, [inView])
   return (
-    <p ref={ref} className="aka mono" aria-label={`Also known as ${ALIASES.join(', ')}`}>
-      <span>a.k.a.</span>
+    <p ref={ref} className="aka mono">
+      <span aria-hidden="true">a.k.a.</span>
+      <span className="sr-only">Also known as {ALIASES.join(', ')}</span>
       <b aria-hidden="true"><Scramble key={index} text={ALIASES[index]} /></b>
     </p>
   )
