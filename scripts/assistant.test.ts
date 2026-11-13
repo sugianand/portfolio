@@ -459,3 +459,13 @@ test('asking for the resume, CV, or résumé points to the PDF and nothing else'
   // "CV" next to a topic is computer vision, not the resume.
   assert.notEqual(answer('Has he done CV projects?').snippets[0]?.doc.id, 'contact')
 })
+
+test('answers recommendation and ranking systems without the particle system', () => {
+  for (const q of ['Has he built a recommendation system?', 'Has he built a ranking system?', 'Has he built a recommender engine?', 'Does he have experience with recommendation systems?']) {
+    const { snippets } = answer(q)
+    assert.match(snippets[0]?.doc.id ?? '', /^(cinedna|skills-ai_ml)/, q)
+    for (const s of snippets) assert.doesNotMatch(s.text, /particle/, q)
+  }
+  // The profile says "ranking and retrieval systems", so "retrieval systems" still finds it.
+  assert.equal(answer('Has he worked on retrieval systems?').snippets[0]?.doc.id, 'profile')
+})

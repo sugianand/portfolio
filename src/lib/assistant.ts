@@ -251,6 +251,9 @@ export function answer(asked: string): Answer {
     // their own rewrite, and "what projects has he worked on?" asks for the projects.
     .replace(/\bwork(ed|s|ing)? (with|on|using) (?!(a |the )?teams?\b)(?=[a-z0-9#])/gi, 'used ')
     .replace(/\b(projects?\b.*)\bwork(ed|s|ing)? on\W*$/i, '$1')
+    // "Recommendation system" or "ranking system" asks about ranking; a bare "system" would quote the
+    // portfolio's particle system.
+    .replace(/\b(recommend(?:ation|er)s?|ranking) (?:systems?|engines?)\b/gi, '$1')
     // The profile says "time zone"; "timezone" alone would match nothing.
     .replace(/\btime-?zones?\b/gi, 'time zone')
     // "Résumé" and "curriculum vitae" are the resume; "his CV" is too, but "CV projects" is computer vision.
