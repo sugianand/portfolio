@@ -449,3 +449,13 @@ test('the input hint fits a phone-width field and is a question it answers', () 
   assert.match(lead?.doc.id ?? '', /^(cinedna|11planner)-/, hint)
   assert.match(lead.text + lead.doc.text, /FastAPI/, hint)
 })
+
+test('asking for the resume, CV, or résumé points to the PDF and nothing else', () => {
+  for (const q of ['Can I see his resume?', 'Where can I download his résumé PDF?', 'Is there a link to his CV?', 'Send me his curriculum vitae']) {
+    const { snippets } = answer(q)
+    assert.deepEqual(snippets.map((s) => s.doc.id), ['contact'], q)
+    assert.match(snippets[0].text, /resume PDF/, q)
+  }
+  // "CV" next to a topic is computer vision, not the resume.
+  assert.notEqual(answer('Has he done CV projects?').snippets[0]?.doc.id, 'contact')
+})

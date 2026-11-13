@@ -198,6 +198,17 @@ function categoryAnswer(question: string): Snippet[] {
     })
 }
 
+// "Can I see his resume?" asks for the PDF. Elsewhere "resume" only appears in the
+// "(resume project)" evidence labels, which would cite whole skill lists.
+const RESUME_ASKS = new Set(tokenize('resume pdf copy link download send show there get view open find share latest current'))
+
+function resumeAnswer(tokens: string[]): Snippet[] {
+  if (!tokens.includes('resume') || !tokens.every((t) => RESUME_ASKS.has(t))) return []
+  const doc = getDocs().find((d) => d.id === 'contact')
+  const text = doc && sentences(doc.text).find((s) => /resume/i.test(s))
+  return doc && text ? [{ text, doc, score: 0 }] : []
+}
+
 /**
  * "What did he do at NeverEnding?" names one employer and nothing else. Only the
  * job's title line repeats the name, so quoting matches alone would drop what he
@@ -242,6 +253,8 @@ export function answer(asked: string): Answer {
     .replace(/\b(projects?\b.*)\bwork(ed|s|ing)? on\W*$/i, '$1')
     // The profile says "time zone"; "timezone" alone would match nothing.
     .replace(/\btime-?zones?\b/gi, 'time zone')
+    // "Résumé" and "curriculum vitae" are the resume; "his CV" is too, but "CV projects" is computer vision.
+    .replace(/(?<![a-z])(r[eé]sum[eé]s?|curriculum vitae)(?![a-z])|\b((?:his|a|the|your|sugi'?s) )cvs?\b(?! (?:projects?|work|models?|experience|skills?)\b)/gi, (_m, _r, owner = '') => `${owner}resume`)
     // "The assistant" or "this chatbot" is the site's BM25 assistant, not his Student Assistant job.
     .replace(/\b(?:(?:the|this|your|that|site'?s|portfolio'?s?|retrieval|rag|bm25|ai)\s+(?:ai\s+)?(?:assistant|chat ?bot|bot)|chat ?bot|ask about sugi(?:\s+(?:assistant|chat ?bot|bot))?)\b/gi, 'BM25 browser assistant')
   const raw = getIndex().search(question, 14)
@@ -259,6 +272,8 @@ export function answer(asked: string): Answer {
   const fallback = kindOnly ? kindAnswer(kinds, tokens) : []
   const filtered = categoryAnswer(question)
   if (filtered.length) return { snippets: filtered, hits, terms: trace }
+  const resume = resumeAnswer(tokens)
+  if (resume.length) return { snippets: resume, hits, terms: trace }
   const named = tokens.some((t) => getNames().has(t))
   // Relevance is judged before the rerank: it only reorders passages, so it
   // must not turn an on-topic question into a refusal.
