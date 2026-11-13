@@ -596,8 +596,10 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .arch { border: 1px solid var(--line); background: var(--ink); }
 .arch-canvas { position: relative; display: grid; grid-template-columns: repeat(var(--tiers), minmax(0, 1fr)); gap: 34px; padding: 22px; }
 .arch-edges { position: absolute; inset: 0; pointer-events: none; overflow: visible; color: var(--wire); }
-.arch-edges path { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.arch-edges g path { fill: none; stroke: currentColor; stroke-width: 1.5; }
 .arch-edges g.hot { color: var(--accent); }
+.arch-edges marker path { fill: var(--wire); stroke: none; }
+.arch-edges marker.arch-head-hot path { fill: var(--accent); }
 .arch-edges g.hot path { stroke-width: 2; stroke-dasharray: 6 5; animation: flow 1s linear infinite; }
 @keyframes flow { to { stroke-dashoffset: -22; } }
 .arch-tier { display: flex; flex-direction: column; justify-content: center; gap: 14px; position: relative; z-index: 1; }

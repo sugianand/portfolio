@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useId, useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
 import { unlock } from '../lib/store'
 import { chainedTiers, gutterRoute, runsAcross, softBreaks } from '../lib/topology'
@@ -25,6 +25,8 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
   const tiers = Math.max(...arch.nodes.map((n) => n.tier)) + 1
   const columns = Array.from({ length: tiers }, (_, t) => arch.nodes.filter((n) => n.tier === t))
   const chained = chainedTiers(arch)
+  // A marker paints in its own context, not the edge's, so hot edges get their own solid head.
+  const arrow = `arch-arrow${useId().replace(/\W/g, '')}`
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current
@@ -77,15 +79,17 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
       <div className="arch-canvas" ref={wrapRef} style={{ ['--tiers' as string]: tiers }}>
         <svg className="arch-edges" width={size.w} height={size.h} aria-hidden="true">
           <defs>
-            <marker id="arch-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,0 L8,4 L0,8 z" fill="currentColor" />
-            </marker>
+            {['', '-hot'].map((suffix) => (
+              <marker key={suffix} id={arrow + suffix} className={`arch-head${suffix}`} viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L8,4 L0,8 z" />
+              </marker>
+            ))}
           </defs>
           {paths.map((p) => {
             const hot = p.from === active || p.to === active
             return (
               <g key={p.key} className={hot ? 'hot' : ''}>
-                <path d={p.d} markerEnd="url(#arch-arrow)" />
+                <path d={p.d} markerEnd={`url(#${arrow}${hot ? '-hot' : ''})`} />
               </g>
             )
           })}
