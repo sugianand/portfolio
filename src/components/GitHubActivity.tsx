@@ -76,7 +76,10 @@ function CurrentlyBuilding({ repos }: { repos: Repo[] }) {
             <a href={r.url} target="_blank" rel="noreferrer">
               <b>{r.name}</b>
               {r.description && <span>{r.description}</span>}
-              <em className="mono">{[r.language, `pushed ${ago(r.pushed)}`].filter(Boolean).join(' · ')}</em>
+              <em className="mono">
+                {r.language && <><span>{r.language}</span> · </>}
+                <span>pushed {ago(r.pushed)}</span>
+              </em>
             </a>
           </li>
         ))}
