@@ -1,7 +1,7 @@
 import { useId, useLayoutEffect, useRef, useState } from 'react'
 import type { Project } from '../data'
 import { unlock } from '../lib/store'
-import { chainedTiers, gutterRoute, runsAcross, softBreaks } from '../lib/topology'
+import { chainedTiers, gutterRoute, nodeLinks, runsAcross, softBreaks } from '../lib/topology'
 
 type Arch = NonNullable<Project['architecture']>
 type Path = { key: string; d: string; from: string; to: string }
@@ -69,10 +69,7 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
 
   const current = arch.nodes.find((n) => n.id === active)!
   const linked = new Set(arch.edges.filter(([a, b]) => a === active || b === active).flatMap(([a, b]) => [a, b]))
-  const name = (id: string) => arch.nodes.find((n) => n.id === id)!.label
-  const links = arch.edges
-    .filter(([a, b]) => a === active || b === active)
-    .map(([a, b, label]) => `${a === active ? '→' : '←'} ${name(a === active ? b : a)}${label ? ` (${label})` : ''}`)
+  const links = nodeLinks(arch, active)
 
   return (
     <div className="arch">
@@ -118,7 +115,15 @@ export function ArchDiagram({ arch }: { arch: Arch }) {
         <p className="mono">{current.tech}</p>
         <strong>{current.label}</strong>
         <span>{current.detail}</span>
-        {links.length > 0 && <em className="mono">{links.join('   ')}</em>}
+        {links.length > 0 && (
+          <ul className="arch-links mono">
+            {links.map((l) => (
+              <li key={l.key}>
+                <i aria-hidden="true">{l.out ? '→' : '←'}</i><b className="sr-only">{l.out ? 'To' : 'From'}</b> {l.name}{l.label && ` (${l.label})`}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )

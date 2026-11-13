@@ -101,3 +101,13 @@ export function gutterRoute(a: Box, b: Box, across: boolean, size: { w: number; 
   const x2 = left ? b.l + inset(b.r - b.l) : b.r - inset(b.r - b.l)
   return roundedPath([[x1, y1], [x1, y1 + dir * turn], [gx, y1 + dir * turn], [gx, y2 - dir * turn], [x2, y2 - dir * turn], [x2, y2]])
 }
+
+export type NodeLink = { key: string; out: boolean; name: string; label?: string }
+
+/** The active node's neighbours: where its data goes (out) and where it comes from. */
+export function nodeLinks(arch: Arch, active: string): NodeLink[] {
+  const name = (id: string) => arch.nodes.find((n) => n.id === id)?.label ?? id
+  return arch.edges
+    .filter(([a, b]) => a === active || b === active)
+    .map(([a, b, label]) => ({ key: `${a}>${b}`, out: a === active, name: name(a === active ? b : a), label }))
+}

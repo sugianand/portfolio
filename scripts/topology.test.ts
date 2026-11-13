@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { projects } from '../src/data.ts'
-import { chainedTiers, gutterRoute, miniTopology, roundedPath, runsAcross, softBreaks, type Box } from '../src/lib/topology.ts'
+import { chainedTiers, gutterRoute, miniTopology, nodeLinks, roundedPath, runsAcross, softBreaks, type Box } from '../src/lib/topology.ts'
 
 const W = 112
 const H = 36
@@ -97,4 +97,18 @@ test('chainedTiers finds only tiers with an edge between their own nodes', () =>
 test('CineDNA widens the tier where the intent parser feeds the ranking engine', () => {
   const cine = projects.find((p) => p.id === 'cinedna')!.architecture!
   assert.deepEqual([...chainedTiers(cine)], [2])
+})
+
+test('nodeLinks lists where a node sends data and where it hears from', () => {
+  const arch = projects.find((p) => p.id === 'whereabout')!.architecture!
+  assert.deepEqual(nodeLinks(arch, 'web').map((l) => [l.out, l.name, l.label]), [
+    [true, 'FastAPI', undefined],
+    [false, 'Cold-path inference', 'guesses'],
+  ])
+  for (const p of projects.filter((p) => p.architecture)) {
+    for (const n of p.architecture!.nodes) {
+      const links = nodeLinks(p.architecture!, n.id)
+      assert.equal(new Set(links.map((l) => l.key)).size, links.length, `${p.id}/${n.id} keys are unique`)
+    }
+  }
 })
