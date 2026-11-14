@@ -65,6 +65,7 @@ export function buildKnowledge(): Doc[] {
     if (p.metrics) docs.push({ id: `${p.id}-metrics`, title: `${p.title} numbers`, text: p.metrics.map((m) => `${p.title}: ${m.value} ${m.label}.`).join(' '), source: src })
     if (p.architecture) docs.push({ id: `${p.id}-arch`, title: `${p.title} architecture`, text: p.architecture.nodes.map((n) => `${n.label} (${n.tech}): ${n.detail}`).join(' '), source: src })
     docs.push({ id: `${p.id}-features`, title: `${p.title} features`, text: p.features.map((f) => f.replace(/\.?$/, '.')).join(' '), source: src })
+    if (p.next) docs.push({ id: `${p.id}-next`, title: `What's next for ${p.title}: roadmap`, text: `Roadmap for ${p.title}: ${p.next.join('; ')}.`, source: src })
     docs.push({ id: `${p.id}-lessons`, title: `What Sugi learned from ${p.title}: challenges and lessons`, text: `Challenges and lessons learned: ${p.challenges.map((c) => c.replace(/\.?$/, '.')).join(' ')}`, source: src })
   }
 

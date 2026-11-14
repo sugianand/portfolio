@@ -163,6 +163,11 @@ export function tokenize(text: string) {
     // he wants next, not his past jobs. "His availability" stems apart from "available".
     .replace(/\b(roles?|positions?|jobs?|opportunit(y|ies))\b(?=.*\b(targets?|targeting|seeking|open to|looking for|wants?|interested in|applying (for|to))\b)|(?<=\b(targets?|targeting|seeking|open to|looking for|wants?|interested in|applying (for|to))\b.*)\b(roles?|positions?|jobs?|opportunit(y|ies))\b/g, 'available')
     .replace(/\bavailability\b|\bjob[\s-]?(hunting|searching|search)\b/g, 'available')
+    // Career goals ask what he wants after this degree, which the "looking" passage answers.
+    .replace(/\b((his|sugi'?s) )?career goals?\b|\b(his|sugi'?s) goals?\b|\bdream (job|role)\b|\bsee (himself|him) in (\w+ )?years\b|\bnext for (him|sugi)\b|\bwants? to (do|work on|go into)( next)?\b|\bafter (he )?graduat\w*\b|\b(kind|type)s? of work\b/g, 'available')
+    // Any other "next" asks for a project's roadmap ("What's next for CineDNA?"), but
+    // "Next.js" is a framework.
+    .replace(/\b(next(?!\.?\s?js\b)( steps?)?|future (plans?|work|improvements?)|planned|upcoming)\b/g, 'roadmap')
     // "Who is Sugi?" asks for the one-line summary; its other words are all stop words.
     .replace(/^\s*(who is (he|sugi|suganeshwara)( anand)?|tell me about (him|yourself|sugi|suganeshwara)( anand)?|introduce (him|yourself|sugi))\W*$/, 'summary')
     // "Show me his GitHub" asks for the link, not for a project to show.

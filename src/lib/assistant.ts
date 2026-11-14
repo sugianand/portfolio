@@ -275,6 +275,8 @@ export function answer(asked: string): Answer {
     // "The assistant" or "this chatbot" is the site's BM25 assistant, not his Student Assistant job.
     .replace(/\b(?:(?:the|this|your|that|site'?s|portfolio'?s?|retrieval|rag|bm25|ai)\s+(?:ai\s+)?(?:assistant|chat ?bot|bot)|chat ?bot|ask about sugi(?:\s+(?:assistant|chat ?bot|bot))?)\b/gi, 'BM25 browser assistant')
   const raw = getIndex().search(question, 14)
+  // A roadmap is planned work: it answers "what's next?", never "has he used embeddings?".
+  if (!raw.terms.has('roadmap')) raw.hits = raw.hits.filter((h) => !h.doc.id.endsWith('-next'))
   const terms = raw.terms
   const hits = leadWithSkill(question, leadWithSummary(question, rerank(question, raw.hits)))
   const trace = [...terms.entries()]
