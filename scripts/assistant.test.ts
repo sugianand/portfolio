@@ -337,6 +337,18 @@ test('refuses kinds of apps and deployments the data never mentions', () => {
   assert.equal(answer('Has he built a Next.js app?').snippets[0].doc.id, '11planner-summary')
 })
 
+test('refuses kinds of databases, APIs, and clouds the data never mentions', () => {
+  // These quoted his SQL databases, REST APIs, or Docker as if he had used them.
+  for (const q of ['Has he used Pinecone vector database?', 'Has he used vector databases?', 'Has he used a NoSQL database?', 'Has he used GraphQL APIs?', 'Has he used Azure cloud?', 'Does he know Tailwind CSS?']) {
+    assert.equal(answer(q).snippets.length, 0, q)
+  }
+  assert.match(answer('Has he used a relational database?').snippets[0].doc.id, /^(skills-data|home-cleaning-arch)$/)
+  assert.match(answer('Has he built REST APIs?').snippets[0].doc.id, /^home-cleaning-/)
+  assert.equal(answer('Has he used Cloudflare D1 database?').snippets[0].doc.id, 'skills-data')
+  assert.equal(answer('Has he used LLM APIs?').snippets[0].doc.id, 'skills-ai_ml')
+  assert.equal(answer('Has he used cloud platforms?').snippets.length > 0, true)
+})
+
 test('refuses experience with tools the data never mentions instead of quoting a job', () => {
   for (const q of ['Does he have AWS experience?', 'Any Rust experience?', 'Does he have Azure experience?', 'What GCP projects has he built?']) {
     assert.equal(answer(q).snippets.length, 0, q)

@@ -141,7 +141,9 @@ function leadWithSkill(question: string, hits: Hit[]) {
 // Nouns so common in the data that they match on their own. "Has he built an
 // iOS app?" asks about a kind of app, so when the word before one of these is
 // nowhere in the data, any passage about some other app is the wrong answer.
-const GENERIC = new Set(tokenize('app application deployment development system platform website service model software'))
+// Likewise "Pinecone vector database" or "GraphQL APIs" must not quote his SQL
+// databases or REST APIs as if he had used them.
+const GENERIC = new Set(tokenize('app application deployment development system platform website service model software database databases api apis cloud css library libraries'))
 
 const unknown = (t: string) => ![...expand([t]).keys()].some((e) => getIndex().has(e))
 
