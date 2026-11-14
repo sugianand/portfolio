@@ -357,6 +357,19 @@ test('refuses experience with tools the data never mentions instead of quoting a
   assert.match(answer('Tell me about his work experience').snippets[0].doc.id, /^role-/)
 })
 
+test('refuses tools named after a verb when the data never mentions them', () => {
+  // These quoted his Vercel deploys, unit tests, or 11Planner's cache as if they were the tool.
+  for (const q of ['Has he deployed to AWS?', 'Has he deployed on Kubernetes?', 'Has he tested with Selenium?', 'Did he write tests in pytest?', 'Did he use Redis for caching?']) {
+    assert.equal(answer(q).snippets.length, 0, q)
+  }
+  assert.match(answer('Has he deployed to Vercel?').snippets[0].text, /Vercel/)
+  assert.match(answer('Did he test with Miniflare?').snippets.map((s) => s.text).join(' '), /Miniflare/)
+  assert.match(answer('Has he coded in C#?').snippets[0].text, /C#/)
+  assert.match(answer('Has he built a REST API in Express?').snippets[0].text, /Express/)
+  assert.match(answer('Has he written tests for his projects?').snippets[0].text, /tests/)
+  assert.equal(answer('Can he start in January?').snippets.length > 0, true)
+})
+
 test('answers life off the clock from the B-Roll', () => {
   for (const q of ['What does he do for fun?', 'What are his hobbies?', 'What does he do outside of work?', 'What does he do in his free time?', 'Does he play sports?']) {
     assert.equal(answer(q).snippets[0]?.doc.id, 'hobbies', q)

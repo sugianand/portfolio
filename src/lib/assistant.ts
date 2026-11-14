@@ -149,6 +149,18 @@ const unknown = (t: string) => ![...expand([t]).keys()].some((e) => getIndex().h
 
 const unknownModifier = (tokens: string[]) => tokens.some((t, i) => GENERIC.has(tokens[i + 1]) && unknown(t))
 
+// "Has he deployed to AWS?" or "tested with Selenium?" names a tool after "use"
+// or a building verb and a preposition; when the data never mentions it, the
+// verb alone would quote his Vercel deploys or unit tests as the answer.
+const TOOL_AFTER =
+  /\b(?:use[sd]?|using|(?:deploy|host|test|buil[dt]|wr[io]te?|written|develop|train|cod|program|implement|integrat)\w*(?:\s+\w+)?\s+(?:to|on|with|in|into|using|via))\s+(?:(?:a|an|the|his)\s+)?([a-z][\w.+#-]*)/gi
+
+const unknownTool = (question: string) =>
+  [...question.matchAll(TOOL_AFTER)].some((m) => {
+    const t = tokenize(m[1])
+    return t.length > 0 && t.every(unknown)
+  })
+
 // "Does he have AWS experience?" asks about AWS; when the data never mentions
 // it, "experience" alone would quote his first job as if it were the answer.
 const unknownSubject = (tokens: string[]) => {
@@ -282,7 +294,7 @@ export function answer(asked: string): Answer {
   const named = tokens.some((t) => getNames().has(t))
   // Relevance is judged before the rerank: it only reorders passages, so it
   // must not turn an on-topic question into a refusal.
-  if (!hits.length || unknownModifier(tokens) || unknownSubject(tokens) || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
+  if (!hits.length || unknownModifier(tokens) || unknownSubject(tokens) || unknownTool(question) || (raw.hits[0].score < MIN_SCORE && !named)) return { snippets: fallback, hits, terms: trace }
 
   const topical = new Map([...terms].filter(([t]) => !INTENT_WORDS.has(t)))
   if (!topical.size) terms.forEach((w, t) => topical.set(t, w))
