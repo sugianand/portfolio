@@ -441,6 +441,16 @@ test('answers questions about the site assistant from its architecture', () => {
   }
 })
 
+// "IT" is his C&IT job; tokenized, "it" is a stop word and "C&IT" left a bare "c".
+test('answers IT questions with his C&IT job', () => {
+  for (const q of ['What did he do at Wayne State IT?', 'What was his job at C&IT?', 'Has he worked in IT?', 'What IT experience does he have?', 'Has he done IT support?', 'Did he work in information technology?']) {
+    assert.equal(answer(q).snippets[0]?.doc.id, 'role-9b2f6a4', q)
+  }
+  // Lowercase "it" stays a pronoun, and C is not C# or C++.
+  assert.equal(answer('How does it work?').snippets.length, 0)
+  assert.equal(answer('Does he know C?').snippets.length, 0)
+})
+
 test('reads "led" as leadership', () => {
   for (const q of ['Has he led a project?', 'Has he ever led anyone?']) {
     assert.match(answer(q).snippets[0]?.doc.id ?? '', /^role-(4e8b1d0|2d7e5c1|0c4b7f2)$/, q)

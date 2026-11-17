@@ -136,6 +136,8 @@ export function tokenize(text: string) {
     .replace(/^(\s*where\b.*)\bbased\b|\bbased (in|out of)\b/, '$1location')
     // "How can I reach him?" or "get in touch" asks for contact details.
     .replace(/\breach (out to )?(him|sugi)\b|\breach out\b|\bget in touch\b/g, 'contact')
+    // "C&IT" is Wayne State's IT department; split, its "it" is a stop word and its "c" a language.
+    .replace(/\bc&it\b|\binformation technology\b/g, 'cit')
     // The data says "Remote", so "has he worked remotely?" must find that role.
     .replace(/\bremotely\b/g, 'remote')
     // Short plurals skip the stemmer, so "APIs" would only match "LLM APIs";
