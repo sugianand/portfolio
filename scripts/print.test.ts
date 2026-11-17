@@ -47,3 +47,19 @@ test('paper shrinks the B-Roll rows and contact row so Contact shares a page', (
   // Nothing printed under 12px (9pt).
   for (const m of print.matchAll(/font-size: ([\d.]+)pt/g)) assert.ok(Number(m[1]) >= 9, `${m[1]}pt is under 12px`)
 })
+
+test('paper prints the skill table as short tiles so Projects follows on the same page', () => {
+  const print = printRules(css)
+  assert.match(rule(print, '.el'), /aspect-ratio: auto/)
+  assert.match(rule(print, '.ptable'), /minmax\(80px, 1fr\)/)
+})
+
+test('print rules for the skill table come after the screen rules they override', () => {
+  // Same specificity, so the later rule wins: a print rule placed earlier is silently ignored.
+  for (const selector of ['.el', '.ptable', '.el-logo', '.el b', '.ptable-legend i', '.el-dots i']) {
+    const at = (needle: string) => css.lastIndexOf(`\n${needle} {`)
+    const screen = at(selector)
+    const printed = css.lastIndexOf(`\n  ${selector} {`)
+    assert.ok(screen !== -1 && printed > screen, `print ${selector} must follow its screen rule`)
+  }
+})

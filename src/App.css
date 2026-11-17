@@ -471,9 +471,6 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   .stat strong { font-size: 22pt; }
   .skills { margin-top: 12pt; }
   .skill-evidence { display: none; }
-  /* Backgrounds don't print, so the family keys and evidence dots are drawn as borders. */
-  .ptable-legend i { width: 0; height: 0; border: 5px solid var(--fam); }
-  .el-dots i { width: 0; height: 0; border: 2.5px solid var(--fam); }
   .skill-group { padding: 8pt; gap: 6pt; }
   .skill-group span { color: #111; padding: 2pt 5pt; }
 
@@ -925,6 +922,19 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
 .el-noev { background: var(--ink); border-style: dashed; }
 .el-noev b { opacity: .75; }
 @media (max-width: 480px) { .ptable { grid-template-columns: repeat(4, 1fr); gap: 5px; } .el b { font-size: 21px; } .el-logo { width: 24px; height: 24px; } .el-n { display: none; } }
+/* After the screen rules, so these win the cascade. Square screen tiles filled two-thirds of a
+   printed page and pushed Projects onto the next one; shorter tiles let it follow straight on. */
+@media print {
+  .skillmap { margin-top: 12pt; }
+  .ptable-legend { margin-bottom: 8pt; }
+  .ptable { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 4pt; }
+  .el { aspect-ratio: auto; padding: 14pt 2pt 5pt; gap: 1pt; }
+  .el-logo { width: 20px; height: 20px; margin-bottom: 2px; }
+  .el b { font-size: 18px; }
+  /* Backgrounds don't print, so the family keys and evidence dots are drawn as borders. */
+  .ptable-legend i { width: 0; height: 0; border: 5px solid var(--fam); }
+  .el-dots i { width: 0; height: 0; border: 2.5px solid var(--fam); }
+}
 
 /* ---------- problem → solution ---------- */
 .ps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
