@@ -67,7 +67,7 @@ export function GitLog() {
                   <div>
                     <p className="diff-meta">Author: Suganeshwara Anand &lt;{profile.email}&gt;<br />Location: {role.place}</p>
                     <ul className="diff">
-                      {role.diff.map((line) => <li key={line}><span>+</span>{line}</li>)}
+                      {role.diff.map((line) => <li key={line}><span aria-hidden="true">+</span>{line}</li>)}
                     </ul>
                   </div>
                 </div>
