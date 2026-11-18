@@ -495,6 +495,13 @@ test('answers "what did he do at" one employer with the work, not just the title
     assert.match(lead.text, /^\S.* at .*\(.*\)\. /, q)
     assert.match(lead.text, work, q)
   }
+  // A skill group quoted beside the job keeps only the items used there, not the whole group.
+  const skills = answer('What did he do at Rocket?').snippets.filter((s) => s.doc.id.startsWith('skills-'))
+  assert.ok(skills.length)
+  for (const s of skills) {
+    assert.doesNotMatch(s.text, /^Skills and technologies/)
+    assert.ok(s.text.split('; ').every((item) => /Rocket Companies/.test(item)), s.text)
+  }
   // A topic beyond the name still quotes only the matching lines.
   const java = answer('Did he use Java at NeverEnding?').snippets[0]
   assert.equal(java?.doc.id, 'role-6f1a8e9')

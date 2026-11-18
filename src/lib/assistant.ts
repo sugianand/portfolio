@@ -256,7 +256,9 @@ function wholeJob(tokens: string[]) {
 }
 
 // A skill group is one long sentence. "Does he know Java?" asks about one item
-// in it, so quote the group's label and only the items the question names.
+// in it, so quote the group's label and only the items the question names. A
+// question naming a job or project ("What did he do at Rocket?") keeps the items
+// used there instead of the whole group.
 const SKILLS_PREFIX = 'Skills and technologies, '
 
 function narrowSkills(text: string, asked: Set<string>) {
@@ -264,7 +266,9 @@ function narrowSkills(text: string, asked: Set<string>) {
   const body = text.slice(SKILLS_PREFIX.length, -1)
   const colon = body.indexOf(': ')
   const items = body.slice(colon + 2).split('; ')
-  const picked = items.filter((item) => tokenize(item.split(' (used in ')[0]).some((t) => asked.has(t)))
+  const names = (part: string) => (item: string) => tokenize(item.split(' (used in ')[part === 'skill' ? 0 : 1] ?? '').some((t) => asked.has(t))
+  const named = items.filter(names('skill'))
+  const picked = named.length ? named : items.filter(names('where'))
   return picked.length && picked.length < items.length ? `${body.slice(0, colon)}: ${picked.join('; ')}.` : text
 }
 
