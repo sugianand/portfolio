@@ -350,6 +350,20 @@ test('refuses kinds of apps and deployments the data never mentions', () => {
   assert.equal(answer('Has he built a Next.js app?').snippets[0].doc.id, '11planner-summary')
 })
 
+test('leads with the skill when a question names it by one of its aliases', () => {
+  // These quoted one project's summary or feature line instead of where he used the skill.
+  const cases: [string, string][] = [
+    ['Has he used Cloudflare?', 'skills-backend'],
+    ['Has he worked with Cloudflare?', 'skills-backend'],
+    ['Has he used WebGL?', 'skills-frontend'],
+    ['Has he used CLIP?', 'skills-ai_ml'],
+    ['Does he know BM25?', 'skills-ai_ml'],
+  ]
+  for (const [q, id] of cases) assert.equal(answer(q).snippets[0].doc.id, id, q)
+  // Without a usage verb a first word alone is not the skill.
+  assert.equal(answer("What's his GitHub?").snippets[0].doc.id, 'contact')
+})
+
 test('refuses kinds of databases, APIs, and clouds the data never mentions', () => {
   // These quoted his SQL databases, REST APIs, or Docker as if he had used them.
   for (const q of ['Has he used Pinecone vector database?', 'Has he used vector databases?', 'Has he used a NoSQL database?', 'Has he used GraphQL APIs?', 'Has he used Azure cloud?', 'Does he know Tailwind CSS?']) {

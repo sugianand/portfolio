@@ -119,6 +119,13 @@ function leadWithSummary(question: string, hits: Hit[]) {
   return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
 }
 
+// "WebGL / GLSL" or "Computer vision (CLIP)" names one skill several ways, and
+// "Cloudflare Workers" goes by its first word. A question about using a skill
+// ("Has he used CLIP?") matches any alias by its first word; without a usage verb
+// only a one-word skill name does, so "What's his GitHub?" stays contact.
+const skillAliases = (name: string) => name.split(/\s*[/()]\s*/).map(tokenize).filter((t) => t.length > 0)
+const ASKS_USE = /\b(?:us(?:e|es|ed|ing)|know|knows|familiar|experience)\b/i
+
 /**
  * "Has he worked with Python?" names one skill. Its skills passage says where he
  * used it, across projects and jobs, so it should lead over a single project's
@@ -129,10 +136,15 @@ function leadWithSkill(question: string, hits: Hit[]) {
   const wanted = wantedKinds(question)
   // "Which project uses Python?" or "CineDNA's stack" asks about something else.
   if (namedSource(question) || namedProject(question) || wanted.some((m) => m !== isJob && m !== isSkill)) return hits
-  const group = skillGroups.find((g) => g.items.some((i) => {
-    const name = tokenize(i.name)
-    return name.length === 1 && tokens.includes(name[0])
-  }))
+  const named = (match: (name: string) => boolean) => skillGroups.find((g) => g.items.some((i) => match(i.name)))
+  const whole = (name: string) => {
+    const t = tokenize(name)
+    return t.length === 1 && tokens.includes(t[0])
+  }
+  // A whole name ("Cloudflare D1 database" names D1) wins over a first word ("Cloudflare").
+  const group = named(whole) ?? (ASKS_USE.test(question)
+    ? named((name) => skillAliases(name).some((a) => a.every((t) => tokens.includes(t)))) ?? named((name) => skillAliases(name).some((a) => tokens.includes(a[0])))
+    : undefined)
   const i = group ? hits.findIndex((h) => h.doc.id === `skills-${group.key}`) : -1
   if (i <= 0) return hits
   return [{ ...hits[i], score: hits[0].score }, ...hits.slice(0, i), ...hits.slice(i + 1)]
