@@ -487,6 +487,22 @@ test('answers "what did he do at" one employer with the work, not just the title
   assert.doesNotMatch(java.text, /Django/)
 })
 
+// A kind-only question about what he did lists each job; the title line alone
+// says nothing about the work, so quote the first thing he did there too.
+test('answers "what did he do at his internships" with the work, not just titles', () => {
+  for (const q of ['What did he do at his internships?', 'What did he build at his internship?', 'Tell me about his latest internship']) {
+    const got = answer(q).snippets
+    assert.deepEqual(got.map((s) => s.doc.id).sort(), ['role-6f1a8e9', 'role-7c3d2b8'], q)
+    assert.match(got.find((s) => s.doc.id === 'role-6f1a8e9')!.text, /Intern at NeverEnding.*\. Built and optimized Django/, q)
+    assert.match(got.find((s) => s.doc.id === 'role-7c3d2b8')!.text, /\. Automated and manual test cases/, q)
+  }
+  assert.ok(answer('What did he do at his jobs?').snippets.every((s) => /\)\. \S/.test(s.text)))
+  // Listing questions keep one line per job.
+  for (const q of ['What jobs has he had?', 'Has he done any internships?', 'What was his role at his internship?']) {
+    assert.ok(answer(q).snippets.every((s) => /\)\.$/.test(s.text)), q)
+  }
+})
+
 test('the input hint fits a phone-width field and is a question it answers', () => {
   const panel = readFileSync(new URL('../src/components/AssistantPanel.tsx', import.meta.url), 'utf8')
   const hint = panel.match(/id="ask-input"[^\n]*?placeholder="([^"]+)"/)?.[1]

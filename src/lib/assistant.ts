@@ -172,7 +172,10 @@ const unknownSubject = (tokens: string[]) => {
  * "What jobs has he had?" or "List his projects" names only a kind of passage,
  * so no text scores well; answer with the first passage of each such source.
  */
-function kindAnswer(kinds: ((d: Doc) => boolean)[], tokens: string[]): Snippet[] {
+// "What did he do at his internships?" asks for the work, not just the title line.
+const ASKS_WORK = /\b(do|did|doing|build|built|tell me about|describe|responsibilit(y|ies)|duties)\b/i
+
+function kindAnswer(kinds: ((d: Doc) => boolean)[], tokens: string[], question: string): Snippet[] {
   // Internships are jobs, so "his role at his internship" asks for the internships
   // only; "jobs and internships" still names both.
   if (kinds.includes(internKind) && !tokens.some((t) => /^jobs?$/.test(t))) kinds = [internKind]
@@ -182,7 +185,8 @@ function kindAnswer(kinds: ((d: Doc) => boolean)[], tokens: string[]): Snippet[]
     const key = doc.source.kind === 'project' ? doc.source.id : doc.id
     if (out.length >= 4 || seen.has(key) || !kinds.some((m) => m(doc))) continue
     seen.add(key)
-    out.push({ text: doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)[0], doc, score: 0 })
+    const [title, work] = doc.text.split(/(?<=[.!?])\s+(?=[A-Z])/)
+    out.push({ text: isJob(doc) && work && ASKS_WORK.test(question) ? `${title} ${work}` : title, doc, score: 0 })
   }
   return out
 }
@@ -290,7 +294,7 @@ export function answer(asked: string): Answer {
   // With a topic ("Has he shipped Java backend features?") retrieval still decides.
   if (tokens.some((t) => MADE.has(t)) && tokens.every(kindWord) && !kinds.includes(projectKind)) kinds.push(projectKind)
   const kindOnly = kinds.length > 0 && tokens.every(kindWord) && !tokens.every((t) => KIND_VERBS.has(t))
-  const fallback = kindOnly ? kindAnswer(kinds, tokens) : []
+  const fallback = kindOnly ? kindAnswer(kinds, tokens, question) : []
   const filtered = categoryAnswer(question)
   if (filtered.length) return { snippets: filtered, hits, terms: trace }
   const resume = resumeAnswer(tokens)
