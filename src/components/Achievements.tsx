@@ -63,7 +63,7 @@ export function AchievementDrawer({ open, onClose }: { open: boolean; onClose: (
       <div className="drawer-panel" ref={panelRef} role="dialog" aria-modal={open} aria-label="Side quests" tabIndex={-1}>
         <div className="drawer-head">
           <p className="kicker mono"><QuestSprite name="sword" className="kicker-sprite" /> Side quests</p>
-          <button type="button" className="mono drawer-close" onClick={onClose} aria-label="Esc, close side quests">esc ✕</button>
+          <button type="button" className="mono drawer-close" onClick={onClose} aria-label="Esc, close side quests"><span className="esc-hint">esc </span>✕</button>
         </div>
         <div className="quest-player">
           <span className="quest-lv quest-lv-lg">{cleared}</span>

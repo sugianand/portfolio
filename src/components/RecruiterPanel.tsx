@@ -51,7 +51,7 @@ export function RecruiterPanel({ onClose: close }: { onClose: () => void }) {
             <h2 id="rv-title">{profile.name} <span>(Sugi)</span></h2>
             <p className="rv-headline">{profile.headline} · {profile.location}</p>
           </div>
-          <button type="button" className="mono rv-close" onClick={close} aria-label="Esc, close summary">esc ✕</button>
+          <button type="button" className="mono rv-close" onClick={close} aria-label="Esc, close summary"><span className="esc-hint">esc </span>✕</button>
         </div>
 
         <div className="rv-actions">

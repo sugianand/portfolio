@@ -970,3 +970,9 @@ body:has([aria-modal="true"], #ask-panel) .toasts { visibility: hidden; }
   linear-gradient(90deg, rgba(var(--accent-rgb), .08), rgba(var(--accent-rgb), .16)); opacity: .9; }
 @media (max-width: 720px) { .film-hud { display: none; } }
 @media print { .film-hud { display: none; } }
+/* Touch screens have no Esc key, so the close buttons drop the "esc" hint and keep
+   just ✕, widened so the lone glyph is still a 32px+ target. */
+@media (hover: none) and (pointer: coarse) {
+  .esc-hint { display: none; }
+  .drawer-close, .ask-close, .rv-close { min-width: 32px; }
+}

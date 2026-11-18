@@ -59,7 +59,7 @@ export function AssistantPanel({ draft, turns, busy, onAsk: ask, onClose }: Prop
           <strong>Ask about Sugi</strong>
           <span className="mono">BM25 retrieval over this site&apos;s verified data · every answer is quoted and cited</span>
         </div>
-        <button type="button" className="mono ask-close" onClick={onClose} aria-label="Esc, close assistant">esc ✕</button>
+        <button type="button" className="mono ask-close" onClick={onClose} aria-label="Esc, close assistant"><span className="esc-hint">esc </span>✕</button>
       </div>
 
       <div className="ask-log" ref={logRef} aria-live="polite">
